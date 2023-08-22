@@ -29,6 +29,10 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 
 == Changelog ==
 
+= 3.8 =
+
+* Tested up WP 6.3
+
 = 3.7 =
 
 * Tested up WP 6.2
