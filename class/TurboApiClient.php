@@ -15,7 +15,7 @@ class TurboApiClient {
     protected $username;
     protected $password;
     public $lastError;
-    private $serverUrl = "https://api.turbo-smtp.com/api";
+    private $serverUrl = "https://dashboard.serversmtp.com/api";
 
     public function __construct($username, $password) {
         $this->username = $username;

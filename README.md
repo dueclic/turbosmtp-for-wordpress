@@ -1,4 +1,4 @@
-[![eMailChef](https://raw.githubusercontent.com/dueclic/turbosmtp-for-wordpress/master/.wordpress-org/assets/banner-772x250.jpg)
+[![turboSMTP](https://raw.githubusercontent.com/dueclic/turbosmtp-for-wordpress/master/.wordpress-org/assets/banner-772x250.jpg)
 ](https://www.serversmtp.com)
 
 

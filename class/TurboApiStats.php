@@ -275,7 +275,7 @@ class TurboApiStats extends TurboApiClient {
 			$getParams['end_date'] = date( "Y-m-d" );
 		}
 
-		return 'https://api.turbo-smtp.com/api/stats/emails/csv?' . custom_http_build_query( $getParams );
+		return 'https://dashboard.serversmtp.com/api/stats/emails/csv?' . custom_http_build_query( $getParams );
 
 	}
 
