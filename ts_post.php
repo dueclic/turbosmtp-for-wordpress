@@ -100,7 +100,7 @@ function post_admin_tsconfig() {
 						?>
                         <div class="notice notice-error is-dismissible">
                             <p>
-								<?php _e("Sender host is not valid.", "turbosmtp"); ?>
+								<?php _e("SMTP Server is not valid.", "turbosmtp"); ?>
                             </p>
                         </div>
 						<?php

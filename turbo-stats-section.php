@@ -126,15 +126,24 @@
 
             </div>
         </div>
-        <div class="other-stats">
-            <div class="queued" data-ts-filter="queue">
+        <div class="bounce" data-ts-filter="bounce">
+            <div class="panel">
+
                 <div class="heading">
-                    <h3><?php _e( "queued", "turbosmtp" ); ?></h3>
+                    <h3><?php _e( "bounces", "turbosmtp" ); ?></h3>
                 </div>
+
                 <div class="body">
+                    <h4></h4>
+                </div>
+
+                <div class="foot">
                     <p></p>
                 </div>
+
             </div>
+        </div>
+        <div class="other-stats">
             <div class="unsubscribes" data-ts-filter="deleted">
                 <div class="heading">
                     <h3><?php _e( "unsubscribes", "turbosmtp" ); ?></h3>
@@ -151,9 +160,17 @@
                     <p></p>
                 </div>
             </div>
-            <div class="bounce" data-ts-filter="bounce">
+            <div class="queued" data-ts-filter="queue">
                 <div class="heading">
-                    <h3><?php _e( "bounces", "turbosmtp" ); ?></h3>
+                    <h3><?php _e( "queued", "turbosmtp" ); ?></h3>
+                </div>
+                <div class="body">
+                    <p></p>
+                </div>
+            </div>
+            <div class="drop" data-ts-filter="dropped">
+                <div class="heading">
+                    <h3><?php _e( "drop", "turbosmtp" ); ?></h3>
                 </div>
                 <div class="body">
                     <p></p>

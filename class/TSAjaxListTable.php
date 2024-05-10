@@ -6,34 +6,51 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 function get_icon( $item ) {
 
-	$status  = $item['status'];
-	$opened  = $item['opened'];
-	$spam    = $item['spam'];
-	$unsub   = $item['unsub'];
-	$clicked = $item['clicked'];
+	$status = $item['status'];
+
+	$analyticsfilterOptions = array(
+		'clicks'       => 'CLICK',
+		'unsubscribes' => 'UNSUB',
+		'spam'         => 'REPORT',
+		'drop'         => 'SYSFAIL',
+		'queued'       => array( 'NEW', 'DEFER' ),
+		'opens'        => array( 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
+		'delivered'    => array( 'SUCCESS', 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
+		'bounce'       => 'FAIL'
+	);
 
 
-	if ( $status === "REPORT" || $status === "SUCCESS" && $spam !== false ) {
-		$i_class = "icon-red_dot";
-	} else if ( $status === "UNSUB" || $status === "SUCCESS" && $unsub !== false ) {
-		$i_class = "icon-maroon_dot";
-	} else if ( $status === "CLICK" || $status === "SUCCESS" && $clicked !== false ) {
-		$i_class = "icon-darkgreen_dot";
-	} else if ( $status === "OPEN" || $status === "SUCCESS" && $opened !== false ) {
-		$i_class = "icon-green_dot";
-	} else if ( $status === "FAIL" ) {
-		$i_class = "icon-yellow_dot";
-	} else if ( $status === "SYSFAIL" ) {
-		$i_class = "icon-orange_dot";
-	} else if ( $status === "DEFER" ) {
-		$i_class = "icon-white_dot";
-	} else if ( $status === "SUCCESS" && $clicked === false && $opened === false && $spam === false && $unsub === false ) {
-		$i_class = "icon-gray_dot";
-	} else {
-		$i_class = "icon-white_dot";
+	$statusFound = null;
+
+	foreach ( $analyticsfilterOptions as $key => $statuses ) {
+		if ( ! is_array( $statuses ) ) {
+			$statuses = array( $statuses );
+		}
+
+		if ( in_array( $status, $statuses ) ) {
+			$statusFound = $key;
+			break;
+		}
 	}
 
-	return '<i class="icon ' . $i_class . '"></i>';
+	$status_i18n = array(
+		"queued"       => __( "Queue", "turbosmtp" ),
+		"delivered"    => __( "Delivered", "turbosmtp" ),
+		"bounce"       => __( "Bounced", "turbosmtp" ),
+		"opens"        => __( "Opened", "turbosmtp" ),
+		"clicks"       => __( "Click", "turbosmtp" ),
+		"unsubscribes" => __( "Unsubscribes", "turbosmtp" ),
+		"drop"         => __( "Dropped", "turbosmtp" ),
+		"spam"         => __( "Spam", "turbosmtp" ),
+		"all"          => __( "Total", "turbosmtp" )
+	);
+
+    if ($statusFound !== null){
+	    return '<span class="events events-' . $statusFound . '">'.$status_i18n[$statusFound].'</span>';
+    }
+
+    return '<span></span>';
+
 
 
 }
@@ -104,12 +121,12 @@ class TS_Ajax_List_Table extends WP_List_Table {
 
 		$data = array();
 
-		$api = new TurboApiStats( $ts_options["op_ts_email"], $ts_options["op_ts_password"] );
+		$api     = new TurboApiStats( $ts_options["op_ts_email"], $ts_options["op_ts_password"] );
 		$ts_data = $api->getEmails( $this->begin, $this->end, $this->filter, $this->get_pagenum() );
 
-		if (isset($ts_data["is_free"])){
-		    return $ts_data;
-        }
+		if ( isset( $ts_data["is_free"] ) ) {
+			return $ts_data;
+		}
 
 		$ts_emails = $ts_data['emails'];
 
@@ -211,11 +228,11 @@ class TS_Ajax_List_Table extends WP_List_Table {
 			case 'subject':
 			case 'from':
 			case 'to':
-				return $item[$column_name];
+				return $item[ $column_name ];
 			case 'datetime':
-				return date( "d/m/Y H:i", strtotime( $item[$column_name] ) );
+				return date( "d/m/Y H:i", strtotime( $item[ $column_name ] ) );
 			default:
-				return $item[$column_name];
+				return $item[ $column_name ];
 		}
 	}
 

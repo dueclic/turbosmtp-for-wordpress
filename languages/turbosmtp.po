@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: turboSMTP\n"
-"POT-Creation-Date: 2024-05-10 10:54+0200\n"
-"PO-Revision-Date: 2024-05-10 10:54+0200\n"
+"POT-Creation-Date: 2024-05-10 11:10+0200\n"
+"PO-Revision-Date: 2024-05-10 11:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -74,7 +74,7 @@ msgid "Sender email address is invalid"
 msgstr ""
 
 #: ts_post.php:103
-msgid "Sender host is not valid."
+msgid "SMTP Server is not valid."
 msgstr ""
 
 #: ts_post.php:113
@@ -173,7 +173,7 @@ msgid "Sender email configuration"
 msgstr ""
 
 #: turbo-config-section.php:101
-msgid "Sender host"
+msgid "SMTP Server"
 msgstr ""
 
 #: turbo-config-section.php:122
@@ -199,11 +199,11 @@ msgid ""
 msgstr ""
 
 #: turbo-config-section.php:159
-msgid "Encryption"
+msgid "SSL"
 msgstr ""
 
 #: turbo-config-section.php:166
-msgid "No encryption"
+msgid "No encryption (non-SSL)"
 msgstr ""
 
 #: turbo-config-section.php:173

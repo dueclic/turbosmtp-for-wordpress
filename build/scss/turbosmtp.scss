@@ -1,21 +1,34 @@
 //colors
+
+:root {
+  --queued-color: rgb(181, 181, 190);
+  --delivered-color: rgb(0, 144, 194);
+  --bounce-color: rgb(232, 193, 79);
+  --all-color: rgb(72,72,79);
+  --open-color: rgb(0, 82, 147);
+  --click-color: rgb(104, 159, 56);
+  --spam-color: rgb(198, 40, 40);
+  --drop-color: rgb(133, 133, 141);
+  --unsub-color: rgb(235, 91, 135);
+}
+
 $white: #fff;
-$color_congress_blue_approx: #004d8b;
-$color_picton_blue_approx: #4ca5ec;
-$color_lochmara_approx: #058dc7;
-$color_stack_approx: #8d8d8d;
-$color_storm_dust_approx: #666666;
-$color_mantis_approx: #84de53;
-$color_forest_green_approx: #22bb2a;
-$color_masala_approx: #3c3c3c;
-$color_iron_approx: #d8d8d8;
+$color_main: #004d8b;
+$color_status_heading: rgba(255,255,255, 0.2) !important;
+
+$color_status_all: var(--all-color);
+$color_status_delivered: var(--delivered-color);
+$color_status_open: var(--open-color);
+$color_status_click: var(--click-color);
+$color_status_bounce: var(--bounce-color);
+$color_status_unsubscribe: var(--unsub-color);
+$color_status_drop: var(--drop-color);
+$color_status_queued: var(--queued-color);
+$color_status_spam: var(--spam-color);
+
+$color_status_queued_accent: #3c3c3c;
 $color_pink_swan_approx: #bbbbbb;
-$color_lonestar_approx: #670202;
-$color_stiletto_approx: #a6303a;
-$red: #ff0000;
 $color_outrageous_orange_approx: #ff5e3c;
-$color_web_orange_approx: #ffa800;
-$color_sunglow_approx: #ffc33e;
 $seashell: #f1f1f1;
 $color_tapa_approx: #717375;
 $color_cape_cod_approx: #3e4145;
@@ -34,25 +47,15 @@ $color_alabaster_approx: #fbfbfb;
 $color_mine_shaft_approx: #333;
 
 //urls
-$url_0: url(../../icons/green_dot.png);
-$url_1: url(../../icons/red_dot.png);
-$url_2: url(../../icons/maroon_dot.png);
-$url_3: url(../../icons/white_dot.png);
-$url_4: url(../../icons/yellow_dot.png);
-$url_5: url(../../icons/orange_dot.png);
-$url_6: url(../../icons/black_dot.png);
-$url_7: url(../../icons/gray_dot.png);
-$url_8: url(../../icons/lighb_dot.png);
-$url_9: url(../../icons/darkgreen_dot.png);
-$url_10: url(../../img/icon-stat.png);
-$url_11: url(../../img/icon-arrow-down.png);
-$url_12: url(../../img/icon-arrow-left.png);
+$stats_icon: url(../../img/icon-stat.png);
+$arrow_down_icon: url(../../img/icon-arrow-down.png);
+$arrow_left_icon: url(../../img/icon-arrow-left.png);
 
 //@extend-elements
 //original selectors
 //.submit input.std, a.std
-%extend_1 {
-  background: $color_congress_blue_approx;
+%btn {
+  background: $color_main;
   color: $white;
   padding: 10px;
   font-size: 13px;
@@ -114,7 +117,10 @@ label {
   display: none;
   > div {
     display: flex;
-    width: 20%;
+    width: 16%;
+    &.other-stats {
+      width: 20%;
+    }
     > .panel {
       //Instead of the line below you could use @include box-sizing($bs)
       box-sizing: border-box;
@@ -219,61 +225,61 @@ label {
       }
       > {
         .queued {
-          background: $color_iron_approx;
+          background: $color_status_queued;
           > {
             .body {
-              background: $color_pink_swan_approx;
-              > p {
-                color: $color_masala_approx;
-              }
-            }
-            .heading h3 {
-              color: $color_masala_approx;
+              background: $color_status_heading;
             }
           }
         }
         .unsubscribes {
-          background: $color_lonestar_approx;
+          background: $color_status_unsubscribe;
           > .body {
-            background: $color_stiletto_approx;
+            background: $color_status_heading;
           }
         }
         .spam {
-          background: $red;
+          background: $color_status_spam;
           > .body {
-            background: $color_outrageous_orange_approx;
+            background: $color_status_heading;
           }
         }
-        .bounce {
-          background: $color_web_orange_approx;
+        .drop {
+          background: $color_status_drop;
           > .body {
-            background: $color_sunglow_approx;
+            background: $color_status_heading;
           }
         }
       }
     }
+    .bounce > .panel {
+        background: $color_status_bounce;
+        > .heading {
+          background: $color_status_heading;
+        }
+    }
     .total-email > .panel {
-      background: $color_picton_blue_approx;
+      background: $color_status_all;
       > .heading {
-        background: $color_lochmara_approx;
+        background: $color_status_heading;
       }
     }
     .delivered > .panel {
-      background: $color_stack_approx;
+      background: $color_status_delivered;
       > .heading {
-        background: $color_storm_dust_approx;
+        background: $color_status_heading;
       }
     }
     .opens > .panel {
-      background: $color_mantis_approx;
+      background: $color_status_open;
       > .heading {
-        background: $color_mantis_approx;
+        background: $color_status_heading;
       }
     }
     .clicks > .panel {
-      background: $color_forest_green_approx;
+      background: $color_status_click;
       > .heading {
-        background: $color_forest_green_approx;
+        background: $color_status_heading;
       }
     }
   }
@@ -330,7 +336,7 @@ label {
     display: flex;
     .box {
       width: 100%;
-      background: $color_congress_blue_approx;
+      background: $color_main;
       //Instead of the line below you could use @include box-sizing($bs)
       box-sizing: border-box;
       overflow: hidden;
@@ -420,7 +426,7 @@ label {
       }
       a {
         font-size: 17px;
-        color: $color_congress_blue_approx;
+        color: $color_main;
       }
       .big {
         font-size: 22px;
@@ -441,16 +447,80 @@ label {
   background-position: 14px 14px;
   background-repeat: no-repeat;
 }
-[class*=" icon-"] {
+
+.events {
+  pointer-events: none;
   display: inline-block;
-  width: 14px;
-  height: 14px;
-  *margin-right: .3em;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-position: 14px 14px;
-  background-repeat: no-repeat;
+  padding: 0 1rem 0 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5em;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  font-weight: 500;
+  position: relative;
+  &:after {
+    content: "";
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 2px;
+  }
+  &.events-delivered {
+    color: $color_status_delivered;
+    &:after {
+      background-color: $color_status_delivered;
+    }
+  }
+  &.events-queued {
+    color: $color_status_queued;
+    &:after {
+      background-color: $color_status_queued;
+    }
+  }
+  &.events-bounce {
+    color: $color_status_bounce;
+    &:after {
+      background-color: $color_status_bounce;
+    }
+  }
+  &.events-opens {
+    color: $color_status_open;
+    &:after {
+      background-color: $color_status_open;
+    }
+  }
+  &.events-clicks {
+    color: $color_status_click;
+    &:after {
+      background-color: $color_status_click;
+    }
+  }
+  &.events-unsubscribes {
+    color: $color_status_unsubscribe;
+    &:after {
+      background-color: $color_status_unsubscribe;
+    }
+  }
+  &.events-drop {
+    color: $color_status_drop;
+    &:after {
+      background-color: $color_status_drop;
+    }
+  }
+  &.events-spam {
+    color: $color_status_spam;
+    &:after {
+      background-color: $color_status_spam;
+    }
+  }
 }
+
 .history-step {
   display: none;
 }
@@ -512,46 +582,17 @@ label {
   h1 {
     font-size: 30px;
     line-height: 36px;
-    color: $color_congress_blue_approx;
+    color: $color_main;
     text-align: center;
   }
   p {
     text-align: center;
   }
 }
-.icon-green_dot {
-  background: $url_0 center center;
-}
-.icon-red_dot {
-  background: $url_1 center center;
-}
-.icon-maroon_dot {
-  background: $url_2 center center;
-}
-.icon-white_dot {
-  background: $url_3 center center;
-}
-.icon-yellow_dot {
-  background: $url_4 center center;
-}
-.icon-orange_dot {
-  background: $url_5 center center;
-}
-.icon-black_dot {
-  background: $url_6 center center;
-}
-.icon-gray_dot {
-  background: $url_7 center center;
-}
-.icon-lighblue_dot {
-  background: $url_8 center center;
-}
-.icon-darkgreen_dot {
-  background: $url_9 center center;
-}
+
 .check-column {
-  width: 30px;
-  padding: 10px 0 0 10px;
+  width: 100px !important;
+  padding: 8px 10px !important;
 }
 .other-infos {
   display: none;
@@ -574,19 +615,19 @@ label {
   right: 20px;
 }
 .icon-stat {
-  background: $url_10;
+  background: $stats_icon;
   width: 22px;
   height: 16px;
   background-repeat: no-repeat;
 }
 .icon-arrow-down {
-  background: $url_11;
+  background: $arrow_down_icon;
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
 }
 .icon-arrow-left {
-  background: $url_12;
+  background: $arrow_left_icon;
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
@@ -602,51 +643,57 @@ label {
 }
 .wp-list-table {
   > thead {
-    background: $color_picton_blue_approx;
+    background: $color_status_all;
     &.all {
-      background: $color_picton_blue_approx;
+      background: $color_status_all;
       > tr > th {
         color: $white;
       }
     }
     &.delivered {
-      background: $color_stack_approx;
+      background: $color_status_delivered;
       > tr > th {
         color: $white;
       }
     }
     &.read {
-      background: $color_mantis_approx;
+      background: $color_status_open;
       > tr > th {
         color: $white;
       }
     }
     &.click {
-      background: $color_forest_green_approx;
+      background: $color_status_click;
       > tr > th {
         color: $white;
       }
     }
     &.queue {
-      background: $color_iron_approx;
+      background: $color_status_queued;
       > tr > th {
-        color: $color_masala_approx;
+        color: $color_status_queued_accent;
       }
     }
     &.deleted {
-      background: $color_lonestar_approx;
+      background: $color_status_unsubscribe;
       > tr > th {
         color: $white;
       }
     }
     &.spam {
-      background: $red;
+      background: $color_status_spam;
       > tr > th {
         color: $white;
       }
     }
     &.bounce {
-      background: $color_web_orange_approx;
+      background: $color_status_bounce;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.dropped {
+      background: $color_status_drop;
       > tr > th {
         color: $white;
       }
@@ -717,15 +764,15 @@ label {
   font-weight: normal;
 }
 .submit input.std {
-  @extend %extend_1;
+  @extend %btn;
 }
 a.std {
-  @extend %extend_1;
+  @extend %btn;
   color: $white !important;
   text-decoration: none !important;
 }
 input.std_sm {
-  background: $color_congress_blue_approx;
+  background: $color_main;
   color: $white;
   padding: 10px;
   font-size: 13px;

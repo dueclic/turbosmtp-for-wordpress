@@ -227,21 +227,23 @@
 
             switch (key) {
                 case "queued":
-                    return "rgba(216,216,216," + value + ")";
+                    return "rgba(181,181,190," + value + ")";
                 case "delivered":
-                    return "rgba(102,102,102," + value + ")";
+                    return "rgba(0,144,194," + value + ")";
                 case "bounce":
-                    return "rgba(255,168,0," + value + ")";
+                    return "rgba(232,193,79," + value + ")";
                 case "opens":
-                    return "rgba(117,197,74," + value + ")";
+                    return "rgba(0,82,147," + value + ")";
                 case "clicks":
-                    return "rgba(30,166,37," + value + ")";
+                    return "rgba(104,159,56," + value + ")";
                 case "unsubscribes":
-                    return "rgba(103,2,2," + value + ")";
+                    return "rgba(235,91,135," + value + ")";
                 case "spam":
-                    return "rgba(255,0,0," + value + ")";
+                    return "rgba(198,40,40," + value + ")";
+                case "drop":
+                    return "rgba(133,133,141," + value + ")";
                 default:
-                    return "rgba(5,141,199," + value + ")";
+                    return "rgba(72,72,79," + value + ")";
 
             }
 
@@ -325,7 +327,7 @@
                             lineTension: 0
                         });
 
-                        if (key == "delivered" || key == "opens" || key == "clicks")
+                        if (key == "delivered" || key == "opens" || key == "clicks" || key == 'bounce')
                             fillBox(key, values, d.total, true);
 
                         else if (key != "all")

@@ -98,7 +98,7 @@
                 <table class="form-table">
                     <tr valign="top">
                         <th scope="row"><label for="ts_smtp_host">
-								<?php _e( "Sender host", "turbosmtp" ); ?>
+								<?php _e( "SMTP Server", "turbosmtp" ); ?>
                             </label>
                         </th>
                         <td>
@@ -156,14 +156,14 @@
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e( "Encryption", "turbosmtp" ); ?>
+                        <th scope="row"><?php _e( "SSL", "turbosmtp" ); ?>
                         </th>
                         <td>
                             <p>
                                 <input id="turboSMTP_mail_smtpsecure_none" name="ts_smtp_smtpsecure" type="radio"
                                        value=""<?php if ( $ts_send_options["smtpsecure"] == '' ) { ?> checked="checked"<?php } ?> />
                                 <label for="ts_smtp_smtpsecure">
-									<?php _e( "No encryption", "turbosmtp" ); ?>
+									<?php _e( "No encryption (non-SSL)", "turbosmtp" ); ?>
                                 </label>
                             </p>
                             <p>

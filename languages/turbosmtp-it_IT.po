@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: turboSMTP\n"
-"POT-Creation-Date: 2024-05-10 10:54+0200\n"
-"PO-Revision-Date: 2024-05-10 10:54+0200\n"
+"POT-Creation-Date: 2024-05-10 11:10+0200\n"
+"PO-Revision-Date: 2024-05-10 11:10+0200\n"
 "Last-Translator: Andrea <andrea@debbaweb.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -74,8 +74,8 @@ msgid "Sender email address is invalid"
 msgstr "Il campo Indirizzo email mittente deve contenere un indirizzo valido."
 
 #: ts_post.php:103
-msgid "Sender host is not valid."
-msgstr "Host di invio non valido."
+msgid "SMTP Server is not valid."
+msgstr "Server SMTP non valido."
 
 #: ts_post.php:113
 msgid "Sender name must be not empty"
@@ -175,8 +175,8 @@ msgid "Sender email configuration"
 msgstr "Invio email"
 
 #: turbo-config-section.php:101
-msgid "Sender host"
-msgstr "Host di invio"
+msgid "SMTP Server"
+msgstr "SMTP Server"
 
 #: turbo-config-section.php:122
 msgid "Sender name"
@@ -203,12 +203,12 @@ msgstr ""
 "connessioni cifrate"
 
 #: turbo-config-section.php:159
-msgid "Encryption"
-msgstr "Crittografia"
+msgid "SSL"
+msgstr "SSL"
 
 #: turbo-config-section.php:166
-msgid "No encryption"
-msgstr "Nessuna crittografia"
+msgid "No encryption (non-SSL)"
+msgstr "Nessuna crittografia (no SSL)"
 
 #: turbo-config-section.php:173
 msgid "Use SSL"
@@ -428,3 +428,9 @@ msgstr ""
 #: turbo-stats-section.php:233
 msgid "Upgrade plan"
 msgstr "Aggiorna piano"
+
+#~ msgid "Sender host"
+#~ msgstr "Host di invio"
+
+#~ msgid "Encryption"
+#~ msgstr "Crittografia"
