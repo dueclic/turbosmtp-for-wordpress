@@ -5,7 +5,7 @@
  * Description: Easily send emails from your WordPress blog using turboSMTP's services
  * Author: dueclic
  * Author URI: https://www.dueclic.com
- * Version: 4.2
+ * Version: 4.3
  * Tested up to: 6.5
  * Text Domain: turbosmtp
  * Domain Path: /languages/
@@ -210,7 +210,7 @@ function ts_enqueue_scripts() {
 	);
 
 	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
-		wp_enqueue_style( 'ts-style-css', plugins_url( 'dist/css/turbosmtp.min.css', __FILE__ ), array(), '2.7' );
+		wp_enqueue_style( 'ts-style-css', plugins_url( 'dist/css/turbosmtp.min.css', __FILE__ ), array(), '4.3' );
 
 		if ( $screen->id === "turbosmtp_page_ts-stats" ) {
 
@@ -228,7 +228,7 @@ function ts_enqueue_scripts() {
 			wp_register_script( 'ts-stat-js', plugins_url( 'dist/js/turbosmtp.min.js', __FILE__ ), array(
 				'jquery',
 				'jquery-ui-core'
-			), '2.7', true );
+			), '4.3', true );
 			wp_localize_script( 'ts-stat-js', 'ts', array(
 				'chart_ajax_url' => admin_url( 'admin-ajax.php?action=get_stats_chart' ),
 				'i18n'           => array(

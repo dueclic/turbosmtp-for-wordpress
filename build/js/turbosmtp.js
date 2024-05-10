@@ -257,7 +257,7 @@
             for (var i = 0; i < values.length; i++)
                 total += values[i];
 
-            pct = Number((total / tot) * 100).toFixed(2);
+            pct = (tot === 0 ?  0 : Number((total / tot) * 100)).toFixed(2);
 
             var pct_part = pct.toString().split('.');
 
