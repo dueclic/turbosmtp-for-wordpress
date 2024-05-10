@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: turboSMTP\n"
-"POT-Creation-Date: 2019-11-21 12:05+0100\n"
-"PO-Revision-Date: 2019-11-21 12:05+0100\n"
+"POT-Creation-Date: 2024-05-10 10:54+0200\n"
+"PO-Revision-Date: 2024-05-10 10:54+0200\n"
 "Last-Translator: Andrea <andrea@debbaweb.it>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: turbo-smtp-plugin.php\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: class/TSAjaxListTable.php:57 turbo-smtp-plugin.php:224
+#: class/TSAjaxListTable.php:57 turbo-smtp-plugin.php:245
 msgid "Subject"
 msgstr "Oggetto"
 
@@ -36,7 +36,7 @@ msgstr "A"
 msgid "Date / Time"
 msgstr "Data / ora"
 
-#: class/TSAjaxListTable.php:62 turbo-smtp-plugin.php:225
+#: class/TSAjaxListTable.php:62 turbo-smtp-plugin.php:246
 msgid "Error description"
 msgstr "Motive errore"
 
@@ -256,113 +256,116 @@ msgstr ""
 msgid "Proceed"
 msgstr "Procedi"
 
-#. Description of the plugin/theme
-#: turbo-smtp-plugin.php:14
+#: turbo-smtp-plugin.php:15
 msgid "Easily send emails from your WordPress blog using turboSMTP's services"
 msgstr ""
 "Invia facilmente le email dal tuo sito web o blog WordPress usando turboSMTP"
 
-#: turbo-smtp-plugin.php:61
+#: turbo-smtp-plugin.php:62
 msgid "European"
 msgstr "Europeo"
 
-#: turbo-smtp-plugin.php:62
+#: turbo-smtp-plugin.php:63
 msgid "Not european"
 msgstr "Non europeo"
 
-#: turbo-smtp-plugin.php:180
+#: turbo-smtp-plugin.php:186
 msgid "This plugin is powered by"
 msgstr "Questo plugin è stato realizzato da"
 
-#: turbo-smtp-plugin.php:215
+#: turbo-smtp-plugin.php:235
 msgid "Queue"
 msgstr "In coda"
 
-#: turbo-smtp-plugin.php:216
+#: turbo-smtp-plugin.php:236
 msgid "Delivered"
 msgstr "Consegnate"
 
-#: turbo-smtp-plugin.php:217
+#: turbo-smtp-plugin.php:237
 msgid "Bounced"
 msgstr "Bounce"
 
-#: turbo-smtp-plugin.php:218
+#: turbo-smtp-plugin.php:238
 msgid "Opened"
 msgstr "Aperte"
 
-#: turbo-smtp-plugin.php:219
+#: turbo-smtp-plugin.php:239
 msgid "Click"
 msgstr "Click"
 
-#: turbo-smtp-plugin.php:220
+#: turbo-smtp-plugin.php:240
 msgid "Unsubscribes"
 msgstr "Cancellazioni"
 
-#: turbo-smtp-plugin.php:221
+#: turbo-smtp-plugin.php:241
+msgid "Dropped"
+msgstr "Scartate"
+
+#: turbo-smtp-plugin.php:242
 msgid "Spam"
 msgstr "Spam"
 
-#: turbo-smtp-plugin.php:222
+#: turbo-smtp-plugin.php:243
 msgid "Total"
 msgstr "Totale"
 
-#: turbo-smtp-plugin.php:223
+#: turbo-smtp-plugin.php:244
 msgid "No results to show"
 msgstr "Nessun risultato da mostrare!"
 
-#: turbo-smtp-plugin.php:227
+#: turbo-smtp-plugin.php:248
 msgid "Today"
 msgstr "Oggi"
 
-#: turbo-smtp-plugin.php:228
+#: turbo-smtp-plugin.php:249
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: turbo-smtp-plugin.php:229
+#: turbo-smtp-plugin.php:250
 msgid "Last week"
 msgstr "Ultima settimana"
 
-#: turbo-smtp-plugin.php:230
+#: turbo-smtp-plugin.php:251
 msgid "Last month"
 msgstr "Ultimo mese"
 
-#: turbo-smtp-plugin.php:231
+#: turbo-smtp-plugin.php:252
 msgid "This month"
 msgstr "Questo mese"
 
-#: turbo-smtp-plugin.php:232
+#: turbo-smtp-plugin.php:253
 msgid "Last 30 days"
 msgstr "Ultimi 30 giorni"
 
-#: turbo-smtp-plugin.php:233
+#: turbo-smtp-plugin.php:254
 msgid "Last 7 days"
 msgstr "Ultimi 7 giorni"
 
-#: turbo-smtp-plugin.php:234
+#: turbo-smtp-plugin.php:255
 msgid "Custom range"
 msgstr "Personalizzato"
 
-#: turbo-smtp-plugin.php:235
+#: turbo-smtp-plugin.php:256
 msgid "Previous month"
 msgstr "Mese precedente"
 
-#: turbo-smtp-plugin.php:236
+#: turbo-smtp-plugin.php:257
 msgid "Current year"
 msgstr "Anno in corso"
 
-#: turbo-smtp-plugin.php:237
+#: turbo-smtp-plugin.php:258
 msgid "Last year"
 msgstr "Ultimo anno"
 
-#: turbo-smtp-plugin.php:238
+#: turbo-smtp-plugin.php:259
 msgid "Confirm"
 msgstr "Conferma"
 
-#: turbo-smtp-plugin.php:239
+#: turbo-smtp-plugin.php:260
 msgid "Clear"
 msgstr "Reset"
 
-#: turbo-smtp-plugin.php:240
+#: turbo-smtp-plugin.php:261
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -370,51 +373,51 @@ msgstr "Annulla"
 msgid "Loading analytics data..."
 msgstr "Caricamento dei dati di analisi in corso..."
 
-#: turbo-stats-section.php:50
+#: turbo-stats-section.php:54
 msgid "No results found for your temporal choice."
 msgstr "Non è presente alcun risultato nella fascia temporale scelta"
 
-#: turbo-stats-section.php:60
+#: turbo-stats-section.php:64
 msgid "total sent emails"
 msgstr "email totali inviate"
 
-#: turbo-stats-section.php:78
+#: turbo-stats-section.php:82
 msgid "delivered emails"
 msgstr "email consegnate"
 
-#: turbo-stats-section.php:95
+#: turbo-stats-section.php:99
 msgid "opened emails"
 msgstr "email aperte"
 
-#: turbo-stats-section.php:112
+#: turbo-stats-section.php:116
 msgid "clicked emails"
 msgstr "email cliccate"
 
-#: turbo-stats-section.php:128
+#: turbo-stats-section.php:132
 msgid "queued"
 msgstr "in coda"
 
-#: turbo-stats-section.php:136
+#: turbo-stats-section.php:140
 msgid "unsubscribes"
 msgstr "cancellazioni"
 
-#: turbo-stats-section.php:144
+#: turbo-stats-section.php:148
 msgid "spam reports"
 msgstr "segnalazioni spam"
 
-#: turbo-stats-section.php:152
+#: turbo-stats-section.php:156
 msgid "bounces"
 msgstr "bounce"
 
-#: turbo-stats-section.php:170
+#: turbo-stats-section.php:174
 msgid "Loading emails history..."
 msgstr "Caricamento storico email in corso..."
 
-#: turbo-stats-section.php:222
+#: turbo-stats-section.php:226
 msgid "Upgrade your plan to unlock statistics"
 msgstr "Aggiorna il tuo piano per sbloccare le statistiche"
 
-#: turbo-stats-section.php:225
+#: turbo-stats-section.php:229
 msgid ""
 "You are currently on a free trial plan. Please upgrade to view the full "
 "dashboard."
@@ -422,22 +425,6 @@ msgstr ""
 "Il tuo piano attivo è di tipo “prova gratuito”. Effettua l’upgrade per "
 "visualizzare la dashboard completa."
 
-#: turbo-stats-section.php:229
+#: turbo-stats-section.php:233
 msgid "Upgrade plan"
 msgstr "Aggiorna piano"
-
-#. Plugin Name of the plugin/theme
-msgid "turboSMTP"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "http://www.serversmtp.com/en/smtp-wordpress-configure"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "dueclic"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://www.dueclic.com"
-msgstr ""

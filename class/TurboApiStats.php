@@ -6,7 +6,9 @@ function calculate_data( $curDate, $start_date, $first_date ) {
 	return date( "d/m/Y", $date );
 }
 
-function get_stat_array( $dataChart, $totalData, $totalLabels, $start_date, $end_date ) {
+function get_stat_array( $dataChart, $totalData, $start_date, $end_date ) {
+
+	$totalLabels = 9;
 
 	$simple_array = array(
 		"max"   => 0,
@@ -99,41 +101,30 @@ function routing_filter( $filter ) {
 	switch ( $filter ) {
 
 		case "queue":
-
 			return '["NEW","DEFER"]';
 
-			break;
-
 		case "delivered":
-
 			return '["SUCCESS","OPEN","CLICK","UNSUB","REPORT"]';
 
 		case "read":
-
 			return '["OPEN","CLICK","UNSUB","REPORT"]';
 
 		case "click":
-
 			return '"CLICK"';
 
 		case "spam":
-
 			return '"REPORT"';
 
 		case "deleted":
-
 			return '"UNSUB"';
 
 		case "bounce":
-
 			return '["FAIL"]';
 
 		case "dropped":
-
 			return '["SYSFAIL"]';
 
 		default :
-
 			return '"*"';
 
 	}
@@ -181,8 +172,10 @@ class TurboApiStats extends TurboApiClient {
 			"start"  => $begin,
 			"end"    => $end,
 			"page"   => $page,
+			"filterBy" => "subject",
+			"fuzzySearch" => true,
 			"filter" => routing_filter( $filter ),
-			"tz"     => "+01:00"
+			"tz"     => wp_timezone_string()
 		);
 
 		if ( $begin == false ) {
@@ -233,7 +226,7 @@ class TurboApiStats extends TurboApiClient {
 			"start_date" => $start_date,
 			"end_date"   => $end_date,
 			"grp"        => "d",
-			"tz"         => "+01:00"
+			"tz"         => wp_timezone_string()
 		);
 
 		$stats = $api->getDecodedJson( '/stats2/chart-data', $getParams );
@@ -248,7 +241,7 @@ class TurboApiStats extends TurboApiClient {
 
 		$total = $api->getDecodedJson( '/stats/panes/emails/count', $getParams );
 
-		return get_stat_array( $stats, $total['count'], 8, $start_date, $end_date );
+		return get_stat_array( $stats, $total['count'], $start_date, $end_date );
 
 	}
 

@@ -84,7 +84,7 @@
 
 		?>
 
-        <div class="pull-right">
+        <div class="ts-pull-right">
             <p><?php _e( "Welcome", "turbosmtp" ); ?> <?php echo $ts_options["op_ts_email"]; ?></p>
         </div>
 

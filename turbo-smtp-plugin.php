@@ -5,7 +5,7 @@
  * Description: Easily send emails from your WordPress blog using turboSMTP's services
  * Author: dueclic
  * Author URI: https://www.dueclic.com
- * Version: 4.0
+ * Version: 4.1
  * Tested up to: 6.5
  * Text Domain: turbosmtp
  * Domain Path: /languages/
@@ -173,10 +173,10 @@ function TSdisactivate() {
 
 function _ajax_fetch_ts_history_callback() {
 
-	$start_date = isset( $_REQUEST['begin'] ) ? sanitize_text_field($_REQUEST['begin']) : null;
-	$end_date   = isset( $_REQUEST['end'] ) ? sanitize_text_field($_REQUEST['end']) : null;
+	$start_date = isset( $_REQUEST['begin'] ) ? sanitize_text_field( $_REQUEST['begin'] ) : null;
+	$end_date   = isset( $_REQUEST['end'] ) ? sanitize_text_field( $_REQUEST['end'] ) : null;
 
-	$wp_list_table = new TS_Ajax_List_Table( $start_date, $end_date, sanitize_text_field($_REQUEST['filter']) );
+	$wp_list_table = new TS_Ajax_List_Table( $start_date, $end_date, sanitize_text_field( $_REQUEST['filter'] ) );
 	$wp_list_table->ajax_response();
 }
 
@@ -201,64 +201,70 @@ add_action( "ts_change_footer_copyright", "TSChange_Copyright" );
 
 function ts_enqueue_scripts() {
 
-    $screen = get_current_screen();
-    $turbo_admin_pages = array("toplevel_page_ts", "toplevel_page_ts-dash", "turbosmtp_page_ts-stats", "turbosmtp_page_ts-logout");
+	$screen            = get_current_screen();
+	$turbo_admin_pages = array(
+		"toplevel_page_ts",
+		"toplevel_page_ts-dash",
+		"turbosmtp_page_ts-stats",
+		"turbosmtp_page_ts-logout"
+	);
 
-    if ($screen != null && in_array($screen->id, $turbo_admin_pages)){
-	    wp_enqueue_style( 'ts-style-css', plugins_url( 'dist/css/turbosmtp.min.css', __FILE__ ), array(), '2.7'  );
+	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
+		wp_enqueue_style( 'ts-style-css', plugins_url( 'dist/css/turbosmtp.min.css', __FILE__ ), array(), '2.7' );
 
-	    if ($screen->id === "turbosmtp_page_ts-stats") {
+		if ( $screen->id === "turbosmtp_page_ts-stats" ) {
 
-		    wp_enqueue_style( 'ts-chart-css', plugins_url( 'dist/lib/chart.js/Chart.min.css', __FILE__ ), array(), '2.9.3' );
+			wp_enqueue_style( 'ts-chart-css', plugins_url( 'dist/lib/chart.js/Chart.min.css', __FILE__ ), array(), '2.9.3' );
 
-		    wp_enqueue_style( 'ts-drange-css', plugins_url( 'dist/lib/daterangepicker/daterangepicker.css', __FILE__ ), array(), '3.0.5' );
+			wp_enqueue_style( 'ts-drange-css', plugins_url( 'dist/lib/daterangepicker/daterangepicker.css', __FILE__ ), array(), '3.0.5' );
 
 
-		    wp_enqueue_script( 'ts-chart', plugins_url( 'dist/lib/chart.js/Chart.bundle.min.js', __FILE__ ), array( 'jquery' ), '2.9.3', true );
-		    wp_enqueue_script( 'ts-drange-js', plugins_url( 'dist/lib/daterangepicker/daterangepicker.js', __FILE__ ), array(
-			    'jquery',
-			    'jquery-ui-core',
-		    ), '3.0.5', true );
+			wp_enqueue_script( 'ts-chart', plugins_url( 'dist/lib/chart.js/Chart.bundle.min.js', __FILE__ ), array( 'jquery' ), '2.9.3', true );
+			wp_enqueue_script( 'ts-drange-js', plugins_url( 'dist/lib/daterangepicker/daterangepicker.js', __FILE__ ), array(
+				'jquery',
+				'jquery-ui-core',
+			), '3.0.5', true );
 
-		    wp_register_script( 'ts-stat-js', plugins_url( 'dist/js/turbosmtp.min.js', __FILE__ ), array(
-			    'jquery',
-			    'jquery-ui-core'
-		    ), '2.7', true );
-		    wp_localize_script( 'ts-stat-js', 'ts', array(
-			    'chart_ajax_url' => admin_url( 'admin-ajax.php?action=get_stats_chart' ),
-			    'i18n'           => array(
-				    "queued"            => __( "Queue", "turbosmtp" ),
-				    "delivered"         => __( "Delivered", "turbosmtp" ),
-				    "bounce"            => __( "Bounced", "turbosmtp" ),
-				    "opens"             => __( "Opened", "turbosmtp" ),
-				    "clicks"            => __( "Click", "turbosmtp" ),
-				    "unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
-				    "spam"              => __( "Spam", "turbosmtp" ),
-				    "all"               => __( "Total", "turbosmtp" ),
-				    "no_results"        => __( "No results to show", "turbosmtp" ),
-				    "subject"           => __( "Subject", "turbosmtp" ),
-				    "description_error" => __( "Error description", "turbosmtp" ),
-				    "drp_preset"        => array(
-					    'today'       => __( "Today", "turbosmtp" ),
-					    'yesterday'   => __( "Yesterday", "turbosmtp" ),
-					    'lastweek'    => __( "Last week", "turbosmtp" ),
-					    'lastmonth'   => __( "Last month", "turbosmtp" ),
-					    'thismonth'   => __( "This month", "turbosmtp" ),
-					    'last30days'  => __( "Last 30 days", "turbosmtp" ),
-					    'last7days'   => __( "Last 7 days", "turbosmtp" ),
-					    'customrange' => __( "Custom range", "turbosmtp" ),
-					    'prevmonth'   => __( "Previous month", "turbosmtp" ),
-					    'thisyear'    => __( "Current year", "turbosmtp" ),
-					    'prevyear'    => __( "Last year", "turbosmtp" ),
-					    'apply'       => __( "Confirm", "turbosmtp" ),
-					    'clear'       => __( "Clear", "turbosmtp" ),
-					    'cancel'      => __( "Cancel", "turbosmtp" ),
-				    ),
-			    ),
-		    ) );
-		    wp_enqueue_script( 'ts-stat-js' );
-	    }
-    }
+			wp_register_script( 'ts-stat-js', plugins_url( 'dist/js/turbosmtp.min.js', __FILE__ ), array(
+				'jquery',
+				'jquery-ui-core'
+			), '2.7', true );
+			wp_localize_script( 'ts-stat-js', 'ts', array(
+				'chart_ajax_url' => admin_url( 'admin-ajax.php?action=get_stats_chart' ),
+				'i18n'           => array(
+					"queued"            => __( "Queue", "turbosmtp" ),
+					"delivered"         => __( "Delivered", "turbosmtp" ),
+					"bounce"            => __( "Bounced", "turbosmtp" ),
+					"opens"             => __( "Opened", "turbosmtp" ),
+					"clicks"            => __( "Click", "turbosmtp" ),
+					"unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
+					"drop"              => __( "Dropped", "turbosmtp" ),
+					"spam"              => __( "Spam", "turbosmtp" ),
+					"all"               => __( "Total", "turbosmtp" ),
+					"no_results"        => __( "No results to show", "turbosmtp" ),
+					"subject"           => __( "Subject", "turbosmtp" ),
+					"description_error" => __( "Error description", "turbosmtp" ),
+					"drp_preset"        => array(
+						'today'       => __( "Today", "turbosmtp" ),
+						'yesterday'   => __( "Yesterday", "turbosmtp" ),
+						'lastweek'    => __( "Last week", "turbosmtp" ),
+						'lastmonth'   => __( "Last month", "turbosmtp" ),
+						'thismonth'   => __( "This month", "turbosmtp" ),
+						'last30days'  => __( "Last 30 days", "turbosmtp" ),
+						'last7days'   => __( "Last 7 days", "turbosmtp" ),
+						'customrange' => __( "Custom range", "turbosmtp" ),
+						'prevmonth'   => __( "Previous month", "turbosmtp" ),
+						'thisyear'    => __( "Current year", "turbosmtp" ),
+						'prevyear'    => __( "Last year", "turbosmtp" ),
+						'apply'       => __( "Confirm", "turbosmtp" ),
+						'clear'       => __( "Clear", "turbosmtp" ),
+						'cancel'      => __( "Cancel", "turbosmtp" ),
+					),
+				),
+			) );
+			wp_enqueue_script( 'ts-stat-js' );
+		}
+	}
 }
 
 function ts_wordpress_libraries() {

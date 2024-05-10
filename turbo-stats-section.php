@@ -13,7 +13,7 @@
 
 <div class="wrap" id="paid-client" style="display:none;">
 
-    <div class="actions bulkactions pull-right">
+    <div class="actions bulkactions ts-pull-right">
 
         <form method="post" action="" class="change_date">
 

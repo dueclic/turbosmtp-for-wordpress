@@ -1,7 +1,7 @@
 === turboSMTP ===
 Contributors: dueclic
 Tags: turbo smtp,turboSMTP,smtp,mail,email,phpmailer,mailer,wp mail,mail smtp,ssl
-Requires at least: 4.0
+Requires at least: 4.1
 Tested up to: 6.5
 Stable tag: 4.0
 License: GPLv2 or later
@@ -28,6 +28,12 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 * **Languages**: the plugin is available in english and italian languages. Soon available the french and spanish ones.
 
 == Changelog ==
+
+= 4.1 =
+
+* Datepicker couldn't be displayed due conflicts with other plugins
+* Fix in chart data
+* Added new i18ns
 
 = 4.0 =
 

@@ -5,7 +5,7 @@
 	if ( turbosmtp_validapi() ):
         $ts_options = get_option( "ts_auth_options" );
         ?>
-        <div class="pull-right">
+        <div class="ts-pull-right">
             <p><?php _e( "Welcome", "turbosmtp" ); ?> <?php echo $ts_options["op_ts_email"]; ?></p>
         </div>
 
