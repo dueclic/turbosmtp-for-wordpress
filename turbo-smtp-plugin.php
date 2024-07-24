@@ -5,8 +5,8 @@
  * Description: Easily send emails from your WordPress blog using turboSMTP's services
  * Author: dueclic
  * Author URI: https://www.dueclic.com
- * Version: 4.3
- * Tested up to: 6.5
+ * Version: 4.4
+ * Tested up to: 6.6
  * Text Domain: turbosmtp
  * Domain Path: /languages/
  * License: GPL v3
