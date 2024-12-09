@@ -206,7 +206,11 @@
                 </div>
             </div>
 
-            <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
+            <?php
+            $page_value = isset($_REQUEST['page']) ? sanitize_text_field($_REQUEST['page']) : '';
+            ?>
+
+            <input type="hidden" name="page" value="<?php echo esc_attr($page_value); ?>"/>
 
             <div id="ts-history-table" style="">
 				<?php
