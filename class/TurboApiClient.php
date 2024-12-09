@@ -42,7 +42,7 @@ class TurboApiClient {
         $response = $this->get("/");
         $status_code = wp_remote_retrieve_response_code($response);
 
-        if ( $status_code == 412 ) {
+        if ( $status_code == 401 || $status_code === 412 ) {
             $body = json_decode(wp_remote_retrieve_body($response));
             throw new TurboApiException($body->message, $body->error);
         }

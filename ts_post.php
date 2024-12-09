@@ -8,7 +8,7 @@ function post_admin_tsconfig() {
 
 	if(isset($_POST['ts_mail_update']) && isset($_POST['ts_nonce_update'])){
 
-		if(!wp_verify_nonce(sanitize_text_field($_POST['ts_nonce_update']),'ts_nonce'))
+		if(!wp_verify_nonce(sanitize_text_field($_POST['ts_nonce_update']),'ts_nonce')) {
 			add_action("admin_notices", function(){
 				?>
 				<div class="notice notice-error is-dismissible">
@@ -16,6 +16,7 @@ function post_admin_tsconfig() {
 				</div>
 				<?php
 			});
+		}
 
 		else {
 
@@ -31,6 +32,7 @@ function post_admin_tsconfig() {
 			$ts_options['op_ts_validapi'] = false;
 
 			if ( ! $api->isValid() ) {
+
 				add_action( "admin_notices", function () use ($api) {
 					?>
 					<div class="notice notice-error is-dismissible">
