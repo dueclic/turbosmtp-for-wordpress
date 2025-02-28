@@ -3,7 +3,7 @@ Contributors: dueclic
 Tags: turboSMTP,smtp,email,mailer,ssl
 Requires at least: 6.0
 Tested up to: 6.7.1
-Stable tag: 4.8
+Stable tag: 4.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,9 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 * **Languages**: the plugin is available in english and italian languages. Soon available the french and spanish ones.
 
 == Changelog ==
+
+= 4.9.0 =
+* API keys integration 
 
 = 4.8 =
 * Fix _load_textdomain_just_in_time  warning from WP 6.7
