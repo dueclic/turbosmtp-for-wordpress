@@ -80,7 +80,12 @@ class Turbosmtp_Admin {
 	}
 
 	public function stats_page() {
-		$api = $this->api;
+		$end   = date( 'Y-m-d' );
+		$begin = strtotime( '-7 days', strtotime( $end ) );
+		$begin = date( 'Y-m-d', $begin );
+
+		$wp_list_table = new Turbosmtp_Messages_List_Table( $this->api, $begin, $end, 10, "all" );
+
 		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats.php';
 	}
 

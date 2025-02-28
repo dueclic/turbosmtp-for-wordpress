@@ -134,8 +134,8 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 			'from' => $filters['from'] ?? '',
 			'to' => $filters['to'] ?? '',
 			'page' => $filters['page'] ?? 1,
-			'limit' => $filters['per_page'] ?? 5,
-			'status' => ['SUCCESS', 'FAIL']
+			'limit' => $filters['limit'] ?? 5,
+			'status' => $filters['status']
 		], false, 'GET');
 
 		return $data;

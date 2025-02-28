@@ -8,7 +8,9 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 
 	private $total_items;
 
-	private $begin;
+	private $per_page;
+
+	private $from;
 	private $end;
 	private $filter;
 
@@ -59,7 +61,7 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		$data = array();
 
 		$ts_data = $this->api->get_analytics( [
-			'from' => $this->begin,
+			'from' => $this->from,
 			'to' => $this->end,
 			'filter' => $this->filter,
 			'page' =>  $this->get_pagenum()	,
@@ -145,11 +147,9 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$this->items  = $this->get_ts_data( $current_page );
 
-		$per_page = 10;
-
 		$this->set_pagination_args( array(
 			'total_items' => (int) $this->total_items,
-			'per_page'    => $per_page,
+			'per_page'    => $this->per_page,
 		) );
 
 	}
@@ -157,7 +157,7 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 	function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
 			case 'status':
-				return "[ICON] ".$item;
+				return turbosmtp_get_icon($item);
 			case 'subject':
 			case 'from':
 			case 'to':
@@ -170,17 +170,18 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 	}
 
 	function column_cb( $item ) {
-		return "[ICON] ". $item ;
+		return turbosmtp_get_icon($item) ;
 	}
 
 	/**
 	 * @param Turbosmtp_Api $api
-	 * @param $begin
+	 * @param $from
 	 * @param $end
-	 * @param $filter
+	 * @param int $per_page
+	 * @param bool $filter
 	 */
 
-	public function __construct( $api, $begin, $end, $filter = false ) {
+	public function __construct( $api, $from, $end, $per_page = 10, $filter = false ) {
 
 		$this->api = $api;
 
@@ -190,9 +191,10 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 			'ajax'     => true,
 		) );
 
-		$this->begin  = date( "Y-m-d", strtotime( $begin ) );
-		$this->end    = date( "Y-m-d", strtotime( $end ) );;
+		$this->from  = $from;
+		$this->end    = $end;
 		$this->filter = $filter;
+		$this->per_page = $per_page;
 
 	}
 
