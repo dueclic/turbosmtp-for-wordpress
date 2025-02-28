@@ -1,0 +1,859 @@
+//colors
+
+:root {
+  --queued-color: rgb(181, 181, 190);
+  --delivered-color: rgb(0, 144, 194);
+  --bounce-color: rgb(232, 193, 79);
+  --all-color: rgb(72,72,79);
+  --open-color: rgb(0, 82, 147);
+  --click-color: rgb(104, 159, 56);
+  --spam-color: rgb(198, 40, 40);
+  --drop-color: rgb(133, 133, 141);
+  --unsub-color: rgb(235, 91, 135);
+}
+
+$white: #fff;
+$color_main: #004d8b;
+$color_status_heading: rgba(255,255,255, 0.2) !important;
+
+$color_status_all: var(--all-color);
+$color_status_delivered: var(--delivered-color);
+$color_status_open: var(--open-color);
+$color_status_click: var(--click-color);
+$color_status_bounce: var(--bounce-color);
+$color_status_unsubscribe: var(--unsub-color);
+$color_status_drop: var(--drop-color);
+$color_status_queued: var(--queued-color);
+$color_status_spam: var(--spam-color);
+
+$color_status_queued_accent: #3c3c3c;
+$color_pink_swan_approx: #bbbbbb;
+$color_outrageous_orange_approx: #ff5e3c;
+$seashell: #f1f1f1;
+$color_tapa_approx: #717375;
+$color_cape_cod_approx: #3e4145;
+$color_alto_approx: #ddd;
+$color_gallery_approx: #eeeeee;
+$color_wild_sand_approx: #f5f5f5;
+$mercury: #e5e5e5;
+$color_emperor_approx: #4d4d4d;
+$color_silver_chalice_approx: #aaaaaa;
+$color_solitude_approx: #eaf5fa;
+$black_5: rgba(0, 0, 0, 0.05);
+$color_mischka_approx: #d2d6de;
+$color_mercury_approx: #e4e4e4;
+$color_star_dust_approx: #9d9d9d;
+$color_alabaster_approx: #fbfbfb;
+$color_mine_shaft_approx: #333;
+
+//urls
+$stats_icon: url(../../img/icon-stat.png);
+$arrow_down_icon: url(../../img/icon-arrow-down.png);
+$arrow_left_icon: url(../../img/icon-arrow-left.png);
+
+//@extend-elements
+//original selectors
+//.submit input.std, a.std
+%btn {
+  background: $color_main;
+  color: $white;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+  text-transform: uppercase;
+  border: 0;
+  cursor: pointer;
+}
+
+.t {
+  color: yellow;
+}
+
+h2 {
+  font-weight: normal;
+}
+h3 {
+  font-weight: normal;
+}
+p {
+  font-weight: normal;
+}
+label {
+  font-weight: normal;
+}
+.container-white {
+  width: 100%;
+  background: $white;
+  //Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+  margin-bottom: 30px;
+  tbody tr:nth-of-type(2n) {
+    background-color: transparent;
+  }
+}
+.turbo-promo {
+  margin: 0 auto !important;
+  img {
+    width: 100% !important;
+  }
+}
+.change_date {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  input {
+    padding: 10px;
+  }
+  label {
+    padding: 10px;
+  }
+}
+.other-infos-columns {
+  padding: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  display: none;
+  > div {
+    display: flex;
+    width: 16%;
+    &.other-stats {
+      width: 20%;
+    }
+    > .panel {
+      //Instead of the line below you could use @include box-sizing($bs)
+      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      margin-right: 4px;
+      cursor: pointer;
+      &:hover {
+        //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+        transform: scale(1.1);
+        z-index: 1001;
+        > .heading {
+          background: inherit;
+        }
+      }
+      > {
+        .heading {
+          padding: 0 15px 0 5px;
+          > h3 {
+            width: 100%;
+            color: $white;
+            text-align: right;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+        }
+        .body > h4 {
+          font-size: 50px;
+          color: $white;
+          text-align: center;
+          font-weight: 200;
+          line-height: 50px;
+          margin: 10px;
+          span {
+            font-size: 40px;
+          }
+        }
+        .foot p {
+          color: $white;
+          font-size: 22px;
+          font-weight: 200;
+          text-align: right;
+          padding: 3px 10px;
+          margin: 0;
+        }
+      }
+    }
+    &.active > .panel > .heading {
+      background: inherit;
+    }
+  }
+  > {
+    .other-stats {
+      flex-wrap: wrap;
+      > div {
+        width: 100%;
+        //Instead of the line below you could use @include box-sizing($bs)
+        box-sizing: border-box;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        > {
+          .heading {
+            float: left;
+            width: 100%;
+            margin-right: -51px;
+            > h3 {
+              display: inline-block;
+              margin-top: 10px;
+              margin-bottom: 10px;
+              padding-left: 10px;
+              color: $white;
+            }
+          }
+          .body {
+            float: left;
+            width: 50px;
+            > p {
+              margin-top: 10px;
+              margin-bottom: 10px;
+              color: $white;
+              text-align: center;
+            }
+          }
+        }
+        &:hover {
+          //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+          transform: scale(1.1);
+          z-index: 1001;
+          > .body {
+            background: inherit;
+          }
+        }
+        &:not(.bounce) {
+          margin-bottom: 3px;
+        }
+        &.active > .body {
+          background: inherit;
+        }
+      }
+      > {
+        .queued {
+          background: $color_status_queued;
+          > {
+            .body {
+              background: $color_status_heading;
+            }
+          }
+        }
+        .unsubscribes {
+          background: $color_status_unsubscribe;
+          > .body {
+            background: $color_status_heading;
+          }
+        }
+        .spam {
+          background: $color_status_spam;
+          > .body {
+            background: $color_status_heading;
+          }
+        }
+        .drop {
+          background: $color_status_drop;
+          > .body {
+            background: $color_status_heading;
+          }
+        }
+      }
+    }
+    .bounce > .panel {
+        background: $color_status_bounce;
+        > .heading {
+          background: $color_status_heading;
+        }
+    }
+    .total-email > .panel {
+      background: $color_status_all;
+      > .heading {
+        background: $color_status_heading;
+      }
+    }
+    .delivered > .panel {
+      background: $color_status_delivered;
+      > .heading {
+        background: $color_status_heading;
+      }
+    }
+    .opens > .panel {
+      background: $color_status_open;
+      > .heading {
+        background: $color_status_heading;
+      }
+    }
+    .clicks > .panel {
+      background: $color_status_click;
+      > .heading {
+        background: $color_status_heading;
+      }
+    }
+  }
+}
+@media screen and(max-width:767px) {
+  .turbo-about {
+    .register {
+      width: 100%;
+      order: 2;
+    }
+    .login {
+      width: 100%;
+      order: 1;
+    }
+  }
+  .other-infos-columns > div {
+    display: flex;
+    width: 100%;
+    margin-bottom: 3px;
+  }
+}
+@media screen and(min-width:768px) and(max-width:991px) {
+  .other-infos-columns {
+    > div > .panel > {
+      .heading > h3 {
+        font-size: 14px;
+      }
+      .body > h4 {
+        font-size: 30px;
+        line-height: 30px;
+        margin: 5px;
+        span {
+          font-size: 25px;
+        }
+      }
+    }
+    > .other-stats > div > .heading > h3 {
+      font-size: 12px;
+    }
+  }
+}
+.other-infos-noresults {
+  display: none;
+}
+.social-foot {
+  text-decoration: none;
+}
+.turbo-about {
+  padding: 30px 30px 70px;
+  display: flex;
+  flex-wrap: wrap;
+  .login {
+    width: 50%;
+    display: flex;
+    .box {
+      width: 100%;
+      background: $color_main;
+      //Instead of the line below you could use @include box-sizing($bs)
+      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
+      margin: 30px;
+      padding: 20px 20px 70px 20px;
+      h3 {
+        color: $white;
+        text-transform: uppercase;
+        font-weight: normal;
+        margin-bottom: 30px;
+        font-size: 22px;
+        text-align: center;
+      }
+      label {
+        font-size: 17px;
+        color: $white;
+        text-transform: uppercase;
+        font-weight: normal;
+      }
+      th {
+        padding-top: 0;
+        padding-bottom: 10px;
+      }
+      td {
+        margin-bottom: 0;
+        padding: 0 0 10px 0;
+      }
+      input {
+        &.form-input {
+          width: 100%;
+          background: transparent;
+          border: 0;
+          border-bottom: 1px solid $white;
+          color: $white;
+          font-size: 17px;
+          &:focus {
+            border: 0;
+            border-bottom: 1px solid $white;
+            //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+            box-shadow: none;
+          }
+        }
+        &.form-submit {
+          background: $seashell;
+          padding: 10px 30px;
+          text-align: center;
+          font-size: 15px;
+          text-transform: uppercase;
+          color: $color_tapa_approx;
+          border: 0;
+          cursor: pointer;
+        }
+      }
+      tr:nth-of-type(2n) {
+        background: none;
+      }
+    }
+  }
+  .register {
+    width: 50%;
+    max-width: 880px;
+    text-align: center;
+    display: flex;
+    &.register-center {
+      margin: 0 auto !important;
+    }
+    .box {
+      width: 100%;
+      margin: 30px;
+      background: $white;
+      //Instead of the line below you could use @include box-sizing($bs)
+      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
+      padding: 20px 20px 70px 20px;
+      h3 {
+        color: $color_cape_cod_approx;
+        text-transform: uppercase;
+        font-weight: normal;
+        margin-bottom: 30px;
+        font-size: 22px;
+      }
+      p {
+        font-size: 17px;
+        color: $color_cape_cod_approx;
+      }
+      a {
+        font-size: 17px;
+        color: $color_main;
+      }
+      .big {
+        font-size: 22px;
+      }
+    }
+  }
+}
+.ts-pull-right {
+  text-align: right;
+}
+[class^="icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  *margin-right: .3em;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+.events {
+  pointer-events: none;
+  display: inline-block;
+  padding: 0 1rem 0 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5em;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  font-weight: 500;
+  position: relative;
+  &:after {
+    content: "";
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 2px;
+  }
+  &.events-delivered {
+    color: $color_status_delivered;
+    &:after {
+      background-color: $color_status_delivered;
+    }
+  }
+  &.events-queued {
+    color: $color_status_queued;
+    &:after {
+      background-color: $color_status_queued;
+    }
+  }
+  &.events-bounce {
+    color: $color_status_bounce;
+    &:after {
+      background-color: $color_status_bounce;
+    }
+  }
+  &.events-opens {
+    color: $color_status_open;
+    &:after {
+      background-color: $color_status_open;
+    }
+  }
+  &.events-clicks {
+    color: $color_status_click;
+    &:after {
+      background-color: $color_status_click;
+    }
+  }
+  &.events-unsubscribes {
+    color: $color_status_unsubscribe;
+    &:after {
+      background-color: $color_status_unsubscribe;
+    }
+  }
+  &.events-drop {
+    color: $color_status_drop;
+    &:after {
+      background-color: $color_status_drop;
+    }
+  }
+  &.events-spam {
+    color: $color_status_spam;
+    &:after {
+      background-color: $color_status_spam;
+    }
+  }
+}
+
+.history-step {
+  display: none;
+}
+.table-loading {
+  opacity: 0.2;
+}
+#email-sent-list {
+  position: relative;
+}
+.ts-history-table-loading {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.panel-info-account {
+  margin-bottom: 20px;
+  border: 1px solid $color_alto_approx;
+  position: relative;
+  > {
+    .heading {
+      height: 38px;
+      background-color: $color_gallery_approx;
+      background-repeat: repeat-x;
+      filter: progid:dximagetransform.microsoft.gradient(startcolorstr='$color_wild_sand_approx', endcolorstr='$color_gallery_approx', gradienttype=0 );
+      background-image: linear-gradient(top, $color_wild_sand_approx 0, $color_gallery_approx 100%);
+      border: 1px solid $mercury;
+      > h2 {
+        font-weight: normal;
+        line-height: 36px;
+        margin-left: 12px;
+        display: inline;
+        color: $color_emperor_approx;
+      }
+    }
+    .content {
+      padding: 10px 25px;
+      background: $white;
+      > p {
+        border-bottom: 1px dashed $color_silver_chalice_approx;
+      }
+    }
+  }
+}
+.bg-blue {
+  word-wrap: break-word;
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: $color_solitude_approx;
+  border: 1px solid $color_gallery_approx;
+  border: 1px solid $black_5;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 4px;
+  //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  box-shadow: inset 0 1px 1px $black_5;
+  h1 {
+    font-size: 30px;
+    line-height: 36px;
+    color: $color_main;
+    text-align: center;
+  }
+  p {
+    text-align: center;
+  }
+}
+
+.check-column {
+  width: 100px !important;
+  padding: 8px 10px !important;
+}
+.other-infos {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: $white;
+  border-top: 3px solid $color_mischka_approx;
+}
+.other-infos-header {
+  color: $color_mercury_approx;
+  padding: 10px 20px 10px 10px;
+  position: relative;
+  h3 {
+    color: $color_star_dust_approx;
+  }
+}
+.other-infos-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.icon-stat {
+  background: $stats_icon;
+  width: 22px;
+  height: 16px;
+  background-repeat: no-repeat;
+}
+.icon-arrow-down {
+  background: $arrow_down_icon;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+}
+.icon-arrow-left {
+  background: $arrow_left_icon;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+}
+.ts-loading {
+  margin-top: 10px;
+  background: $color_alabaster_approx;
+  border: 1px solid $mercury;
+  h3 {
+    text-align: center;
+    padding: 10px;
+  }
+}
+.wp-list-table {
+  > thead {
+    background: $color_status_all;
+    &.all {
+      background: $color_status_all;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.delivered {
+      background: $color_status_delivered;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.read {
+      background: $color_status_open;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.click {
+      background: $color_status_click;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.queue {
+      background: $color_status_queued;
+      > tr > th {
+        color: $color_status_queued_accent;
+      }
+    }
+    &.deleted {
+      background: $color_status_unsubscribe;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.spam {
+      background: $color_status_spam;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.bounce {
+      background: $color_status_bounce;
+      > tr > th {
+        color: $white;
+      }
+    }
+    &.dropped {
+      background: $color_status_drop;
+      > tr > th {
+        color: $white;
+      }
+    }
+    > tr > th {
+      color: $white;
+    }
+  }
+  > tfoot {
+    display: none;
+  }
+}
+.ts-spinner {
+  margin: 20px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+  > div {
+    background-color: $color_mine_shaft_approx;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  }
+  .rect2 {
+    animation-delay: -1.1s;
+  }
+  .rect3 {
+    animation-delay: -1.0s;
+  }
+  .rect4 {
+    animation-delay: -0.9s;
+  }
+  .rect5 {
+    animation-delay: -0.8s;
+  }
+}
+@-webkit-keyframes sk-stretchdelay {
+  0% {
+  }
+  40% {
+  }
+  100% {
+  }
+  20% {
+  }
+}
+@keyframes sk-stretchdelay {
+  0% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  40% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  100% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  20% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(1.0);
+  }
+}
+.form-table th {
+  font-weight: normal;
+}
+.submit input.std {
+  @extend %btn;
+}
+a.std {
+  @extend %btn;
+  color: $white !important;
+  text-decoration: none !important;
+}
+input.std_sm {
+  background: $color_main;
+  color: $white;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+  text-transform: uppercase;
+  border: 0;
+  cursor: pointer;
+}
+.centered img {
+  margin: 0 auto;
+  display: block;
+}
+tbody tr:nth-of-type(2n) {
+  background-color: $color_gallery_approx;
+}
+
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.turbosmtp-setup {
+  max-width: 700px;
+  margin: auto;
+  padding-top: 30px;
+}
+
+.turbosmtp-setup-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.turbosmtp-divider {
+  margin: 20px 0;
+  font-style: italic;
+  color: #666;
+}
+
+.turbosmtp-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.turbo-button {
+  margin: 10px 0;
+  background: #004d8b;
+  color: #fff;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.turbo-button:hover {
+  color: #fff;
+}
+
+.turbosmtp-warning {
+  color: #d63638;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.turbosmtp-skip {
+  background: #f3f3f3;
+  color: #555;
+  border: 1px solid #ccc;
+}
+
+.turbosmtp-skip:hover {
+  background: #e2e2e2;
+}
+
+.copy-message {
+  color: green;
+  font-weight: bold;
+  margin-left: 10px;
+  display: none;
+}
+
