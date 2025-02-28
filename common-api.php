@@ -9,7 +9,9 @@ function turbosmtp_migration_has_done() {
 	$plugin_setup_done = get_option( 'ts_migration_done' );
 
 	return ! ( $auth_options &&
+	           isset($auth_options['op_ts_validapi']) &&
 	           (bool)$auth_options['op_ts_validapi'] &&
+	           isset($auth_options['op_ts_email']) &&
 	           $auth_options['op_ts_email'] &&
 	           ! $plugin_setup_done );
 

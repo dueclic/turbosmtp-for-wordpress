@@ -126,13 +126,13 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 	/**
 	 * @throws Exception
 	 */
-	public function get_analytics($filters = [])
+	public function get_analytics($filters)
 	{
 		$endpoint = 'analytics';
 
 		$response = $this->request($endpoint, [
-			'from' => $filters['date_from'],
-			'to' => $filters['date_to'],
+			'from' => $filters['from'] ?? '',
+			'to' => $filters['to'] ?? '',
 			'page' => $filters['page'] ?? 1,
 			'limit' => $filters['per_page'] ?? 5,
 			'status' => ['SUCCESS', 'FAIL']

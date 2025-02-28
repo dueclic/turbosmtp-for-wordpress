@@ -69,12 +69,24 @@ class Turbosmtp_Admin {
 		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/migration.php';
 	}
 
-	public function configuration_page() {
+	public function login_page() {
+		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/login.php';
+	}
 
+	public function configuration_page() {
+		$auth_options = get_option( "ts_auth_options" );
+
+		var_dump($auth_options);
 	}
 
 	public function stats_page() {
-
+		$stats = $this->api->get_analytics(
+			[
+				'from' => '2020-01-01',
+				'to'   => '2025-02-01',
+			]
+		);
+		var_dump($stats);
 	}
 
 
@@ -103,17 +115,18 @@ class Turbosmtp_Admin {
 
 			$consumer_key    = sanitize_text_field( $_POST['consumer_key'] );
 			$consumer_secret = sanitize_text_field( $_POST['consumer_secret'] );
+			$referer_url = wp_get_referer();
 
 			if ( empty( $consumer_key ) || empty( $consumer_secret ) ) {
 				wp_redirect(
-					add_query_arg( 'error', 'provide_api_keys', admin_url( 'admin.php?page=' . $this->plugin_name . '_migration' ) )
+					add_query_arg( 'error', 'provide_api_keys', $referer_url )
 				);
 				exit;
 			}
 
 			try {
 				$this->api->set( $consumer_key, $consumer_secret );
-				$user_config = $this->api->get_user_config();
+				$this->api->get_user_config();
 			} catch ( Exception $e ) {
 
 				$error_messages = apply_filters( 'turbosmtp_api_error_messages', [
@@ -121,7 +134,7 @@ class Turbosmtp_Admin {
 				] );
 
 				wp_redirect(
-					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request', admin_url( 'admin.php?page=' . $this->plugin_name . '_migration' ) )
+					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request',$referer_url )
 				);
 				exit;
 			}
@@ -169,6 +182,8 @@ class Turbosmtp_Admin {
 		if ( ! turbosmtp_migration_has_done() ) {
 			$configuration_page_callback = [ $this, 'migration_page' ];
 			$configuration_page_slug     = "turbosmtp_migration";
+		} else if (!turbosmtp_validapi()){
+			$configuration_page_callback = [ $this, 'login_page' ];
 		}
 
 		add_menu_page(

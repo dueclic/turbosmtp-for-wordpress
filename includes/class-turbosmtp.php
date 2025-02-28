@@ -58,6 +58,11 @@ class Turbosmtp {
 	protected $version;
 
 	/**
+	 * @var false|mixed|null
+	 */
+	private $auth_options;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -70,9 +75,11 @@ class Turbosmtp {
 		if ( defined( 'TURBOSMTP_VERSION' ) ) {
 			$this->version = TURBOSMTP_VERSION;
 		} else {
-			$this->version = '4.9.0';
+			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'turbosmtp';
+
+		$this->auth_options = get_option( 'ts_auth_options' );
 
 		$this->load_dependencies();
 		$this->define_admin_hooks();
@@ -135,12 +142,16 @@ class Turbosmtp {
 	 */
 	private function define_admin_hooks() {
 
+		$auth_options = get_option( 'ts_auth_options' );
+
 		$plugin_admin = new Turbosmtp_Admin(
 			new Turbosmtp_Api(
-				get_option( 'op_ts_consumer_key', '' ),
-				get_option( 'op_ts_consumer_secret', '' )
+				$this->auth_options['consumer_key'] ?? '',
+				$this->auth_options['consumer_secret'] ?? ''
 			),
-			$this->get_plugin_name(), $this->get_version() );
+			$this->get_plugin_name(),
+			$this->get_version()
+		);
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -150,10 +161,11 @@ class Turbosmtp {
 		if ( ! turbosmtp_migration_has_done() ) {
 			$this->loader->add_action( 'admin_notices', $plugin_admin, 'switch_to_api_keys_notice' );
 			$this->loader->add_action( 'wp_ajax_turbosmtp_generate_api_keys', $plugin_admin, 'generate_api_keys' );
-			$this->loader->add_action('admin_post_save_api_keys', $plugin_admin, 'save_api_keys' );
 		} else {
 
 		}
+
+		$this->loader->add_action( 'admin_post_save_api_keys', $plugin_admin, 'save_api_keys' );
 
 	}
 
@@ -168,10 +180,11 @@ class Turbosmtp {
 
 		$plugin_public = new Turbosmtp_Public(
 			new Turbosmtp_Api(
-				get_option( 'op_ts_consumer_key', '' ),
-				get_option( 'op_ts_consumer_secret', '' )
+				$this->auth_options['consumer_key'] ?? '',
+				$this->auth_options['consumer_secret'] ?? ''
 			),
-			$this->get_plugin_name(), $this->get_version() );
+			$this->get_plugin_name(), $this->get_version()
+		);
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

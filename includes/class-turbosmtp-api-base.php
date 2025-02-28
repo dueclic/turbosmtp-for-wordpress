@@ -40,7 +40,6 @@ abstract class Turbosmtp_Api_Base {
 		}
 
 		if (is_wp_error($response)) {
-
 			throw new \Exception($response->get_error_message());
 		}
 
@@ -69,6 +68,6 @@ abstract class Turbosmtp_Api_Base {
 
 	abstract public function get_user_config();
 
-	abstract public function get_analytics($filters = []);
+	abstract public function get_analytics(array $filters);
 
 }
