@@ -80,13 +80,8 @@ class Turbosmtp_Admin {
 	}
 
 	public function stats_page() {
-		$stats = $this->api->get_analytics(
-			[
-				'from' => '2020-01-01',
-				'to'   => '2025-02-01',
-			]
-		);
-		var_dump($stats);
+		$api = $this->api;
+		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats.php';
 	}
 
 

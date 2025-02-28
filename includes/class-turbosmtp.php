@@ -111,6 +111,7 @@ class Turbosmtp {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-turbosmtp-api-base.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-turbosmtp-api.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-turbosmtp-messages-list-table.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -128,6 +129,7 @@ class Turbosmtp {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-turbosmtp-public.php';
+
 
 		$this->loader = new Turbosmtp_Loader();
 
