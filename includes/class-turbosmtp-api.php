@@ -130,7 +130,7 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 	{
 		$endpoint = 'analytics';
 
-		$response = $this->request($endpoint, [
+		$data = $this->request($endpoint, [
 			'from' => $filters['from'] ?? '',
 			'to' => $filters['to'] ?? '',
 			'page' => $filters['page'] ?? 1,
@@ -138,42 +138,6 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 			'status' => ['SUCCESS', 'FAIL']
 		], false, 'GET');
 
-		$data = [];
-		$data['data'] = $this->format_analytics_response($response);
-		$data['columns'] = $this->analytics_table_columns();
 		return $data;
 	}
-
-	private function format_analytics_response($response)
-	{
-		$formatted_data = [];
-		foreach ($response['results'] as $data) {
-			$formatted_data[] = [
-				'id' => $data['id'],
-				'subject' => $data['subject'],
-				'sender' => $data['sender'],
-				'recipient' => $data['recipient'],
-				'send_time' => $data['send_time'],
-				'status' => $data['status'],
-				'domain' => $data['domain'],
-				'provider_message' => $data['error']
-			];
-		}
-
-		return $formatted_data;
-	}
-	private function analytics_table_columns()
-	{
-		return [
-			'id',
-			'subject',
-			'sender',
-			'recipient',
-			'send_time',
-			'status',
-			'domain',
-			'provider_message'
-		];
-	}
-
 }

@@ -68,6 +68,6 @@ abstract class Turbosmtp_Api_Base {
 
 	abstract public function get_user_config();
 
-	abstract public function get_analytics(array $filters);
+	abstract public function get_analytics($filters);
 
 }
