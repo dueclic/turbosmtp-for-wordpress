@@ -29,4 +29,44 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	$(document).on('click', '#generate_api_keys', function () {
+		var nonce = $(this).data('nonce');
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'turbosmtp_generate_api_keys',
+				turbosmtp_nonce: nonce
+			},
+			beforeSend: function () {
+				$('#generate_api_keys').prop('disabled', true).text('Generating...');
+			},
+			success: function (response) {
+				if (response.success) {
+					location.href=response.data.next_url;
+				} else {
+					alert('Error: ' + (response.message || 'Unknown error'));
+				}
+			},
+			error: function (xhr, status, error) {
+				alert('AJAX Error: ' + error);
+			},
+			complete: function () {
+				$('#generate_api_keys').prop('disabled', false).text('Generate API Key');
+			}
+		});
+	});
+
+	$(document).on('click', '.copy-button', function () {
+		var targetId = $(this).data('target');
+		var copyText = $('#' + targetId);
+		copyText.select();
+		document.execCommand('copy');
+
+		var messageSpan = $('#message_' + targetId);
+		messageSpan.text('Copied!').fadeIn().delay(2000).fadeOut();
+	});
+
 })( jQuery );

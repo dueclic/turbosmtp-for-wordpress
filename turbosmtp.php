@@ -30,12 +30,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+require_once plugin_dir_path( __FILE__ ) . 'common-api.php';
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'TURBOSMTP_VERSION', '4.9.0' );
+define( 'TURBOSMTP_BASE_PATH', __FILE__ );
 
 /**
  * The code that runs during plugin activation.
@@ -79,4 +82,5 @@ function run_turbosmtp() {
 	$plugin->run();
 
 }
+
 run_turbosmtp();

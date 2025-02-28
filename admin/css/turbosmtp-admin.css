@@ -2,3 +2,66 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.turbosmtp-setup {
+    max-width: 700px;
+    margin: auto;
+    padding-top: 30px;
+}
+
+.turbosmtp-setup-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.turbosmtp-divider {
+    margin: 20px 0;
+    font-style: italic;
+    color: #666;
+}
+
+.turbosmtp-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.turbo-button {
+    margin: 10px 0;
+    background: #004d8b;
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.turbo-button:hover {
+    color: #fff;
+}
+
+.turbosmtp-warning {
+    color: #d63638;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.turbosmtp-skip {
+    background: #f3f3f3;
+    color: #555;
+    border: 1px solid #ccc;
+}
+
+.turbosmtp-skip:hover {
+    background: #e2e2e2;
+}
+
+.copy-message {
+    color: green;
+    font-weight: bold;
+    margin-left: 10px;
+    display: none;
+}

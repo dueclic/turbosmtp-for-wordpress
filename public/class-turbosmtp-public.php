@@ -27,7 +27,7 @@ class Turbosmtp_Public {
 	 *
 	 * @since    4.9.0
 	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @var      string $plugin_name The ID of this plugin.
 	 */
 	private $plugin_name;
 
@@ -36,22 +36,39 @@ class Turbosmtp_Public {
 	 *
 	 * @since    4.9.0
 	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * @var      string $version The current version of this plugin.
 	 */
 	private $version;
 
 	/**
+	 * @var Turbosmtp_Api
+	 */
+	private $api;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
+	 * @param Turbosmtp_Api $api
+	 * @param string $plugin_name The name of the plugin.
+	 * @param string $version The version of this plugin.
+	 *
 	 * @since    4.9.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $api, $plugin_name, $version ) {
 
+		$this->api         = $api;
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 
+	}
+
+	public function turbosmtp_api_response($response, $args){
+		$code = (int)$args['code'];
+		if ($code === 401 && turbosmtp_migration_has_done()){
+			$auth_options = get_option("ts_auth_options");
+			$auth_options['valid_api'] = false;
+			update_option("ts_auth_options", $auth_options);
+		}
 	}
 
 	/**
