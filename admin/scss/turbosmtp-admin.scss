@@ -47,9 +47,9 @@ $color_alabaster_approx: #fbfbfb;
 $color_mine_shaft_approx: #333;
 
 //urls
-$stats_icon: url(../../img/icon-stat.png);
-$arrow_down_icon: url(../../img/icon-arrow-down.png);
-$arrow_left_icon: url(../../img/icon-arrow-left.png);
+$stats_icon: url(../img/icon-stat.png);
+$arrow_down_icon: url(../img/icon-arrow-down.png);
+$arrow_left_icon: url(../img/icon-arrow-left.png);
 
 //@extend-elements
 //original selectors
@@ -798,6 +798,10 @@ tbody tr:nth-of-type(2n) {
   max-width: 700px;
   margin: auto;
   padding-top: 30px;
+  &-fullwidth {
+    max-width: 100%;
+    width:100%;
+  }
 }
 
 .turbosmtp-setup-card {

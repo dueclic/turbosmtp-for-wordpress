@@ -164,7 +164,10 @@ class Turbosmtp {
 			$this->loader->add_action( 'admin_notices', $plugin_admin, 'switch_to_api_keys_notice' );
 			$this->loader->add_action( 'wp_ajax_turbosmtp_generate_api_keys', $plugin_admin, 'generate_api_keys' );
 		} else {
-
+			if ( turbosmtp_validapi() ) {
+				$this->loader->add_action( 'wp_ajax_turbosmtp_get_stats_chart', $plugin_admin, 'get_stats_chart' );
+				$this->loader->add_action('wp_ajax_turbosmtp_get_stats_history', $plugin_admin, 'get_stats_history');
+			}
 		}
 
 		$this->loader->add_action( 'admin_post_save_api_keys', $plugin_admin, 'save_api_keys' );

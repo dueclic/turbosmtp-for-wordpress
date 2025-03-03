@@ -56,24 +56,21 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 
 	function get_ts_data( $page_number ) {
 
-		global $ts_options;
-
 		$data = array();
 
 		$ts_data = $this->api->get_analytics( [
 			'from' => $this->from,
 			'to' => $this->end,
-			'filter' => $this->filter,
+			'status' => $this->filter,
 			'page' =>  $this->get_pagenum()	,
-			'limit' => 10
+			'limit' => 10,
 		]  );
-
 
 		$ts_emails = $ts_data['results'];
 
 		foreach ( $ts_emails as $email ) {
 
-			array_push( $data, array(
+			$data[] = array(
 
 				"subject"      => ( strlen( $email['subject'] ) > 40 ? substr( $email['subject'], 0, 40 ) . "..." : $email['subject'] ),
 				"subject_comp" => $email['subject'],
@@ -81,7 +78,7 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 				"to"           => $email['recipient'],
 				"datetime"     => $email['send_time'],
 				"status"       => $email['status']
-			) );
+			);
 
 		}
 

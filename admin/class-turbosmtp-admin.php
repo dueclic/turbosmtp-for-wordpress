@@ -76,27 +76,51 @@ class Turbosmtp_Admin {
 	public function configuration_page() {
 		$auth_options = get_option( "ts_auth_options" );
 
-		var_dump($auth_options);
+		var_dump( $auth_options );
 	}
 
 	public function stats_page() {
-		$end   = date( 'Y-m-d' );
-		$begin = strtotime( '-7 days', strtotime( $end ) );
-		$begin = date( 'Y-m-d', $begin );
 
-		$wp_list_table = new Turbosmtp_Messages_List_Table( $this->api, $begin, $end, 10, "all" );
+		try {
 
-		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats.php';
+			$user_config = $this->api->get_user_config();
+
+			if ('paid' === $user_config['account_type']) {
+
+				$end   = date( 'Y-m-d' );
+				$begin = strtotime( '-7 days', strtotime( $end ) );
+				$begin = date( 'Y-m-d', $begin );
+
+				$wp_list_table = new Turbosmtp_Messages_List_Table(
+					$this->api,
+					$begin,
+					$end,
+					apply_filters( 'turbosmtp_stats_per_page', 10 ),
+					"all"
+				);
+				require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats.php';
+
+			} else {
+				require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats-free.php';
+			}
+
+		}
+		catch ( Exception $e ) {
+			wp_die(
+				__('There was an error connecting to the API. Please retry later.', 'turbosmtp')
+			);
+		}
+
 	}
 
 
 	public function show_credentials_page() {
-		update_option("ts_show_credentials", false);
-		$consumer_key = sanitize_text_field($_GET['consumer_key']);
-		$consumer_secret = sanitize_text_field($_GET['consumer_secret']);
-		if (empty($consumer_key) || empty($consumer_secret)) {
+		update_option( "ts_show_credentials", false );
+		$consumer_key    = sanitize_text_field( $_GET['consumer_key'] );
+		$consumer_secret = sanitize_text_field( $_GET['consumer_secret'] );
+		if ( empty( $consumer_key ) || empty( $consumer_secret ) ) {
 			wp_die(
-				__('Invalid request', 'turbosmtp')
+				__( 'Invalid request', 'turbosmtp' )
 			);
 		}
 		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/credentials.php';
@@ -111,11 +135,11 @@ class Turbosmtp_Admin {
 			exit;
 		}
 
-		if (isset($_POST['save_api_keys'])) {
+		if ( isset( $_POST['save_api_keys'] ) ) {
 
 			$consumer_key    = sanitize_text_field( $_POST['consumer_key'] );
 			$consumer_secret = sanitize_text_field( $_POST['consumer_secret'] );
-			$referer_url = wp_get_referer();
+			$referer_url     = wp_get_referer();
 
 			if ( empty( $consumer_key ) || empty( $consumer_secret ) ) {
 				wp_redirect(
@@ -134,7 +158,7 @@ class Turbosmtp_Admin {
 				] );
 
 				wp_redirect(
-					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request',$referer_url )
+					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request', $referer_url )
 				);
 				exit;
 			}
@@ -159,7 +183,7 @@ class Turbosmtp_Admin {
 
 			update_option( "ts_migration_done", true );
 
-		} else if (isset($_POST['skip_setup'])) {
+		} else if ( isset( $_POST['skip_setup'] ) ) {
 			update_option( "ts_auth_options", [] );
 			update_option( "ts_send_options", [] );
 			update_option( "ts_migration_done", true );
@@ -182,7 +206,7 @@ class Turbosmtp_Admin {
 		if ( ! turbosmtp_migration_has_done() ) {
 			$configuration_page_callback = [ $this, 'migration_page' ];
 			$configuration_page_slug     = "turbosmtp_migration";
-		} else if (!turbosmtp_validapi()){
+		} else if ( ! turbosmtp_validapi() ) {
 			$configuration_page_callback = [ $this, 'login_page' ];
 		}
 
@@ -216,7 +240,7 @@ class Turbosmtp_Admin {
 				[ $this, 'stats_page' ]
 			);
 
-			if (get_option("ts_show_credentials", false)) {
+			if ( get_option( "ts_show_credentials", false ) ) {
 				add_submenu_page( null,
 					__( "turboSMTP API Keys generated", "turbosmtp" ),
 					__( "APIKeys", "turbosmtp" ),
@@ -285,10 +309,10 @@ class Turbosmtp_Admin {
 				"message"         => __( 'Migration was completed succesfully' ),
 				"consumer_key"    => $api_keys['consumerKey'],
 				"consumer_secret" => $api_keys['consumerSecret'],
-				"next_url" => add_query_arg([
+				"next_url"        => add_query_arg( [
 					"consumer_key"    => $api_keys["consumerKey"],
 					"consumer_secret" => $api_keys["consumerSecret"]
-				], admin_url( 'admin.php?page=' . $this->plugin_name . '_api_keys' ))
+				], admin_url( 'admin.php?page=' . $this->plugin_name . '_api_keys' ) )
 			] );
 
 		} catch ( Exception $e ) {
@@ -339,8 +363,59 @@ class Turbosmtp_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/turbosmtp-admin.min.css', array(), $this->version, 'all' );
+		if ( ! is_null( $screen = turbosmtp_is_admin_page() ) ) {
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( TURBOSMTP_BASE_PATH ) . 'admin/css/turbosmtp-admin.min.css', array(), $this->version, 'all' );
+			if ( $screen->id === "turbosmtp_page_turbosmtp_stats" ) {
 
+				wp_enqueue_style( $this->plugin_name . '-chart-css', plugins_url( 'admin/bundle/chart.js/Chart.min.css', TURBOSMTP_BASE_PATH ), array(), '2.9.3' );
+
+				wp_enqueue_style( $this->plugin_name . '-drange-css', plugins_url( 'admin/bundle/daterangepicker/daterangepicker.css', TURBOSMTP_BASE_PATH ), array(), '3.0.5' );
+
+			}
+		}
+	}
+
+	public function get_stats_history(){
+		$start_date = isset( $_REQUEST['begin'] ) ? sanitize_text_field( $_REQUEST['begin'] ) : null;
+		$end_date   = isset( $_REQUEST['end'] ) ? sanitize_text_field( $_REQUEST['end'] ) : null;
+		$filter = isset( $_REQUEST['filter'] ) ? sanitize_text_field( $_REQUEST['filter'] ) : null;
+
+
+		$wp_list_table = new Turbosmtp_Messages_List_Table(
+			$this->api,
+			$start_date,
+			$end_date,
+			apply_filters( 'turbosmtp_stats_per_page', 10 ),
+			turbosmtp_get_status_by_filter($filter)
+		);
+
+		$wp_list_table->ajax_response();
+	}
+
+	public function get_stats_chart() {
+
+		$start_date = sanitize_text_field( $_POST['start_date'] );
+		$end_date   = sanitize_text_field( $_POST['end_date'] );
+
+		$analytics = [];
+
+		try {
+			$analytics = $this->api->get_analytics(
+				[
+					'from' => $start_date,
+					'to'   => $end_date
+				]
+			);;
+		} catch ( Exception $e ) {
+
+			wp_send_json_error( [
+				'message' => $e->getMessage()
+			] );
+
+		}
+		wp_send_json_success( [
+			'stats' => $analytics
+		] );
 	}
 
 	/**
@@ -362,7 +437,80 @@ class Turbosmtp_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/turbosmtp.min.js', array( 'jquery' ), $this->version, false );
+		if ( ! is_null( $screen = turbosmtp_is_admin_page() ) ) {
+
+			wp_enqueue_script( 'jquery-ui-core' );
+			wp_enqueue_script( 'moment' );
+
+			$turbosmtp_debug_js = defined('TURBOSMTP_DEBUG_JS') && (bool)TURBOSMTP_DEBUG_JS;
+
+			$plugin_js = [
+				'admin' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-admin.js' : 'admin/bundle/turbosmtp-admin.min.js',
+				'stats' =>  $turbosmtp_debug_js ? 'admin/js/turbosmtp-stats.js' : 'admin/bundle/turbosmtp-stats.min.js'
+			];
+
+
+			wp_enqueue_script( $this->plugin_name . '-admin', plugins_url( $plugin_js['admin'], TURBOSMTP_BASE_PATH ), array(
+				'jquery',
+				'jquery-ui-core'
+			), $this->version, true );
+
+			if ( $screen->id === "turbosmtp_page_turbosmtp_stats" ) {
+
+				wp_enqueue_script( $this->plugin_name . '-summarizer', plugins_url( 'admin/bundle/turbosmtp/turbosmtp-summarizer.min.js', TURBOSMTP_BASE_PATH ), array(
+					'moment'
+				), '1.0', true );
+
+				wp_register_script( $this->plugin_name . '-stats', plugins_url( $plugin_js['stats'], TURBOSMTP_BASE_PATH ), array(
+					$this->plugin_name .'-summarizer',
+					'jquery',
+					'jquery-ui-core'
+				), $this->version, true );
+
+				wp_localize_script( $this->plugin_name . '-stats', 'ts', array(
+					'chart_ajax_url' => admin_url( 'admin-ajax.php?action=turbosmtp_get_stats_chart' ),
+					'i18n'           => array(
+						"queued"            => __( "Queue", "turbosmtp" ),
+						"delivered"         => __( "Delivered", "turbosmtp" ),
+						"bounce"            => __( "Bounced", "turbosmtp" ),
+						"opens"             => __( "Opened", "turbosmtp" ),
+						"clicks"            => __( "Click", "turbosmtp" ),
+						"unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
+						"drop"              => __( "Dropped", "turbosmtp" ),
+						"spam"              => __( "Spam", "turbosmtp" ),
+						"all"               => __( "Total", "turbosmtp" ),
+						"no_results"        => __( "No results to show", "turbosmtp" ),
+						"subject"           => __( "Subject", "turbosmtp" ),
+						"description_error" => __( "Error description", "turbosmtp" ),
+						"drp_preset"        => array(
+							'today'       => __( "Today", "turbosmtp" ),
+							'yesterday'   => __( "Yesterday", "turbosmtp" ),
+							'lastweek'    => __( "Last week", "turbosmtp" ),
+							'lastmonth'   => __( "Last month", "turbosmtp" ),
+							'thismonth'   => __( "This month", "turbosmtp" ),
+							'last30days'  => __( "Last 30 days", "turbosmtp" ),
+							'last7days'   => __( "Last 7 days", "turbosmtp" ),
+							'customrange' => __( "Custom range", "turbosmtp" ),
+							'prevmonth'   => __( "Previous month", "turbosmtp" ),
+							'thisyear'    => __( "Current year", "turbosmtp" ),
+							'prevyear'    => __( "Last year", "turbosmtp" ),
+							'apply'       => __( "Confirm", "turbosmtp" ),
+							'clear'       => __( "Clear", "turbosmtp" ),
+							'cancel'      => __( "Cancel", "turbosmtp" ),
+						),
+					),
+				) );
+				wp_enqueue_script( $this->plugin_name . '-stats' );
+
+				wp_enqueue_script( $this->plugin_name . '-chart', plugins_url( 'admin/bundle/chart.js/Chart.bundle.min.js', TURBOSMTP_BASE_PATH ), array( 'jquery' ), '2.9.3', true );
+				wp_enqueue_script( $this->plugin_name . '-drange-js', plugins_url( 'admin/bundle/daterangepicker/daterangepicker.js', TURBOSMTP_BASE_PATH ), array(
+					'jquery',
+					'jquery-ui-core',
+				), '3.0.5', true );
+
+			}
+
+		}
 
 	}
 

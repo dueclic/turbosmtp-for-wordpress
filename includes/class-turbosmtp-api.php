@@ -130,14 +130,31 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 	{
 		$endpoint = 'analytics';
 
-		$data = $this->request($endpoint, [
+		$status = "";
+
+		if (isset($filters['status'])){
+			if (is_array($filters['status'])){
+				$status = implode(",", $filters['status']);
+			} else {
+				if ($filters['status'] != "all"){
+					$status = $filters['status'];
+				}
+			}
+		}
+
+		$params = [
+			'int' => 1,
+			'orderby' => $filters['orderby'] ?? 'send_time',
+			'ordertype' => $filters['ordertype'] ?? 'desc',
+			'grp' => $filters['grp'] ?? 'day',
 			'from' => $filters['from'] ?? '',
 			'to' => $filters['to'] ?? '',
 			'page' => $filters['page'] ?? 1,
 			'limit' => $filters['limit'] ?? 5,
-			'status' => $filters['status']
-		], false, 'GET');
+			'tz' => wp_timezone_string(),
+			'status' => $status
+		];
 
-		return $data;
+		return $this->request($endpoint, $params, false, 'GET');
 	}
 }

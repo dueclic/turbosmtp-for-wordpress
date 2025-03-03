@@ -16,8 +16,8 @@
   "author": "dueclic",
   "license": "GPLv3",
   "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
@@ -34,6 +34,7 @@
     "daterangepicker": "^3.0.5",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-clean": "^0.4.0",
-    "gulp-sourcemaps": "^2.6.5"
+    "gulp-sourcemaps": "^2.6.5",
+    "ts-aggs-chartjs": "^1.0.9"
   }
 }

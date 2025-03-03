@@ -26,11 +26,8 @@ function turbosmtp_validapi() {
 	return isset( $auth_options['valid_api'] ) && (bool)$auth_options['valid_api'];
 }
 
-function turbosmtp_get_icon( $item ) {
-
-	$status = $item['status'];
-
-	$analyticsfilterOptions = array(
+function turbosmtp_analytics_filter_options(){
+	return apply_filters('turbosmtp_analytics_filter_options', array(
 		'clicks'       => 'CLICK',
 		'unsubscribes' => 'UNSUB',
 		'spam'         => 'REPORT',
@@ -39,7 +36,21 @@ function turbosmtp_get_icon( $item ) {
 		'opens'        => array( 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
 		'delivered'    => array( 'SUCCESS', 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
 		'bounce'       => 'FAIL'
-	);
+	));
+}
+
+function turbosmtp_get_status_by_filter(
+	$filter
+){
+	$options = turbosmtp_analytics_filter_options();
+	return $options[$filter] ?? false;
+}
+
+function turbosmtp_get_icon( $item ) {
+
+	$status = $item['status'];
+
+	$analyticsfilterOptions = turbosmtp_analytics_filter_options();
 
 
 	$statusFound = null;
@@ -73,6 +84,21 @@ function turbosmtp_get_icon( $item ) {
 
 	return '<span></span>';
 
+}
 
+function turbosmtp_is_admin_page(){
 
+	$screen = get_current_screen();
+
+	$turbo_admin_pages = array(
+		"turbosmtp_page_turbosmtp_config",
+		"turbosmtp_page_turbosmtp_migration",
+		"turbosmtp_page_turbosmtp_stats",
+		"turbosmtp_page_turbosmtp_api_keys"
+	);
+
+	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
+		return $screen;
+	}
+	return null;
 }

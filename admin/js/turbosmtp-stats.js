@@ -97,11 +97,13 @@
                 data: $.extend(
                     {
                         _ajax_custom_list_nonce: $('#_ajax_custom_list_nonce').val(),
-                        action: '_ajax_fetch_ts_history'
+                        action: 'turbosmtp_get_stats_history'
                     },
                     data
                 ),
                 success: function (response) {
+
+                    console.log({response})
 
                     response = $.parseJSON(response);
 
@@ -293,56 +295,44 @@
                 },
                 success: function (d) {
 
-                    console.log("D = ", d);
-
-                    if (d.is_free == 1){
-                        $("#demo-client").show();
-                        $("#paid-client").hide();
-                        $(".other-infos-loading").hide();
-                        return;
-                    }
-
-                    if (d.data && d.data.length == 0) {
+                    if (d.data.stats.aggs && d.data.stats.aggs.length == 0) {
                         $(".other-infos-noresults").show();
                         return;
                     }
 
-                    $("#demo-client").hide();
                     $("#paid-client").show();
 
-                    $(".total-email").find("h4").text(d.total);
+                    $(".total-email").find("h4").text(d.data.stats.count);
                     $(".chartjs-hidden-iframe").remove();
 
-                    var ts_datasets = [];
+                    chartData = window.tsAggsChartJs.dataToChartJs(
+                        d.data.stats.aggs,
+                        picker.startDate.format("YYYY-MM-DD"),
+                        picker.endDate.format("YYYY-MM-DD"),
+                        'd',
+                        function(dataset, key){
 
-                    $.each(d.data, function (key, values) {
+                            if (key == "delivered" || key == "opens" || key == "clicks" || key == 'bounce')
+                                fillBox(key, dataset.data, d.data.stats.count, true);
 
-                        ts_datasets.push({
-                            label: getType(key),
-                            backgroundColor: getColor(key, 0.2),
-                            borderColor: getColor(key, 1),
-                            pointBorderColor: getColor(key, 1),
-                            pointBackgroundColor: "#000000",
-                            data: d.data[key],
-                            lineTension: 0
-                        });
+                            else if (key != "all")
+                                fillBox(key, dataset.data, d.data.stats.count, false);
 
-                        if (key == "delivered" || key == "opens" || key == "clicks" || key == 'bounce')
-                            fillBox(key, values, d.total, true);
-
-                        else if (key != "all")
-                            fillBox(key, values, d.total, false);
-
-                    });
+                            return {
+                                ...dataset,
+                                label: getType(key),
+                                backgroundColor: getColor(key, 0.2),
+                                borderColor: getColor(key, 1),
+                                pointBorderColor: getColor(key, 1),
+                                pointBackgroundColor: "#000000",
+                                lineTension: 0
+                            }
+                        }
+                    );
 
                     $(".other-infos").show();
                     $(".other-infos-columns").css("display", "flex");
                     $(".other-infos-loading").hide();
-
-                    chartData = {
-                        labels: d.axis,
-                        datasets: ts_datasets
-                    };
 
                     respondCanvas();
 

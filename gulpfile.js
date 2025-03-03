@@ -39,28 +39,35 @@ gulp.task('plugins', async () => {
         './node_modules/daterangepicker/daterangepicker.css'
     ]).pipe(gulp.dest('./admin/bundle/daterangepicker'));
 
-    return copyChart && copyDrp;
+    const copyAggsChartJs = gulp.src('./node_modules/ts-aggs-chartjs/index.js')
+        .pipe(babel({
+            presets: ['@babel/preset-env'],
+            plugins: [['@babel/plugin-transform-modules-umd', { exactGlobals: true, globals: { 'index': 'tsAggsChartJs' } }]]
+        }))
+        .pipe(rename('turbosmtp-summarizer.min.js'))
+        .pipe(gulp.dest('./admin/bundle/turbosmtp'));
+
+    return copyChart && copyDrp && copyAggsChartJs;
 });
 
 gulp.task('scripts', async () => {
-
-    let src = [
-        "./admin/js/turbosmtp-table.js",
-        "./admin/js/turbosmtp-admin.js"
+    const files = [
+        { src: "./admin/js/turbosmtp-stats.js", dest: "turbosmtp-stats.min.js" },
+        { src: "./admin/js/turbosmtp-admin.js", dest: "turbosmtp-admin.min.js" }
     ];
 
-    gulp.src(src)
-        .pipe(concat('turbosmtp.min.js'))
-        .pipe(babel({
-            presets: ['@babel/preset-env']
-        }))
-        .pipe(uglify())
-        .pipe(gulp.dest('./admin/js'));
+    files.forEach(file => {
+        gulp.src(file.src)
+            .pipe(babel({ presets: ['@babel/preset-env'] }))
+            .pipe(uglify())
+            .pipe(rename(file.dest))
+            .pipe(gulp.dest('./admin/bundle/turbosmtp'));
+    });
 });
 
 
 gulp.task('clean', function () {
-    return gulp.src(['./admin/bundle/*', './admin/js/**/*.min.js', "./admin/css"], {read: false})
+    return gulp.src(['./admin/bundle/*', "./admin/css"], {read: false})
         .pipe(clean());
 });
 
