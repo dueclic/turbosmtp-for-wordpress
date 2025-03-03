@@ -121,6 +121,36 @@
 
     $(function () {
 
+        $tooltip = $(".error-tooltip");
+
+        $(document).on('mouseenter', 'tr', function(e) {
+            var $row = $(this);
+            var $errorCell = $row.find('.column-error');
+            var errorText = $errorCell.text().trim();
+
+            if (errorText !== '') {
+                $tooltip.text(errorText);
+
+                var offset = $row.offset();
+                $tooltip.css({
+                    top: offset.top + $row.outerHeight(),
+                    left: e.pageX,
+                    display: 'block'
+                });
+            }
+        });
+
+        $(document).on('mouseleave', 'tr', function() {
+            $tooltip.hide();
+        });
+
+        $(document).on('mousemove', 'tr', function(e) {
+            $tooltip.css({
+                left: e.pageX + 10,
+                top: e.pageY + 10
+            });
+        });
+
         $(".other-infos-toggle a").on("click", function (evt) {
             evt.preventDefault();
 

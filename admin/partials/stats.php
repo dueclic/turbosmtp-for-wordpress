@@ -14,6 +14,8 @@
 
 ?>
 
+<div class="error-tooltip"></div>
+
 <div class="ts-loading other-infos-loading">
 
     <div class="ts-spinner">

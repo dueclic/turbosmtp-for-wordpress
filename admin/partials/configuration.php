@@ -218,22 +218,3 @@
 
     </div>
 </div>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const sendingMethod = document.getElementById("send_method");
-        const smtpSettings = document.getElementById("smtp_settings");
-
-        function toggleSMTPFields() {
-            if (sendingMethod.value === "api") {
-                smtpSettings.style.display = "none";
-            } else {
-                smtpSettings.style.display = "block";
-            }
-        }
-
-        sendingMethod.addEventListener("change", toggleSMTPFields);
-        toggleSMTPFields(); // Ensure correct state on page load
-    });
-</script>

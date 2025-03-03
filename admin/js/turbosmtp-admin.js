@@ -69,4 +69,18 @@
 		messageSpan.text('Copied!').fadeIn().delay(2000).fadeOut();
 	});
 
+	var $sendingMethod = $("#send_method");
+	var $smtpSettings = $("#smtp_settings");
+
+	function toggleSMTPFields() {
+		if ($sendingMethod.val() === "api") {
+			$smtpSettings.hide();
+		} else {
+			$smtpSettings.show();
+		}
+	}
+
+	$sendingMethod.on("change", toggleSMTPFields);
+	toggleSMTPFields();
+
 })( jQuery );

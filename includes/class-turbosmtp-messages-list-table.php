@@ -137,7 +137,7 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 
 	function prepare_items() {
 		$columns               = $this->get_columns();
-		$hidden                = array( );
+		$hidden                = array(  "error" );
 		$sortable              = array();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
