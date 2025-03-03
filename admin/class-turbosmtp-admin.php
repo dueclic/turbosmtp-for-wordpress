@@ -88,7 +88,7 @@ class Turbosmtp_Admin {
 			if ('paid' === $user_config['account_type']) {
 
 				$end   = date( 'Y-m-d' );
-				$begin = strtotime( '-7 days', strtotime( $end ) );
+				$begin = strtotime( '-6 days', strtotime( $end ) );
 				$begin = date( 'Y-m-d', $begin );
 
 				$wp_list_table = new Turbosmtp_Messages_List_Table(
@@ -378,7 +378,7 @@ class Turbosmtp_Admin {
 	public function get_stats_history(){
 		$start_date = isset( $_REQUEST['begin'] ) ? sanitize_text_field( $_REQUEST['begin'] ) : null;
 		$end_date   = isset( $_REQUEST['end'] ) ? sanitize_text_field( $_REQUEST['end'] ) : null;
-		$filter = isset( $_REQUEST['filter'] ) ? sanitize_text_field( $_REQUEST['filter'] ) : null;
+		$filter = isset( $_REQUEST['filter'] ) ? sanitize_text_field( $_REQUEST['filter'] ) : 'all';
 
 
 		$wp_list_table = new Turbosmtp_Messages_List_Table(
@@ -386,7 +386,7 @@ class Turbosmtp_Admin {
 			$start_date,
 			$end_date,
 			apply_filters( 'turbosmtp_stats_per_page', 10 ),
-			turbosmtp_get_status_by_filter($filter)
+			$filter == 'all' ? '' : turbosmtp_get_status_by_filter($filter)
 		);
 
 		$wp_list_table->ajax_response();

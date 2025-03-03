@@ -71,13 +71,13 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		foreach ( $ts_emails as $email ) {
 
 			$data[] = array(
-
 				"subject"      => ( strlen( $email['subject'] ) > 40 ? substr( $email['subject'], 0, 40 ) . "..." : $email['subject'] ),
 				"subject_comp" => $email['subject'],
 				"from"         => $email['sender'],
 				"to"           => $email['recipient'],
 				"datetime"     => $email['send_time'],
-				"status"       => $email['status']
+				"status"       => $email['status'],
+                "error" => $email["error"]
 			);
 
 		}
@@ -152,18 +152,13 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 	}
 
 	function column_default( $item, $column_name ) {
-		switch ( $column_name ) {
-			case 'status':
-				return turbosmtp_get_icon($item);
-			case 'subject':
-			case 'from':
-			case 'to':
-				return $item[ $column_name ];
-			case 'datetime':
-				return date( "d/m/Y H:i", strtotime( $item[ $column_name ] ) );
-			default:
-				return $item[ $column_name ];
-		}
+        if ($column_name === 'status'){
+	        return turbosmtp_get_icon($item);
+        }
+        if ($column_name === 'datetime'){
+	        return date( "d/m/Y H:i", strtotime( $item[ $column_name ] ) );
+        }
+		return $item[ $column_name ];
 	}
 
 	function column_cb( $item ) {

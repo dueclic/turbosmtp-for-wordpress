@@ -656,25 +656,25 @@ label {
         color: $white;
       }
     }
-    &.read {
+    &.opens {
       background: $color_status_open;
       > tr > th {
         color: $white;
       }
     }
-    &.click {
+    &.clicks {
       background: $color_status_click;
       > tr > th {
         color: $white;
       }
     }
-    &.queue {
+    &.queued {
       background: $color_status_queued;
       > tr > th {
         color: $color_status_queued_accent;
       }
     }
-    &.deleted {
+    &.unsubscribes {
       background: $color_status_unsubscribe;
       > tr > th {
         color: $white;
@@ -692,7 +692,7 @@ label {
         color: $white;
       }
     }
-    &.dropped {
+    &.drop {
       background: $color_status_drop;
       > tr > th {
         color: $white;

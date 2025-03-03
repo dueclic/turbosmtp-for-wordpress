@@ -11,7 +11,7 @@
 
             data = $.extend({
                 _ajax_custom_list_nonce: $('#_ajax_custom_list_nonce').val(),
-                action: '_ajax_fetch_ts_history',
+                action: 'turbosmtp_get_stats_history',
                 filter: 'all'
             }, data);
 
@@ -60,24 +60,6 @@
             });
 
             $("tbody tr").prop("title", "");
-
-            /*$("tbody:not(.table-loading) tr:not(.no-items)").tooltip({
-                content: function () {
-
-                    var subject_comp = $(this).find(".column-subject_comp").text();
-                    var error = $(this).find(".column-error").text()
-
-                    var tooltip = '<p><strong>' + ts.i18n['subject'] + '</strong>: ' + subject_comp + '</p>';
-
-                    if (error.length > 0)
-
-                        tooltip += '<p><strong style="color: #ff0000;">' + ts.i18n['description_error'] + '</strong>: ' + error + '</p>';
-
-                    return tooltip;
-
-                },
-                track: true
-            });*/
 
             $(".ts-loading").hide();
             $(".history-step").show();
@@ -156,7 +138,7 @@
         });
 
         var from_date = $("input[name='from_date']");
-        var start = moment().subtract(7, 'days').startOf('day').toDate();
+        var start = moment().subtract(6, 'days').startOf('day').toDate();
         var end = moment().startOf('day').toDate();
 
         $(from_date).daterangepicker({
@@ -196,8 +178,6 @@
             c.attr('width', $container.width()); //max width
 
             c.attr('height', $container.height() / 1.5); //max height
-
-            //Call a function to redraw other content (texts, images etc)
 
             window.chart = new Chart(ctx, {
                 type: 'line',
