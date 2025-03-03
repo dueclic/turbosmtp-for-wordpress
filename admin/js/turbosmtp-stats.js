@@ -85,8 +85,6 @@
                 ),
                 success: function (response) {
 
-                    console.log({response})
-
                     response = $.parseJSON(response);
 
                     if (response.rows.length)
@@ -309,6 +307,14 @@
                             }
                         }
                     );
+
+                    if (chartData){
+                        chartData.labels = chartData.labels.map(
+                            label => moment
+                                .unix(label)
+                                .format("YYYY-MM-DD")
+                        )
+                    }
 
                     $(".other-infos").show();
                     $(".other-infos-columns").css("display", "flex");
