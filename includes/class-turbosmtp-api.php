@@ -20,13 +20,15 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 	 */
 	public function send($data)
 	{
+
 		$endpoint = 'https://api.turbo-smtp.com/api/v2/mail/send';
 		$payload = [
-			'from' => $data['from_email'],
+			'from' => $data['from'],
 			'subject' => $data['subject'],
 			'content' => $data['message'],
-			'to' => implode(",", $data['to']),
-			'reply_to' => $data['reply_to'] ?? $data['from_email'],
+			'to' => turbosmtp_implode(",", $data['to']),
+			'reply_to' => $data['reply_to'] ?? $data['from'],
+			'custom_headers' => $data['headers']
 		];
 
 		// Add CC recipients if any
@@ -43,9 +45,9 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 		if (!empty($data['attachments'])) {
 			$payload['attachments'] = array_map(function ($attachment) {
 				return [
-					'content' => $attachment['content'],
-					'name' => $attachment['name'],
-					'type' => $attachment['type']
+					'content' => base64_encode(file_get_contents($attachment)),
+					'name' => basename($attachment),
+					'type' => mime_content_type($attachment)
 				];
 			}, $data['attachments']);
 		}

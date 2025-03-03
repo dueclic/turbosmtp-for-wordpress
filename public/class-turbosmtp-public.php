@@ -62,6 +62,76 @@ class Turbosmtp_Public {
 
 	}
 
+
+	/**
+	 * @param \PHPMailer\PHPMailer\PHPMailer $phpmailer
+	 *
+	 * @throws \PHPMailer\PHPMailer\Exception
+	 */
+
+	function phpmailer_init(
+		$phpmailer
+	) {
+		$send_options = get_option( "ts_send_options" );
+
+		if (
+			isset($send_options['is_smtp']) &&
+			(bool)$send_options['is_smtp']
+		) {
+
+			if ( ! is_email( $send_options["from"] ) || empty( $send_options["host"] ) ) {
+				return;
+			}
+
+			$phpmailer->isSMTP();
+			$phpmailer->setFrom( $send_options["from"], $send_options["fromname"] );
+			$phpmailer->Host       = $send_options["host"];
+			$phpmailer->SMTPAuth   = 'yes';
+			$phpmailer->SMTPSecure = $send_options["smtpsecure"];
+			$phpmailer->Port = $send_options["port"];
+			$phpmailer->Username = $send_options["email"];
+			$phpmailer->Password = defined('TURBOSMTP_SMTP_PASSWORD') ? TURBOSMTP_SMTP_PASSWORD : $send_options["password"];
+
+		}
+	}
+
+	function maybe_send_via_http(
+		$retval,
+		$atts
+	){
+		$send_options = get_option( "ts_send_options" );
+		if ( ! isset( $send_options['is_smtp'] ) || $send_options['is_smtp'] ) {
+			return $retval;
+		}
+
+		$content_type = turbosmtp_get_header_content_type(
+			$atts['headers']
+		);
+
+		$mail_atts =  [
+			'to'             => $atts['to'],
+			'from'           => $send_options['from'],
+			'subject'        => $atts['subject'],
+			'message'        => $atts['message'],
+			"headers" => $atts["headers"],
+			"attachments"   => $atts["attachments"]
+		];
+
+		if ('text/html' == $content_type) {
+			$mail_atts['html'] = $atts['message'];
+			$mail_atts['message'] = wp_strip_all_tags($mail_atts['message']);
+		}
+
+		try {
+			$this->api->send($mail_atts );
+		} catch (\Exception $e) {
+			return false;
+		}
+
+		return true;
+
+	}
+
 	public function turbosmtp_api_response($response, $args){
 		$code = (int)$args['code'];
 		if ($code === 401 && turbosmtp_migration_has_done()){

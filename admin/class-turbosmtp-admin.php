@@ -74,9 +74,18 @@ class Turbosmtp_Admin {
 	}
 
 	public function configuration_page() {
-		$auth_options = get_option( "ts_auth_options" );
 
-		var_dump( $auth_options );
+		try {
+			$hosts        = turbosmtp_valid_hosts();
+			$send_options = get_option( "ts_send_options" );
+			$user_config  = $this->api->get_user_config();
+			require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/configuration.php';
+		} catch ( Exception $e ) {
+			wp_die(
+				__( 'There was an error connecting to the API. Please retry later.', 'turbosmtp' )
+			);
+		}
+
 	}
 
 	public function stats_page() {
@@ -85,7 +94,7 @@ class Turbosmtp_Admin {
 
 			$user_config = $this->api->get_user_config();
 
-			if ('paid' === $user_config['account_type']) {
+			if ( 'paid' === $user_config['account_type'] ) {
 
 				$end   = date( 'Y-m-d' );
 				$begin = strtotime( '-6 days', strtotime( $end ) );
@@ -104,12 +113,160 @@ class Turbosmtp_Admin {
 				require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats-free.php';
 			}
 
-		}
-		catch ( Exception $e ) {
+		} catch ( Exception $e ) {
 			wp_die(
-				__('There was an error connecting to the API. Please retry later.', 'turbosmtp')
+				__( 'There was an error connecting to the API. Please retry later.', 'turbosmtp' )
 			);
 		}
+
+	}
+
+	public function send_test_email() {
+
+		if ( ! wp_verify_nonce( $_POST['turbosmtp_nonce'], 'turbosmtp_send_test_email' ) ) {
+			wp_redirect(
+				add_query_arg( [ 'error' => 'invalid_request' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+			);
+			exit;
+		}
+
+		$to      = sanitize_email( $_POST['ts_mail_to'] );
+		$subject = sanitize_text_field( $_POST['ts_mail_subject'] );
+		$message = sanitize_text_field( $_POST['ts_mail_message'] );
+
+		if ( ! empty( $to ) && ! empty( $subject ) && ! empty( $message ) ) {
+			try {
+				wp_mail( $to, $subject, $message );
+				wp_redirect(
+					add_query_arg( [ 'success' => '1' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			} catch ( phpmailerException $e ) {
+				wp_redirect(
+					add_query_arg( [ 'error' => 'email_not_sent' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			}
+		}
+		wp_redirect(
+			add_query_arg( [ 'error' => 'test_email_invalid_params' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+		);
+		exit;
+	}
+
+	function action_wp_mail_failed( $wp_error ) {
+
+		add_action( "admin_notices", function () use ( $wp_error ) {
+			?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php _e( "Error details", "turbosmtp" ); ?></p>
+                <code>
+					<?php
+					print json_encode( $wp_error, JSON_PRETTY_PRINT );
+					?>
+                </code>
+            </div>
+			<?php
+		} );
+
+	}
+
+	public function save_send_options() {
+
+		$send_method = sanitize_text_field( $_POST['ts_send_method'] );
+
+		if ( ! wp_verify_nonce( $_POST['turbosmtp_nonce'], 'turbosmtp_save_send_options' ) ) {
+			wp_redirect(
+				add_query_arg( [
+					'error'       => 'invalid_request',
+					'send_method' => $send_method
+				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+			);
+			exit;
+		}
+
+		$ts_send_options = array();
+        $old_send_options = get_option("ts_send_options");
+
+		$ts_send_options["from"]     = sanitize_email( $_POST['ts_auth_email'] );
+		$ts_send_options["fromname"] = sanitize_text_field( $_POST['ts_auth_email_from'] );
+
+		$ts_send_options["is_smtp"] = 'smtp' === $send_method;
+
+		if ( ! is_email( $ts_send_options['from'] ) ) {
+
+			wp_redirect(
+				add_query_arg( [
+					'error'       => 'invalid_sender_email',
+					'send_method' => $send_method
+				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+			);
+			exit;
+
+		}
+
+		if ( empty( $ts_send_options['fromname'] ) ) {
+
+			wp_redirect(
+				add_query_arg( [
+					'error'       => 'sender_name_empty',
+					'send_method' => $send_method
+				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+			);
+			exit;
+		}
+
+		if ( $ts_send_options["is_smtp"] ) {
+
+			$port = sanitize_text_field( $_POST['ts_smtp_mailport'] );
+
+			if ( $port == "" ) {
+				$port = 25;
+			}
+
+			$ts_send_options["host"]       = sanitize_text_field( $_POST['ts_smtp_host'] );
+			$ts_send_options["smtpsecure"] = sanitize_text_field( $_POST['ts_smtp_smtpsecure'] );
+
+			$ts_send_options["email"]      = sanitize_text_field( $_POST['ts_smtp_email'] );
+
+			if ( ! is_email( $ts_send_options['email'] ) ) {
+				wp_redirect(
+					add_query_arg( [
+						'error'       => 'invalid_smtp_email',
+						'send_method' => $send_method
+					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			}
+
+			if ( isset( $_POST['ts_smtp_password'] ) ) {
+				$ts_send_options["password"] = sanitize_text_field( $_POST['ts_smtp_password'] );
+			} else if (isset($old_send_options['password'])) {
+                $ts_send_options["password"] = $old_send_options['password'];
+            }
+
+			$ts_send_options["port"]     = $port;
+			$ts_send_options["smtpauth"] = 'yes';
+			$ts_send_options["is_smtp"]  = true;
+
+
+			if ( ! in_array( $ts_send_options["host"], array_keys( turbosmtp_valid_hosts() ) ) ) {
+				wp_redirect(
+					add_query_arg( [
+						'error'       => 'invalid_smtp_server',
+						'send_method' => $send_method
+					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			}
+
+		}
+
+		update_option( "ts_send_options", $ts_send_options );
+
+		wp_redirect(
+			add_query_arg( 'success', '1', admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+		);
 
 	}
 
@@ -375,10 +532,10 @@ class Turbosmtp_Admin {
 		}
 	}
 
-	public function get_stats_history(){
+	public function get_stats_history() {
 		$start_date = isset( $_REQUEST['begin'] ) ? sanitize_text_field( $_REQUEST['begin'] ) : null;
 		$end_date   = isset( $_REQUEST['end'] ) ? sanitize_text_field( $_REQUEST['end'] ) : null;
-		$filter = isset( $_REQUEST['filter'] ) ? sanitize_text_field( $_REQUEST['filter'] ) : 'all';
+		$filter     = isset( $_REQUEST['filter'] ) ? sanitize_text_field( $_REQUEST['filter'] ) : 'all';
 
 
 		$wp_list_table = new Turbosmtp_Messages_List_Table(
@@ -386,7 +543,7 @@ class Turbosmtp_Admin {
 			$start_date,
 			$end_date,
 			apply_filters( 'turbosmtp_stats_per_page', 10 ),
-			$filter == 'all' ? '' : turbosmtp_get_status_by_filter($filter)
+			$filter == 'all' ? '' : turbosmtp_get_status_by_filter( $filter )
 		);
 
 		$wp_list_table->ajax_response();
@@ -442,11 +599,11 @@ class Turbosmtp_Admin {
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'moment' );
 
-			$turbosmtp_debug_js = defined('TURBOSMTP_DEBUG_JS') && (bool)TURBOSMTP_DEBUG_JS;
+			$turbosmtp_debug_js = defined( 'TURBOSMTP_DEBUG_JS' ) && (bool) TURBOSMTP_DEBUG_JS;
 
 			$plugin_js = [
 				'admin' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-admin.js' : 'admin/bundle/turbosmtp-admin.min.js',
-				'stats' =>  $turbosmtp_debug_js ? 'admin/js/turbosmtp-stats.js' : 'admin/bundle/turbosmtp-stats.min.js'
+				'stats' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-stats.js' : 'admin/bundle/turbosmtp-stats.min.js'
 			];
 
 
@@ -462,7 +619,7 @@ class Turbosmtp_Admin {
 				), '1.0', true );
 
 				wp_register_script( $this->plugin_name . '-stats', plugins_url( $plugin_js['stats'], TURBOSMTP_BASE_PATH ), array(
-					$this->plugin_name .'-summarizer',
+					$this->plugin_name . '-summarizer',
 					'jquery',
 					'jquery-ui-core'
 				), $this->version, true );
