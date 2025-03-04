@@ -1,27 +1,53 @@
+<?php
+
+/**
+ * Provide a admin area view for the plugin
+ *
+ * This file is used to markup the admin-facing aspects of the plugin.
+ *
+ * @link       https://www.dueclic.com
+ * @since      4.9.0
+ *
+ * @package    Turbosmtp
+ * @subpackage Turbosmtp/admin/partials
+ *
+ * @var $current_user WP_User
+ * @var $turbosmtp_hosts array
+ * @var $send_options array
+ * @var $user_config array
+ */
+
+?>
+
+
 <div class="wrap">
 
 	<?php
 	if ( isset( $_REQUEST['error'] ) ) {
+		$error = sanitize_text_field( $_REQUEST['error'] );
 		?>
-        <p class="turbosmtp-warning">
-			<?php
-			if ( $_REQUEST['error'] == "invalid_request" ) {
-				esc_html_e( 'Invalid request', 'turbosmtp' );
-			} else if ( $_REQUEST['error'] == "invalid_sender_email" ) {
-				esc_html_e( 'Sender email address is invalid', 'turbosmtp' );
-			} else if ( $_REQUEST['error'] == "invalid_smtp_email" ) {
-				esc_html_e( 'SMTP Email is invalid', 'turbosmtp' );
-			} else if ( $_REQUEST['error'] == "invalid_smtp_server" ) {
-				esc_html_e( "SMTP Server is not valid.", 'turbosmtp' );
-			} else if ( $_REQUEST['error'] == "sender_name_empty" ) {
-				esc_html_e( "Sender name must be not empty", 'turbosmtp' );
-			}
-			?>
-        </p>
+        <div class="notice notice-error is-dismissible">
+            <p>
+				<?php
+				if ( $error == "invalid_request" ) {
+					esc_html_e( 'Invalid request', 'turbosmtp' );
+				} else if ( $error == "invalid_sender_email" ) {
+					esc_html_e( 'Sender email address is invalid', 'turbosmtp' );
+				} else if ( $error == "invalid_smtp_email" ) {
+					esc_html_e( 'SMTP Email is invalid', 'turbosmtp' );
+				} else if ( $error == "invalid_smtp_server" ) {
+					esc_html_e( "SMTP Server is not valid.", 'turbosmtp' );
+				} else if ( $error == "sender_name_empty" ) {
+					esc_html_e( "Sender name must be not empty", 'turbosmtp' );
+				}
+				?>
+            </p>
+        </div>
 		<?php
 	}
 
 	if ( isset( $_REQUEST['success'] ) ) {
+		$success = sanitize_text_field( $_REQUEST['error'] );
 		?>
         <p class="turbosmtp-success">
 			<?php esc_html_e( "Options saved succesfully!", 'turbosmtp' ); ?>
@@ -102,14 +128,34 @@
                         </tr>
                         <tr valign="top">
                             <th scope="row"><label for="ts_smtp_password">
-				                    <?php _e( "Password", "turbosmtp" ); ?>
+									<?php _e( "Password", "turbosmtp" ); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="password" id="ts_smtp_password" name="ts_smtp_password"
-                                       value=""/>
+
+								<?php
+								if ( ! defined( "TURBOSMTP_SMTP_PASSWORD" ) ):
+									?>
+
+
+                                    <input type="password" id="ts_smtp_password" name="ts_smtp_password"
+                                           value=""/> <span class="description">
+                                <?php _e( "Password is stored in clear in WordPress database, consider to define it in wp-config.php AS TURBOSMTP_SMTP_PASSWORD", "turbosmtp" ); ?>
+							</span>
+
+
+								<?php
+								else:
+									?>
+									<?php
+									_e( "Safely stored in wp-config.php", "turbosmtp" );
+									?>
+								<?php
+								endif;
+								?>
                             </td>
                         </tr>
+
                         <tr valign="top">
                             <th scope="row"><label for="ts_smtp_host">
 									<?php _e( "SMTP Server", "turbosmtp" ); ?>
@@ -119,7 +165,7 @@
 
                                 <select name="ts_smtp_host">
 									<?php
-									foreach ( $hosts as $host => $label ):
+									foreach ( $turbosmtp_hosts as $host => $label ):
 										?>
                                         <option <?php selected( $host, $send_options['host'] ); ?>
                                                 value="<?php echo $host; ?>">
@@ -184,7 +230,7 @@
 
             <h3><?php _e( "Send test email", "turbosmtp" ); ?></h3>
 
-            <form method="POST" action="<?php echo admin_url( "admin-post.php" ); ?>">
+            <form method="POST" action="">
                 <input type="hidden" name="action" value="turbosmtp_send_test_email">
                 <table class="form-table">
                     <tr valign="top">
@@ -192,7 +238,7 @@
 								<?php _e( "Recipient", "turbosmtp" ); ?>
                             </label>
                         </th>
-                        <td><input type="text" id="ts_mail_to" name="ts_mail_to" value="" size="43"
+                        <td><input type="text" id="ts_mail_to" name="ts_mail_to" value="<?php echo esc_html($current_user->user_email); ?>" size="43"
                                    style="width:272px;height:24px;"/>
                             <br>
                             <span class="description">
@@ -201,18 +247,16 @@
                     </tr>
                 </table>
                 <p class="submit">
-                    <input type="hidden" name="ts_mail_subject"
-                           value="<?php _e( "Email sent with WordPress and turboSMTP", "turbosmtp" ); ?>"/>
-                    <input type="hidden" name="ts_mail_message"
-                           value="<?php _e( "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" ); ?>"/>
-                    <input type="hidden" name="ts_mail_test" value="test"/>
 					<?php
-					wp_nonce_field( 'turbosmtp_send_test_email', 'turbosmtp_nonce' );
+					wp_nonce_field( 'turbosmtp_send_test_email', 'turbosmtp_send_test_email_nonce' );
 					?>
-                    <input type="submit" name="submit" id="submit" class="std"
-                           value="<?php _e( "Send test", "turbosmtp" ); ?>">
+                    <button id="turbosmtp_send_test_email" class="std">
+                        <?php _e( "Send test", "turbosmtp" ); ?>
+                    </button>
                 </p>
             </form>
+
+            <p id="turbosmtp-email-result"></p>
 
         </div>
 

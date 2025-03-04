@@ -83,4 +83,32 @@
 	$sendingMethod.on("change", toggleSMTPFields);
 	toggleSMTPFields();
 
+	$('#turbosmtp_send_test_email').click(function() {
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'turbosmtp_send_test_email',
+				to: $('#ts_mail_to').val(),
+				turbosmtp_send_test_email_nonce: $("#turbosmtp_send_test_email_nonce").val()
+			},
+			beforeSend: function() {
+				$("#turbosmtp_send_test_email").attr("disabled", true);
+				$('#turbosmtp-email-result').html('Invio in corso...');
+			},
+			success: function(response) {
+				if (response.success) {
+					$('#turbosmtp-email-result').html('<span style="color: green;">' + response.data.message + '</span>');
+				} else {
+					$('#turbosmtp-email-result').html('<span style="color: red;">Errore: ' + response.data.message + '<br>' +( response.data.error || '') + '</span>');
+				}
+				$("#turbosmtp_send_test_email").attr("disabled", false);
+			},
+			error: function() {
+				$('#turbosmtp-email-result').html('<span style="color: red;">Errore di connessione AJAX</span>');
+				$("#turbosmtp_send_test_email").attr("disabled", false);
+			}
+		});
+	});
+
 })( jQuery );

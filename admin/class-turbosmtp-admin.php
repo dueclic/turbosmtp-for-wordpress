@@ -76,9 +76,10 @@ class Turbosmtp_Admin {
 	public function configuration_page() {
 
 		try {
-			$hosts        = turbosmtp_valid_hosts();
+			$turbosmtp_hosts        = turbosmtp_valid_hosts();
 			$send_options = get_option( "ts_send_options" );
 			$user_config  = $this->api->get_user_config();
+			$current_user = wp_get_current_user();
 			require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/configuration.php';
 		} catch ( Exception $e ) {
 			wp_die(
@@ -123,53 +124,40 @@ class Turbosmtp_Admin {
 
 	public function send_test_email() {
 
-		if ( ! wp_verify_nonce( $_POST['turbosmtp_nonce'], 'turbosmtp_send_test_email' ) ) {
-			wp_redirect(
-				add_query_arg( [ 'error' => 'invalid_request' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-			);
-			exit;
+		add_action('wp_mail_failed', function($wp_error) {
+			wp_send_json_error([
+				'message' => __('Error sending email', 'turbosmtp'),
+				'error' => $wp_error->get_error_message(),
+				'data' => $wp_error->get_error_data(),
+			]);
+		});
+
+		if ( ! wp_verify_nonce( $_POST['turbosmtp_send_test_email_nonce'], 'turbosmtp_send_test_email' ) ) {
+			wp_send_json_error([
+				'message' => __('Invalid request', 'turbosmtp')
+			]);
 		}
 
-		$to      = sanitize_email( $_POST['ts_mail_to'] );
-		$subject = sanitize_text_field( $_POST['ts_mail_subject'] );
-		$message = sanitize_text_field( $_POST['ts_mail_message'] );
+		$current_user = wp_get_current_user();
 
-		if ( ! empty( $to ) && ! empty( $subject ) && ! empty( $message ) ) {
-			try {
-				wp_mail( $to, $subject, $message );
-				wp_redirect(
-					add_query_arg( [ 'success' => '1' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-				);
-				exit;
-			} catch ( phpmailerException $e ) {
-				wp_redirect(
-					add_query_arg( [ 'error' => 'email_not_sent' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-				);
-				exit;
-			}
-		}
-		wp_redirect(
-			add_query_arg( [ 'error' => 'test_email_invalid_params' ], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-		);
-		exit;
-	}
+		$to      = isset($_POST['ts_mail_to'] ) ? sanitize_email( $_POST['ts_mail_to'] ) : $current_user->user_email;
 
-	function action_wp_mail_failed( $wp_error ) {
+		$subject = esc_html__( "Email sent with WordPress and turboSMTP", "turbosmtp" );
+		$message = esc_html__(  "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
 
-		add_action( "admin_notices", function () use ( $wp_error ) {
-			?>
-            <div class="notice notice-error is-dismissible">
-                <p><?php _e( "Error details", "turbosmtp" ); ?></p>
-                <code>
-					<?php
-					print json_encode( $wp_error, JSON_PRETTY_PRINT );
-					?>
-                </code>
-            </div>
-			<?php
-		} );
+
+        $sent_email = wp_mail( $to, $subject, $message );
+        if (!$sent_email) {
+	        wp_send_json_success(['message' => __('Test email sent succesfully', 'turbosmtp')]);
+        } else {
+	        wp_send_json_error(['message' =>  __('Unknown error sending the test email', 'turbosmtp')]);
+
+        }
+
+		wp_die();
 
 	}
+
 
 	public function save_send_options() {
 
@@ -265,7 +253,7 @@ class Turbosmtp_Admin {
 		update_option( "ts_send_options", $ts_send_options );
 
 		wp_redirect(
-			add_query_arg( 'success', '1', admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+			add_query_arg( 'success', 'config_saved', admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 		);
 
 	}

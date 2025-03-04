@@ -763,7 +763,7 @@ label {
 .form-table th {
   font-weight: normal;
 }
-.submit input.std {
+.submit input.std, .submit button.std  {
   @extend %btn;
 }
 a.std {
@@ -840,6 +840,12 @@ tbody tr:nth-of-type(2n) {
 
 .turbosmtp-warning {
   color: #d63638;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.turbosmtp-success {
+  color: green;
   font-weight: bold;
   margin: 20px 0;
 }

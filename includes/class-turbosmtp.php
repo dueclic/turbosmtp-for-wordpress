@@ -168,8 +168,7 @@ class Turbosmtp {
 				$this->loader->add_action( 'wp_ajax_turbosmtp_get_stats_chart', $plugin_admin, 'get_stats_chart' );
 				$this->loader->add_action('wp_ajax_turbosmtp_get_stats_history', $plugin_admin, 'get_stats_history');
 				$this->loader->add_action('admin_post_turbosmtp_save_send_options', $plugin_admin, 'save_send_options');
-				$this->loader->add_action( 'wp_mail_failed', $plugin_admin,'action_wp_mail_failed', 10, 1 );
-				$this->loader->add_action( 'admin_post_turbosmtp_send_test_email', $plugin_admin,'send_test_email');
+				$this->loader->add_action( 'wp_ajax_turbosmtp_send_test_email', $plugin_admin,'send_test_email');
 			}
 		}
 
