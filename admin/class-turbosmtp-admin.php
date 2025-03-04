@@ -536,7 +536,26 @@ class Turbosmtp_Admin {
 		$wp_list_table->ajax_response();
 	}
 
+	public function disconnect_account(){
+		check_ajax_referer( 'turbosmtp_disconnect_account', 'turbosmtp_disconnect_account_nonce' );
+
+		delete_option( "ts_send_options");
+
+		delete_option( "ts_auth_options" );
+
+		delete_option( "ts_migration_done" );
+
+		delete_option( "ts_show_credentials" );
+
+		wp_send_json_success( [
+			'message' => __('Account was succesfully disconnected', 'turbosmtp'),
+			'redirect_url' => admin_url( 'admin.php?page=' . $this->plugin_name . '_config' )
+		] );
+	}
+
 	public function get_stats_chart() {
+
+		check_ajax_referer( 'turbosmtp_get_stats_history', 'turbosmtp_get_stats_history_nonce' );
 
 		$start_date = sanitize_text_field( $_POST['start_date'] );
 		$end_date   = sanitize_text_field( $_POST['end_date'] );
@@ -600,7 +619,6 @@ class Turbosmtp_Admin {
 			), $this->version, true );
 
 			wp_localize_script( $this->plugin_name . '-admin', 'ts', array(
-				'chart_ajax_url' => admin_url( 'admin-ajax.php?action=turbosmtp_get_stats_chart' ),
 				'i18n'           => array(
 					'api_key_generate_loading' => __( 'Generating...', 'turbosmtp' ),
 					'api_key_generate_button' => __( 'Generating API Key', 'turbosmtp' ),

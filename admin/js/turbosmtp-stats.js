@@ -295,10 +295,12 @@
             var picker = $(from_date).data('daterangepicker');
 
             $.ajax({
-                url: ts.chart_ajax_url,
+                url: ajaxurl,
                 method: 'POST',
                 dataType: 'json',
                 data: {
+                    'action': 'turbosmtp_get_stats_chart',
+                    'turbosmtp_get_stats_history_nonce': $('#turbosmtp_get_stats_history_nonce').val(),
                     'start_date': picker.startDate.format("YYYY-MM-DD"),
                     'end_date': picker.endDate.format("YYYY-MM-DD")
                 },
@@ -371,8 +373,8 @@
                     }
 
                 },
-                error: function(err){
-                    alert(JSON.stringify(err));
+                error: function(){
+                    alert(ts.i18n.connection_request_error);
                 }
             });
         };

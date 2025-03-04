@@ -117,26 +117,20 @@
 			return;
 		}
 		$.ajax({
-			url: ajaxurl,
+			url: $(this).data("action"),
 			type: 'POST',
-			data: {
-				action: 'turbosmtp_disconnect',
-			},
+			data: {},
 			beforeSend: function() {
 				$("#turbosmtp_send_test_email").prop("disabled", true);
 				$('#turbosmtp-email-result').html(ts.i18n.test_email_send_loading);
 			},
 			success: function(response) {
 				if (response.success) {
-					$('#turbosmtp-email-result').html('<span style="color: green;">' + response.data.message + '</span>');
-				} else {
-					$('#turbosmtp-email-result').html('<span style="color: red;">'+response.data.message + '<br>' +( response.data.error || '') + '</span>');
+					location.href = response.data.redirect_url;
 				}
-				$("#turbosmtp_send_test_email").attr("disabled", false);
 			},
 			error: function() {
-				$('#turbosmtp-email-result').html('<span style="color: red;">'+ts.i18n.connection_request_error+'</span>');
-				$("#turbosmtp_send_test_email").prop("disabled", false);
+				alert(ts.i18n.connection_request_error);
 			}
 		});
 	});
