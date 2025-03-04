@@ -23,7 +23,7 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 
 		$endpoint = 'https://api.turbo-smtp.com/api/v2/mail/send';
 		$payload = [
-			'from' => $data['from'],
+			'from' => $data['fromname'].' <'.$data['from'].'>',
 			'subject' => $data['subject'],
 			'content' => $data['message'],
 			'to' => turbosmtp_implode(",", $data['to']),
@@ -57,16 +57,6 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 			'message_id' => 'turboSMTP_' . uniqid(),
 			'provider_response' => $response
 		];
-	}
-	protected function get_error_message($body, $code)
-	{
-		$data = json_decode($body, true);
-
-		if (isset($data['message'])) {
-			return "Turbo SMTP API error: {$data['message']}. (HTTP $code)";
-		}
-
-		return "Turbo SMTP API error (HTTP $code)";
 	}
 
 	/**

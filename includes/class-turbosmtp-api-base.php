@@ -1,4 +1,40 @@
 <?php
+
+class Turbosmtp_Exception extends Exception {
+
+	/**
+	 * @var array
+	 */
+	private $additionalData;
+
+	protected function get_error_message($data, $code)
+	{
+
+
+		if (isset($data['message'])) {
+			return "Turbo SMTP API error: {$data['message']}. (HTTP $code)";
+		}
+
+		return "Turbo SMTP API error (HTTP $code)";
+	}
+
+	public function __construct(
+		$body = [],
+		$code = 0,
+		Exception $previous = null
+	){
+		$data = json_decode($body, true);
+		$message = $this->get_error_message($data, $code);
+		$this->additionalData = $data;
+		parent::__construct($message, $code, $previous);
+	}
+
+	public function getAdditionalData() {
+		return $this->additionalData;
+	}
+
+}
+
 abstract class Turbosmtp_Api_Base {
 
 	protected $api_url = "https://pro.api.serversmtp.com/api/v2";
@@ -40,7 +76,7 @@ abstract class Turbosmtp_Api_Base {
 		}
 
 		if (is_wp_error($response)) {
-			throw new \Exception($response->get_error_message());
+			throw new \Exception($response->get_error_message(), 0);
 		}
 
 		$body = wp_remote_retrieve_body($response);
@@ -54,7 +90,10 @@ abstract class Turbosmtp_Api_Base {
 		] );
 
 		if ($code < 200 || $code >= 300) {
-			throw new \Exception($this->get_error_message($body, $code), $code);
+			throw new \Turbosmtp_Exception(
+				$body,
+				$code
+			);
 		}
 		return json_decode($body, true);
 	}
@@ -63,8 +102,6 @@ abstract class Turbosmtp_Api_Base {
 	abstract protected function get_api_url();
 
 	abstract protected function get_headers();
-
-	abstract protected function get_error_message($body, $code);
 
 	abstract public function get_user_config();
 

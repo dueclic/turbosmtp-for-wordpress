@@ -123,10 +123,22 @@ class Turbosmtp_Public {
 		}
 
 		try {
-			$this->api->send($mail_atts );
-		} catch (\Exception $e) {
+			$mail_sent_response = $this->api->send($mail_atts );
+		} catch ( \Exception $e) {
+			$mail_atts['api_exception_code'] = $e->getCode();
+			if ($e instanceof Turbosmtp_Exception) {
+				$mail_atts['api_error_infos'] = $e->getAdditionalData();
+			}
+			do_action('wp_mail_failed',new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_atts ) );
 			return false;
 		}
+
+		do_action('wp_mail_succeeded', array_merge(
+			$mail_atts,
+			array(
+				'api_response' => $mail_sent_response
+			)
+		) );
 
 		return true;
 
