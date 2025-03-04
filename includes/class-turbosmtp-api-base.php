@@ -56,6 +56,10 @@ abstract class Turbosmtp_Api_Base {
 		$this->set($consumer_key, $consumer_secret);
 	}
 
+	/**
+	 * @throws Turbosmtp_Exception
+	 * @throws Exception
+	 */
 	protected function request($endpoint, $data = [], $override_base_api_url = false, $method = 'POST', $override_headers = null) {
 		$args = [
 			'method' => $method,
