@@ -232,7 +232,6 @@
 
             <div id="ts-history-table" style="">
 				<?php
-				wp_nonce_field( 'ajax-custom-list-nonce', '_ajax_custom_list_nonce' );
 				$wp_list_table->prepare_items();
 				$wp_list_table->display();
 

@@ -66,7 +66,7 @@
     <div class="login">
 
         <div class="ts-pull-right">
-            <p><?php _e( "Welcome", "turbosmtp" ); ?> <?php echo $user_config["email"]; ?> <span>Disconnect</span></p>
+            <p><?php _e( "Welcome", "turbosmtp" ); ?> <?php echo $user_config["email"]; ?> <a href="#" id="turbosmtp_disconnect"><?php esc_html_e("Disconnect", "turbosmtp"); ?></a></p>
         </div>
 
         <h2><?php _e( "Settings", "turbosmtp" ); ?> turboSMTP</h2>

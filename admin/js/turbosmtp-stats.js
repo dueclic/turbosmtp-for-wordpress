@@ -10,7 +10,7 @@
             });
 
             data = $.extend({
-                _ajax_custom_list_nonce: $('#_ajax_custom_list_nonce').val(),
+                turbosmtp_get_stats_history_nonce: $('#turbosmtp_get_stats_history_nonce').val(),
                 action: 'turbosmtp_get_stats_history',
                 filter: 'all'
             }, data);
@@ -33,8 +33,6 @@
                     paged: list.__query(query, 'paged') || '1',
                 });
 
-                console.log(data);
-
                 list.update(data);
             });
 
@@ -46,8 +44,6 @@
                 var data = $.extend(origin_data, {
                     paged: parseInt($('input[name=paged]').val()) || '1',
                 });
-
-                console.log(data);
 
                 window.clearTimeout(timer);
                 timer = window.setTimeout(function () {
@@ -78,7 +74,7 @@
                 url: ajaxurl,
                 data: $.extend(
                     {
-                        _ajax_custom_list_nonce: $('#_ajax_custom_list_nonce').val(),
+                        turbosmtp_get_stats_history_nonce: $('#turbosmtp_get_stats_history_nonce').val(),
                         action: 'turbosmtp_get_stats_history'
                     },
                     data
@@ -101,6 +97,11 @@
                     $(".ts-history-table-loading").hide();
 
                     list.init(data);
+                },
+                error: function(){
+                    alert(ts.i18n.connection_request_error)
+                    $("#the-list").removeClass("table-loading");
+                    $(".ts-history-table-loading").hide();
                 }
             });
         },
@@ -369,6 +370,9 @@
                         });
                     }
 
+                },
+                error: function(err){
+                    alert(JSON.stringify(err));
                 }
             });
         };
