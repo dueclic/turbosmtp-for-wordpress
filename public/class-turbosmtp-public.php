@@ -75,8 +75,8 @@ class Turbosmtp_Public {
 		$send_options = get_option( "ts_send_options" );
 
 		if (
-			isset($send_options['is_smtp']) &&
-			(bool)$send_options['is_smtp']
+			isset( $send_options['is_smtp'] ) &&
+			(bool) $send_options['is_smtp']
 		) {
 
 			if ( ! is_email( $send_options["from"] ) || empty( $send_options["host"] ) ) {
@@ -88,9 +88,9 @@ class Turbosmtp_Public {
 			$phpmailer->Host       = $send_options["host"];
 			$phpmailer->SMTPAuth   = 'yes';
 			$phpmailer->SMTPSecure = $send_options["smtpsecure"];
-			$phpmailer->Port = $send_options["port"];
-			$phpmailer->Username = $send_options["email"];
-			$phpmailer->Password = defined('TURBOSMTP_SMTP_PASSWORD') ? TURBOSMTP_SMTP_PASSWORD : $send_options["password"];
+			$phpmailer->Port       = $send_options["port"];
+			$phpmailer->Username   = $send_options["email"];
+			$phpmailer->Password   = defined( 'TURBOSMTP_SMTP_PASSWORD' ) ? TURBOSMTP_SMTP_PASSWORD : $send_options["password"];
 
 		}
 	}
@@ -98,7 +98,7 @@ class Turbosmtp_Public {
 	function maybe_send_via_http(
 		$retval,
 		$atts
-	){
+	) {
 		$send_options = get_option( "ts_send_options" );
 		if ( ! isset( $send_options['is_smtp'] ) || $send_options['is_smtp'] ) {
 			return $retval;
@@ -108,32 +108,34 @@ class Turbosmtp_Public {
 			$atts['headers']
 		);
 
-		$mail_atts =  [
-			'to'             => $atts['to'],
-			'from'           => $send_options['from'],
-			'subject'        => $atts['subject'],
-			'message'        => $atts['message'],
-			"headers" => $atts["headers"],
-			"attachments"   => $atts["attachments"]
+		$mail_atts = [
+			'to'          => $atts['to'],
+			'from'        => $send_options['from'],
+			'fromname'    => $send_options['fromname'],
+			'subject'     => $atts['subject'],
+			'message'     => $atts['message'],
+			"headers"     => $atts["headers"],
+			"attachments" => $atts["attachments"]
 		];
 
-		if ('text/html' == $content_type) {
-			$mail_atts['html'] = $atts['message'];
-			$mail_atts['message'] = wp_strip_all_tags($mail_atts['message']);
+		if ( 'text/html' == $content_type ) {
+			$mail_atts['html']    = $atts['message'];
+			$mail_atts['message'] = wp_strip_all_tags( $mail_atts['message'] );
 		}
 
 		try {
-			$mail_sent_response = $this->api->send($mail_atts );
-		} catch ( \Exception $e) {
+			$mail_sent_response = $this->api->send( $mail_atts );
+		} catch ( \Exception $e ) {
 			$mail_atts['api_exception_code'] = $e->getCode();
-			if ($e instanceof Turbosmtp_Exception) {
+			if ( $e instanceof Turbosmtp_Exception ) {
 				$mail_atts['api_error_infos'] = $e->getAdditionalData();
 			}
-			do_action('wp_mail_failed',new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_atts ) );
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_atts ) );
+
 			return false;
 		}
 
-		do_action('wp_mail_succeeded', array_merge(
+		do_action( 'wp_mail_succeeded', array_merge(
 			$mail_atts,
 			array(
 				'api_response' => $mail_sent_response
@@ -144,12 +146,12 @@ class Turbosmtp_Public {
 
 	}
 
-	public function turbosmtp_api_response($response, $args){
-		$code = (int)$args['code'];
-		if ($code === 401 && turbosmtp_migration_has_done()){
-			$auth_options = get_option("ts_auth_options");
+	public function turbosmtp_api_response( $response, $args ) {
+		$code = (int) $args['code'];
+		if ( $code === 401 && turbosmtp_migration_has_done() ) {
+			$auth_options              = get_option( "ts_auth_options" );
 			$auth_options['valid_api'] = false;
-			update_option("ts_auth_options", $auth_options);
+			update_option( "ts_auth_options", $auth_options );
 		}
 	}
 
