@@ -123,7 +123,7 @@
 
         $tooltip = $(".error-tooltip");
 
-        $(document).on('mouseenter', 'tr', function(e) {
+        $(document).on('mouseenter', '#ts-history-table tbody tr', function(e) {
             var $row = $(this);
             var $errorCell = $row.find('.column-error');
             var errorText = $errorCell.text().trim();
@@ -140,11 +140,11 @@
             }
         });
 
-        $(document).on('mouseleave', 'tr', function() {
+        $(document).on('mouseleave', '#ts-history-table tbody tr', function() {
             $tooltip.hide();
         });
 
-        $(document).on('mousemove', 'tr', function(e) {
+        $(document).on('mousemove', '#ts-history-table tbody tr', function(e) {
             $tooltip.css({
                 left: e.pageX + 10,
                 top: e.pageY + 10

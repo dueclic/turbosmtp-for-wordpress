@@ -41,20 +41,20 @@
 				turbosmtp_nonce: nonce
 			},
 			beforeSend: function () {
-				$('#generate_api_keys').prop('disabled', true).text('Generating...');
+				$('#generate_api_keys').prop('disabled', true).text(ts.i18n.api_key_generate_loading);
 			},
 			success: function (response) {
 				if (response.success) {
 					location.href=response.data.next_url;
 				} else {
-					alert('Error: ' + (response.message || 'Unknown error'));
+					alert('Error: ' + (response.message || ts.i18n.api_key_generate_unknown_error));
 				}
 			},
 			error: function (xhr, status, error) {
 				alert('AJAX Error: ' + error);
 			},
 			complete: function () {
-				$('#generate_api_keys').prop('disabled', false).text('Generate API Key');
+				$('#generate_api_keys').prop('disabled', false).text(ts.i18n.api_key_generate_button);
 			}
 		});
 	});
@@ -66,7 +66,7 @@
 		document.execCommand('copy');
 
 		var messageSpan = $('#message_' + targetId);
-		messageSpan.text('Copied!').fadeIn().delay(2000).fadeOut();
+		messageSpan.text(ts.i18n.api_key_copied_text).fadeIn().delay(2000).fadeOut();
 	});
 
 	var $sendingMethod = $("#send_method");
@@ -93,20 +93,20 @@
 				turbosmtp_send_test_email_nonce: $("#turbosmtp_send_test_email_nonce").val()
 			},
 			beforeSend: function() {
-				$("#turbosmtp_send_test_email").attr("disabled", true);
-				$('#turbosmtp-email-result').html('Invio in corso...');
+				$("#turbosmtp_send_test_email").prop("disabled", true);
+				$('#turbosmtp-email-result').html(ts.i18n.test_email_send_loading);
 			},
 			success: function(response) {
 				if (response.success) {
 					$('#turbosmtp-email-result').html('<span style="color: green;">' + response.data.message + '</span>');
 				} else {
-					$('#turbosmtp-email-result').html('<span style="color: red;">Errore: ' + response.data.message + '<br>' +( response.data.error || '') + '</span>');
+					$('#turbosmtp-email-result').html('<span style="color: red;">'+response.data.message + '<br>' +( response.data.error || '') + '</span>');
 				}
 				$("#turbosmtp_send_test_email").attr("disabled", false);
 			},
 			error: function() {
-				$('#turbosmtp-email-result').html('<span style="color: red;">Errore di connessione AJAX</span>');
-				$("#turbosmtp_send_test_email").attr("disabled", false);
+				$('#turbosmtp-email-result').html('<span style="color: red;">'+ts.i18n.test_email_send_ajax_connection_error+'</span>');
+				$("#turbosmtp_send_test_email").prop("disabled", false);
 			}
 		});
 	});

@@ -148,10 +148,9 @@ class Turbosmtp_Admin {
 
         $sent_email = wp_mail( $to, $subject, $message );
         if (!$sent_email) {
-	        wp_send_json_success(['message' => __('Test email sent succesfully', 'turbosmtp')]);
-        } else {
 	        wp_send_json_error(['message' =>  __('Unknown error sending the test email', 'turbosmtp')]);
-
+        } else {
+	        wp_send_json_success(['message' => __('Test email sent succesfully', 'turbosmtp')]);
         }
 
 		wp_die();
@@ -600,6 +599,46 @@ class Turbosmtp_Admin {
 				'jquery-ui-core'
 			), $this->version, true );
 
+			wp_localize_script( $this->plugin_name . '-admin', 'ts', array(
+				'chart_ajax_url' => admin_url( 'admin-ajax.php?action=turbosmtp_get_stats_chart' ),
+				'i18n'           => array(
+					'api_key_generate_loading' => __( 'Generating...', 'turbosmtp' ),
+					'api_key_generate_button' => __( 'Generating API Key', 'turbosmtp' ),
+					'api_key_generate_unknown_error' => __('Unknown error', 'turbosmtp'),
+					'api_key_copied_text' => __('Copied', 'turbosmtp'),
+					'test_email_send_loading' => __('Send in progress...', 'turbosmtp'),
+                    'test_email_send_ajax_connection_error' => __('Ajax connection error', 'turbosmtp'),
+					"queued"            => __( "Queue", "turbosmtp" ),
+					"delivered"         => __( "Delivered", "turbosmtp" ),
+					"bounce"            => __( "Bounced", "turbosmtp" ),
+					"opens"             => __( "Opened", "turbosmtp" ),
+					"clicks"            => __( "Click", "turbosmtp" ),
+					"unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
+					"drop"              => __( "Dropped", "turbosmtp" ),
+					"spam"              => __( "Spam", "turbosmtp" ),
+					"all"               => __( "Total", "turbosmtp" ),
+					"no_results"        => __( "No results to show", "turbosmtp" ),
+					"subject"           => __( "Subject", "turbosmtp" ),
+					"description_error" => __( "Error description", "turbosmtp" ),
+					"drp_preset"        => array(
+						'today'       => __( "Today", "turbosmtp" ),
+						'yesterday'   => __( "Yesterday", "turbosmtp" ),
+						'lastweek'    => __( "Last week", "turbosmtp" ),
+						'lastmonth'   => __( "Last month", "turbosmtp" ),
+						'thismonth'   => __( "This month", "turbosmtp" ),
+						'last30days'  => __( "Last 30 days", "turbosmtp" ),
+						'last7days'   => __( "Last 7 days", "turbosmtp" ),
+						'customrange' => __( "Custom range", "turbosmtp" ),
+						'prevmonth'   => __( "Previous month", "turbosmtp" ),
+						'thisyear'    => __( "Current year", "turbosmtp" ),
+						'prevyear'    => __( "Last year", "turbosmtp" ),
+						'apply'       => __( "Confirm", "turbosmtp" ),
+						'clear'       => __( "Clear", "turbosmtp" ),
+						'cancel'      => __( "Cancel", "turbosmtp" ),
+					),
+				),
+			) );
+
 			if ( $screen->id === "turbosmtp_page_turbosmtp_stats" ) {
 
 				wp_enqueue_script( $this->plugin_name . '-summarizer', plugins_url( 'admin/bundle/turbosmtp/turbosmtp-summarizer.min.js', TURBOSMTP_BASE_PATH ), array(
@@ -612,39 +651,6 @@ class Turbosmtp_Admin {
 					'jquery-ui-core'
 				), $this->version, true );
 
-				wp_localize_script( $this->plugin_name . '-stats', 'ts', array(
-					'chart_ajax_url' => admin_url( 'admin-ajax.php?action=turbosmtp_get_stats_chart' ),
-					'i18n'           => array(
-						"queued"            => __( "Queue", "turbosmtp" ),
-						"delivered"         => __( "Delivered", "turbosmtp" ),
-						"bounce"            => __( "Bounced", "turbosmtp" ),
-						"opens"             => __( "Opened", "turbosmtp" ),
-						"clicks"            => __( "Click", "turbosmtp" ),
-						"unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
-						"drop"              => __( "Dropped", "turbosmtp" ),
-						"spam"              => __( "Spam", "turbosmtp" ),
-						"all"               => __( "Total", "turbosmtp" ),
-						"no_results"        => __( "No results to show", "turbosmtp" ),
-						"subject"           => __( "Subject", "turbosmtp" ),
-						"description_error" => __( "Error description", "turbosmtp" ),
-						"drp_preset"        => array(
-							'today'       => __( "Today", "turbosmtp" ),
-							'yesterday'   => __( "Yesterday", "turbosmtp" ),
-							'lastweek'    => __( "Last week", "turbosmtp" ),
-							'lastmonth'   => __( "Last month", "turbosmtp" ),
-							'thismonth'   => __( "This month", "turbosmtp" ),
-							'last30days'  => __( "Last 30 days", "turbosmtp" ),
-							'last7days'   => __( "Last 7 days", "turbosmtp" ),
-							'customrange' => __( "Custom range", "turbosmtp" ),
-							'prevmonth'   => __( "Previous month", "turbosmtp" ),
-							'thisyear'    => __( "Current year", "turbosmtp" ),
-							'prevyear'    => __( "Last year", "turbosmtp" ),
-							'apply'       => __( "Confirm", "turbosmtp" ),
-							'clear'       => __( "Clear", "turbosmtp" ),
-							'cancel'      => __( "Cancel", "turbosmtp" ),
-						),
-					),
-				) );
 				wp_enqueue_script( $this->plugin_name . '-stats' );
 
 				wp_enqueue_script( $this->plugin_name . '-chart', plugins_url( 'admin/bundle/chart.js/Chart.bundle.min.js', TURBOSMTP_BASE_PATH ), array( 'jquery' ), '2.9.3', true );
