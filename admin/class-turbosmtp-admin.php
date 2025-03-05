@@ -455,7 +455,7 @@ class Turbosmtp_Admin {
 				[
 					"email"    => $auth_options['op_ts_email'],
 					"password" => $auth_options['op_ts_password'],
-					"is_smtp"  => true
+					"is_smtp"  => apply_filters('turbosmtp_migration_is_smtp', false)
 				]
 			) );
 
