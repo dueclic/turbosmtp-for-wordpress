@@ -472,7 +472,7 @@ class Turbosmtp_Admin {
 			$this->api->deauthorize( $authkey );
 
 			wp_send_json_success( [
-				"message"         => __( 'Migration was completed succesfully' ),
+				"message"         => __( 'Migration was completed succesfully', 'turbosmtp'  ),
 				"consumer_key"    => $api_keys['consumerKey'],
 				"consumer_secret" => $api_keys['consumerSecret'],
 				"redirect_url"        => add_query_arg( [
