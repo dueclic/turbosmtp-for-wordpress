@@ -45,7 +45,7 @@
 			},
 			success: function (response) {
 				if (response.success) {
-					location.href=response.data.next_url;
+					location.href=response.data.redirect_url;
 				} else {
 					alert('Error: ' + (response.message || ts.i18n.api_key_generate_unknown_error));
 				}

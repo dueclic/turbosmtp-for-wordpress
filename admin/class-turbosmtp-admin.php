@@ -475,7 +475,7 @@ class Turbosmtp_Admin {
 				"message"         => __( 'Migration was completed succesfully' ),
 				"consumer_key"    => $api_keys['consumerKey'],
 				"consumer_secret" => $api_keys['consumerSecret'],
-				"next_url"        => add_query_arg( [
+				"redirect_url"        => add_query_arg( [
 					"consumer_key"    => $api_keys["consumerKey"],
 					"consumer_secret" => $api_keys["consumerSecret"]
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_api_keys' ) )
