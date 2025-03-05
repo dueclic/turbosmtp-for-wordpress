@@ -765,6 +765,9 @@ label {
 }
 .submit input.std, .submit button.std  {
   @extend %btn;
+  &:disabled {
+    opacity: 0.8;
+  }
 }
 a.std {
   @extend %btn;
