@@ -148,7 +148,7 @@ class Turbosmtp_Public {
 
 	public function turbosmtp_api_response( $response, $args ) {
 		$code = (int) $args['code'];
-		if ( $code === 401 && turbosmtp_migration_has_done() ) {
+		if ( $code === 401 && apply_filters('turbosmtp_disconnect_if_api_response_401', true) ) {
 			$auth_options              = get_option( "ts_auth_options" );
 			$auth_options['valid_api'] = false;
 			update_option( "ts_auth_options", $auth_options );

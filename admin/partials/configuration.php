@@ -39,6 +39,8 @@
 					esc_html_e( "SMTP Server is not valid.", 'turbosmtp' );
 				} else if ( $error == "sender_name_empty" ) {
 					esc_html_e( "Sender name must be not empty", 'turbosmtp' );
+				} else if ( $error == "invalid_smtp_credentials" ) {
+					esc_html_e( "SMTP credentials are not valid", 'turbosmtp' );
 				}
 				?>
             </p>

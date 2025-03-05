@@ -76,10 +76,10 @@ class Turbosmtp_Admin {
 	public function configuration_page() {
 
 		try {
-			$turbosmtp_hosts        = turbosmtp_valid_hosts();
-			$send_options = get_option( "ts_send_options" );
-			$user_config  = $this->api->get_user_config();
-			$current_user = wp_get_current_user();
+			$turbosmtp_hosts = turbosmtp_valid_hosts();
+			$send_options    = get_option( "ts_send_options" );
+			$user_config     = $this->api->get_user_config();
+			$current_user    = wp_get_current_user();
 			require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/configuration.php';
 		} catch ( Exception $e ) {
 			wp_die(
@@ -124,34 +124,34 @@ class Turbosmtp_Admin {
 
 	public function send_test_email() {
 
-		add_action('wp_mail_failed', function($wp_error) {
-			wp_send_json_error([
-				'message' => __('Error sending email', 'turbosmtp'),
-				'error' => $wp_error->get_error_message(),
-				'data' => $wp_error->get_error_data(),
-			]);
-		});
+		add_action( 'wp_mail_failed', function ( $wp_error ) {
+			wp_send_json_error( [
+				'message' => __( 'Error sending email', 'turbosmtp' ),
+				'error'   => $wp_error->get_error_message(),
+				'data'    => $wp_error->get_error_data(),
+			] );
+		} );
 
 		if ( ! wp_verify_nonce( $_POST['turbosmtp_send_test_email_nonce'], 'turbosmtp_send_test_email' ) ) {
-			wp_send_json_error([
-				'message' => __('Invalid request', 'turbosmtp')
-			]);
+			wp_send_json_error( [
+				'message' => __( 'Invalid request', 'turbosmtp' )
+			] );
 		}
 
 		$current_user = wp_get_current_user();
 
-		$to      = isset($_POST['ts_mail_to'] ) ? sanitize_email( $_POST['ts_mail_to'] ) : $current_user->user_email;
+		$to = isset( $_POST['ts_mail_to'] ) ? sanitize_email( $_POST['ts_mail_to'] ) : $current_user->user_email;
 
 		$subject = esc_html__( "Email sent with WordPress and turboSMTP", "turbosmtp" );
-		$message = esc_html__(  "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
+		$message = esc_html__( "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
 
 
-        $sent_email = wp_mail( $to, $subject, $message );
-        if (!$sent_email) {
-	        wp_send_json_error(['message' =>  __('Unknown error sending the test email', 'turbosmtp')]);
-        } else {
-	        wp_send_json_success(['message' => __('Test email sent succesfully', 'turbosmtp')]);
-        }
+		$sent_email = wp_mail( $to, $subject, $message );
+		if ( ! $sent_email ) {
+			wp_send_json_error( [ 'message' => __( 'Unknown error sending the test email', 'turbosmtp' ) ] );
+		} else {
+			wp_send_json_success( [ 'message' => __( 'Test email sent succesfully', 'turbosmtp' ) ] );
+		}
 
 		wp_die();
 
@@ -169,11 +169,11 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			exit;
+			wp_die();
 		}
 
-		$ts_send_options = array();
-        $old_send_options = get_option("ts_send_options");
+		$ts_send_options  = array();
+		$old_send_options = get_option( "ts_send_options" );
 
 		$ts_send_options["from"]     = sanitize_email( $_POST['ts_auth_email'] );
 		$ts_send_options["fromname"] = sanitize_text_field( $_POST['ts_auth_email_from'] );
@@ -188,8 +188,7 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			exit;
-
+			wp_die();
 		}
 
 		if ( empty( $ts_send_options['fromname'] ) ) {
@@ -200,7 +199,7 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			exit;
+			wp_die();
 		}
 
 		if ( $ts_send_options["is_smtp"] ) {
@@ -214,7 +213,7 @@ class Turbosmtp_Admin {
 			$ts_send_options["host"]       = sanitize_text_field( $_POST['ts_smtp_host'] );
 			$ts_send_options["smtpsecure"] = sanitize_text_field( $_POST['ts_smtp_smtpsecure'] );
 
-			$ts_send_options["email"]      = sanitize_text_field( $_POST['ts_smtp_email'] );
+			$ts_send_options["email"] = sanitize_text_field( $_POST['ts_smtp_email'] );
 
 			if ( ! is_email( $ts_send_options['email'] ) ) {
 				wp_redirect(
@@ -223,14 +222,35 @@ class Turbosmtp_Admin {
 						'send_method' => $send_method
 					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 				);
-				exit;
+				wp_die();
 			}
 
 			if ( isset( $_POST['ts_smtp_password'] ) ) {
 				$ts_send_options["password"] = sanitize_text_field( $_POST['ts_smtp_password'] );
-			} else if (isset($old_send_options['password'])) {
-                $ts_send_options["password"] = $old_send_options['password'];
-            }
+			} else if ( isset( $old_send_options['password'] ) ) {
+				$ts_send_options["password"] = $old_send_options['password'];
+			}
+
+
+			try {
+				add_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
+				$authorize_body = $this->api->authorize(
+					$ts_send_options['email'],
+					defined( 'TURBOSMTP_SMTP_PASSWORD' ) ?
+						TURBOSMTP_SMTP_PASSWORD :
+						$ts_send_options["password"]
+				);
+				$this->api->deauthorize( $authorize_body['auth'] );
+				remove_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
+			} catch ( \Exception $e ) {
+				wp_redirect(
+					add_query_arg( [
+						'error'       => 'invalid_smtp_credentials',
+						'send_method' => $send_method
+					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			}
 
 			$ts_send_options["port"]     = $port;
 			$ts_send_options["smtpauth"] = 'yes';
@@ -244,7 +264,7 @@ class Turbosmtp_Admin {
 						'send_method' => $send_method
 					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 				);
-				exit;
+				wp_die();
 			}
 
 		}
@@ -276,7 +296,7 @@ class Turbosmtp_Admin {
 			wp_redirect(
 				add_query_arg( 'error', 'invalid_request', admin_url( 'admin.php?page=' . $this->plugin_name . '_migration' ) )
 			);
-			exit;
+			wp_die();
 		}
 
 		if ( isset( $_POST['save_api_keys'] ) ) {
@@ -289,7 +309,7 @@ class Turbosmtp_Admin {
 				wp_redirect(
 					add_query_arg( 'error', 'provide_api_keys', $referer_url )
 				);
-				exit;
+				wp_die();
 			}
 
 			try {
@@ -304,7 +324,7 @@ class Turbosmtp_Admin {
 				wp_redirect(
 					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request', $referer_url )
 				);
-				exit;
+				wp_die();
 			}
 
 			$auth_options = get_option( "ts_auth_options" );
@@ -338,7 +358,7 @@ class Turbosmtp_Admin {
 			admin_url( 'admin.php?page=' . $this->plugin_name . '_config' )
 		);
 
-		exit;
+		wp_die();
 
 	}
 
@@ -417,6 +437,8 @@ class Turbosmtp_Admin {
 
 		try {
 
+			add_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
+
 			$authorize_body = $this->api->authorize(
 				$auth_options['op_ts_email'],
 				$auth_options['op_ts_password']
@@ -458,6 +480,8 @@ class Turbosmtp_Admin {
 					"consumer_secret" => $api_keys["consumerSecret"]
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_api_keys' ) )
 			] );
+
+			remove_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
 
 		} catch ( Exception $e ) {
 			wp_send_json_error( [
@@ -536,10 +560,10 @@ class Turbosmtp_Admin {
 		$wp_list_table->ajax_response();
 	}
 
-	public function disconnect_account(){
+	public function disconnect_account() {
 		check_ajax_referer( 'turbosmtp_disconnect_account', 'turbosmtp_disconnect_account_nonce' );
 
-		delete_option( "ts_send_options");
+		delete_option( "ts_send_options" );
 
 		delete_option( "ts_auth_options" );
 
@@ -548,7 +572,7 @@ class Turbosmtp_Admin {
 		delete_option( "ts_show_credentials" );
 
 		wp_send_json_success( [
-			'message' => __('Account was succesfully disconnected', 'turbosmtp'),
+			'message'      => __( 'Account was succesfully disconnected', 'turbosmtp' ),
 			'redirect_url' => admin_url( 'admin.php?page=' . $this->plugin_name . '_config' )
 		] );
 	}
@@ -619,27 +643,27 @@ class Turbosmtp_Admin {
 			), $this->version, true );
 
 			wp_localize_script( $this->plugin_name . '-admin', 'ts', array(
-				'i18n'           => array(
-					'api_key_generate_loading' => __( 'Generating...', 'turbosmtp' ),
-					'api_key_generate_button' => __( 'Generating API Key', 'turbosmtp' ),
-					'api_key_generate_unknown_error' => __('Unknown error', 'turbosmtp'),
-					'api_key_copied_text' => __('Copied', 'turbosmtp'),
-					'test_email_send_loading' => __('Send in progress...', 'turbosmtp'),
-					'connection_request_error' => __('Connection request failed, please retry later.', 'turbosmtp'),
-					'disconnect_confirm' => __('Are you sure you want disconnect?', 'turbosmtp'),
-					"queued"            => __( "Queue", "turbosmtp" ),
-					"delivered"         => __( "Delivered", "turbosmtp" ),
-					"bounce"            => __( "Bounced", "turbosmtp" ),
-					"opens"             => __( "Opened", "turbosmtp" ),
-					"clicks"            => __( "Click", "turbosmtp" ),
-					"unsubscribes"      => __( "Unsubscribes", "turbosmtp" ),
-					"drop"              => __( "Dropped", "turbosmtp" ),
-					"spam"              => __( "Spam", "turbosmtp" ),
-					"all"               => __( "Total", "turbosmtp" ),
-					"no_results"        => __( "No results to show", "turbosmtp" ),
-					"subject"           => __( "Subject", "turbosmtp" ),
-					"description_error" => __( "Error description", "turbosmtp" ),
-					"drp_preset"        => array(
+				'i18n' => array(
+					'api_key_generate_loading'       => __( 'Generating...', 'turbosmtp' ),
+					'api_key_generate_button'        => __( 'Generating API Key', 'turbosmtp' ),
+					'api_key_generate_unknown_error' => __( 'Unknown error', 'turbosmtp' ),
+					'api_key_copied_text'            => __( 'Copied', 'turbosmtp' ),
+					'test_email_send_loading'        => __( 'Send in progress...', 'turbosmtp' ),
+					'connection_request_error'       => __( 'Connection request failed, please retry later.', 'turbosmtp' ),
+					'disconnect_confirm'             => __( 'Are you sure you want disconnect?', 'turbosmtp' ),
+					"queued"                         => __( "Queue", "turbosmtp" ),
+					"delivered"                      => __( "Delivered", "turbosmtp" ),
+					"bounce"                         => __( "Bounced", "turbosmtp" ),
+					"opens"                          => __( "Opened", "turbosmtp" ),
+					"clicks"                         => __( "Click", "turbosmtp" ),
+					"unsubscribes"                   => __( "Unsubscribes", "turbosmtp" ),
+					"drop"                           => __( "Dropped", "turbosmtp" ),
+					"spam"                           => __( "Spam", "turbosmtp" ),
+					"all"                            => __( "Total", "turbosmtp" ),
+					"no_results"                     => __( "No results to show", "turbosmtp" ),
+					"subject"                        => __( "Subject", "turbosmtp" ),
+					"description_error"              => __( "Error description", "turbosmtp" ),
+					"drp_preset"                     => array(
 						'today'       => __( "Today", "turbosmtp" ),
 						'yesterday'   => __( "Yesterday", "turbosmtp" ),
 						'lastweek'    => __( "Last week", "turbosmtp" ),
