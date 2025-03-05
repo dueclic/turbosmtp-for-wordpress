@@ -47,7 +47,6 @@
 	}
 
 	if ( isset( $_REQUEST['success'] ) ) {
-		$success = sanitize_text_field( $_REQUEST['error'] );
 		?>
         <p class="turbosmtp-success">
 			<?php esc_html_e( "Options saved succesfully!", 'turbosmtp' ); ?>

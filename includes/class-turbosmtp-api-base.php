@@ -38,6 +38,7 @@ class Turbosmtp_Exception extends Exception {
 abstract class Turbosmtp_Api_Base {
 
 	protected $api_url = "https://pro.api.serversmtp.com/api/v2";
+	protected $api_smtp_endpoint_url = "https://api.turbo-smtp.com/api/v2/mail/send";
 	/**
 	 * @var string | null
 	 */
@@ -104,6 +105,9 @@ abstract class Turbosmtp_Api_Base {
 
 
 	abstract protected function get_api_url();
+
+	abstract protected function get_api_smtp_endpoint_url();
+
 
 	abstract protected function get_headers();
 
