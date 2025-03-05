@@ -309,7 +309,7 @@ class Turbosmtp_Admin {
 				wp_redirect(
 					add_query_arg( 'error', 'provide_api_keys', $referer_url )
 				);
-				wp_die();
+				exit;
 			}
 
 			try {
@@ -324,7 +324,7 @@ class Turbosmtp_Admin {
 				wp_redirect(
 					add_query_arg( 'error', $error_messages[ $e->getCode() ] ?? 'retry_request', $referer_url )
 				);
-				wp_die();
+				exit;
 			}
 
 			$auth_options = get_option( "ts_auth_options" );
@@ -335,7 +335,7 @@ class Turbosmtp_Admin {
 				[
 					"email"    => $auth_options['op_ts_email'],
 					"password" => $auth_options['op_ts_password'],
-					"is_smtp"  => true
+					"is_smtp"  => apply_filters('turbosmtp_default_is_smtp', false)
 				]
 			) );
 
@@ -353,12 +353,11 @@ class Turbosmtp_Admin {
 			update_option( "ts_migration_done", true );
 		}
 
-
 		wp_redirect(
 			admin_url( 'admin.php?page=' . $this->plugin_name . '_config' )
 		);
 
-		wp_die();
+		exit;
 
 	}
 
@@ -455,7 +454,7 @@ class Turbosmtp_Admin {
 				[
 					"email"    => $auth_options['op_ts_email'],
 					"password" => $auth_options['op_ts_password'],
-					"is_smtp"  => apply_filters('turbosmtp_migration_is_smtp', false)
+					"is_smtp"  => apply_filters('turbosmtp_default_is_smtp', false)
 				]
 			) );
 
