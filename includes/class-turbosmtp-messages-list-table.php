@@ -23,10 +23,9 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		$columns = array(
 			'cb'           => '',
 			'subject'      => __( 'Subject', 'turbosmtp' ),
-			'subject_comp' => '',
-			'from'         => __( 'From', 'turbosmtp' ),
-			'to'           => __( 'To', 'turbosmtp' ),
-			'datetime'     => __( 'Date / Time', 'turbosmtp' ),
+			'sender'         => __( 'From', 'turbosmtp' ),
+			'recipient'           => __( 'To', 'turbosmtp' ),
+			'send_time'     => __( 'Date / Time', 'turbosmtp' ),
 			'error'        => __( 'Error description', 'turbosmtp' ),
 		);
 
@@ -54,37 +53,15 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		$this->display_tablenav( 'top' );
 	}
 
-	function get_ts_data( $page_number ) {
+	function get_ts_data(  ) {
 
-		$data = array();
-
-		$ts_data = $this->api->get_analytics( [
+		return $this->api->get_analytics( [
 			'from' => $this->from,
 			'to' => $this->end,
 			'status' => $this->filter,
 			'page' =>  $this->get_pagenum()	,
 			'limit' => 10,
 		]  );
-
-		$ts_emails = $ts_data['results'];
-
-		foreach ( $ts_emails as $email ) {
-
-			$data[] = array(
-				"subject"      => ( strlen( $email['subject'] ) > 40 ? substr( $email['subject'], 0, 40 ) . "..." : $email['subject'] ),
-				"subject_comp" => $email['subject'],
-				"from"         => $email['sender'],
-				"to"           => $email['recipient'],
-				"datetime"     => $email['send_time'],
-				"status"       => $email['status'],
-                "error" => $email["error"]
-			);
-
-		}
-
-		$this->total_items = $ts_data['count'];
-
-		return $data;
 
 	}
 
@@ -141,8 +118,11 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 		$sortable              = array();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$current_page = $this->get_pagenum();
-		$this->items  = $this->get_ts_data( $current_page );
+		$data  = $this->get_ts_data( );
+
+		$this->total_items = $data['count'];
+        $this->items = $data['results'];
+
 
 		$this->set_pagination_args( array(
 			'total_items' => (int) $this->total_items,
@@ -155,7 +135,7 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
         if ($column_name === 'status'){
 	        return turbosmtp_get_icon($item);
         }
-        if ($column_name === 'datetime'){
+        if ($column_name === 'send_time'){
 	        return date( "d/m/Y H:i", strtotime( $item[ $column_name ] ) );
         }
 		return $item[ $column_name ];
