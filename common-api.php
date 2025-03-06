@@ -9,25 +9,31 @@ function turbosmtp_migration_has_done() {
 	$plugin_setup_done = get_option( 'ts_migration_done' );
 
 	return ! ( $auth_options &&
-	           isset($auth_options['op_ts_validapi']) &&
-	           (bool)$auth_options['op_ts_validapi'] &&
-	           isset($auth_options['op_ts_email']) &&
+	           isset( $auth_options['op_ts_validapi'] ) &&
+	           (bool) $auth_options['op_ts_validapi'] &&
+	           isset( $auth_options['op_ts_email'] ) &&
 	           $auth_options['op_ts_email'] &&
 	           ! $plugin_setup_done );
 
 }
 
-function turbosmtp_get_label(){
-	return apply_filters('turbosmtp_get_label', 'turboSMTP (WordPress Plugin)');
+function turbosmtp_get_label() {
+	$site_name = get_bloginfo();
+
+	return apply_filters( 'turbosmtp_get_label',
+		$site_name . ' (WordPress Plugin)',
+		$site_name
+	);
 }
 
 function turbosmtp_validapi() {
-	$auth_options      = get_option( "ts_auth_options" );
-	return isset( $auth_options['valid_api'] ) && (bool)$auth_options['valid_api'];
+	$auth_options = get_option( "ts_auth_options" );
+
+	return isset( $auth_options['valid_api'] ) && (bool) $auth_options['valid_api'];
 }
 
-function turbosmtp_analytics_filter_options(){
-	return apply_filters('turbosmtp_analytics_filter_options', array(
+function turbosmtp_analytics_filter_options() {
+	return apply_filters( 'turbosmtp_analytics_filter_options', array(
 		'clicks'       => 'CLICK',
 		'unsubscribes' => 'UNSUB',
 		'spam'         => 'REPORT',
@@ -36,14 +42,15 @@ function turbosmtp_analytics_filter_options(){
 		'opens'        => array( 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
 		'delivered'    => array( 'SUCCESS', 'OPEN', 'CLICK', 'UNSUB', 'REPORT' ),
 		'bounce'       => 'FAIL'
-	));
+	) );
 }
 
 function turbosmtp_get_status_by_filter(
 	$filter
-){
+) {
 	$options = turbosmtp_analytics_filter_options();
-	return $options[$filter] ?? false;
+
+	return $options[ $filter ] ?? false;
 }
 
 function turbosmtp_get_icon( $item ) {
@@ -78,15 +85,15 @@ function turbosmtp_get_icon( $item ) {
 		"all"          => __( "Total", "turbosmtp" )
 	);
 
-	if ($statusFound !== null){
-		return '<span class="events events-' . $statusFound . '">'.$status_i18n[$statusFound].'</span>';
+	if ( $statusFound !== null ) {
+		return '<span class="events events-' . $statusFound . '">' . $status_i18n[ $statusFound ] . '</span>';
 	}
 
 	return '<span></span>';
 
 }
 
-function turbosmtp_is_admin_page(){
+function turbosmtp_is_admin_page() {
 
 	$screen = get_current_screen();
 
@@ -101,6 +108,7 @@ function turbosmtp_is_admin_page(){
 	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
 		return $screen;
 	}
+
 	return null;
 }
 
@@ -114,16 +122,17 @@ function turbosmtp_valid_hosts() {
 	return $hosts;
 }
 
-function turbosmtp_implode($glue, $pieces) {
-	if (is_array($pieces)) {
-		return implode($glue, $pieces);
+function turbosmtp_implode( $glue, $pieces ) {
+	if ( is_array( $pieces ) ) {
+		return implode( $glue, $pieces );
 	}
+
 	return $pieces;
 }
 
 function turbosmtp_get_header_content_type(
 	$headers
-){
+) {
 	if ( ! is_array( $headers ) ) {
 		$tempheaders = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
 	} else {
@@ -137,7 +146,7 @@ function turbosmtp_get_header_content_type(
 			}
 			list( $name, $content ) = explode( ':', trim( $header ), 2 );
 
-			if (strtolower( $name ) == 'content-type') {
+			if ( strtolower( $name ) == 'content-type' ) {
 				return $content;
 			}
 		}

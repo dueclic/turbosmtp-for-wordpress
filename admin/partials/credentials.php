@@ -22,6 +22,8 @@
 
         <p><?php esc_html_e( 'Your API Keys have been generated. Copy them for future use.', 'turbosmtp' ); ?></p>
 
+        <p>Label: <?php echo turbosmtp_get_label(); ?></p>
+
         <label for="consumer_key"><strong><?php esc_html_e( 'Consumer Key:', 'turbosmtp' ); ?></strong></label>
         <input type="text" id="consumer_key" class="regular-text"
                value="<?php echo esc_attr( $_GET['consumer_key'] ?? '' ); ?>" readonly/>
