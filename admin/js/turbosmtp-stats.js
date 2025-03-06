@@ -1,10 +1,14 @@
 (function ($) {
 
+    var $table = $("#turbosmtp-messages-list-table");
+    var $tbody = $table.find("tbody");
+    var $theaders = $table.find("thead, tfoot");
+
     var list = {
 
         display: function (data) {
 
-            $("tbody").on("click", ".toggle-row", function (e) {
+            $tbody.on("click", ".toggle-row", function (e) {
                 e.preventDefault();
                 $(this).closest("tr").toggleClass("is-expanded")
             });
@@ -31,7 +35,19 @@
 
                 var data = $.extend(origin_data, {
                     paged: list.__query(query, 'paged') || '1',
+
                 });
+
+                var orderby = list.__query(query, 'orderby');
+                var order = list.__query(query, 'order');
+
+                if (orderby){
+                    data['orderby'] = orderby;
+                }
+
+                if (order){
+                    data['order'] = order;
+                }
 
                 list.update(data);
             });
@@ -64,10 +80,10 @@
 
         update: function (data) {
 
-            $("#the-list").addClass("table-loading");
+            $tbody.addClass("table-loading");
             $(".ts-history-table-loading").show();
 
-            $("#ts-history-table").find("thead").removeClass().addClass(data.filter);
+            $theaders.removeClass().addClass(data.filter);
 
             $.ajax({
 
@@ -84,23 +100,23 @@
                     response = $.parseJSON(response);
 
                     if (response.rows.length)
-                        $('#the-list').html(response.rows);
+                        $tbody.html(response.rows);
                     if (response.column_headers.length)
-                        $('thead tr, tfoot tr').html(response.column_headers);
+                        $theaders.find("tr").html(response.column_headers);
                     if (response.pagination.bottom.length)
                         $('.tablenav.top .tablenav-pages').html($(response.pagination.top).html());
                     if (response.pagination.top.length)
                         $('.tablenav.bottom .tablenav-pages').html($(response.pagination.bottom).html());
 
 
-                    $("#the-list").removeClass("table-loading");
+                    $tbody.removeClass("table-loading");
                     $(".ts-history-table-loading").hide();
 
                     list.init(data);
                 },
                 error: function(){
                     alert(ts.i18n.connection_request_error)
-                    $("#the-list").removeClass("table-loading");
+                    $tbody.removeClass("table-loading");
                     $(".ts-history-table-loading").hide();
                 }
             });
@@ -122,7 +138,7 @@
 
     $(function () {
 
-        $tooltip = $(".error-tooltip");
+        var $tooltip = $(".error-tooltip");
 
         $(document).on('mouseenter', '#ts-history-table tbody tr', function(e) {
             var $row = $(this);

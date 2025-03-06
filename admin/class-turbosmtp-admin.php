@@ -100,14 +100,6 @@ class Turbosmtp_Admin {
 				$end   = date( 'Y-m-d' );
 				$begin = strtotime( '-6 days', strtotime( $end ) );
 				$begin = date( 'Y-m-d', $begin );
-
-				$wp_list_table = new Turbosmtp_Messages_List_Table(
-					$this->api,
-					$begin,
-					$end,
-					apply_filters( 'turbosmtp_stats_per_page', 10 ),
-					"all"
-				);
 				require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/stats.php';
 
 			} else {

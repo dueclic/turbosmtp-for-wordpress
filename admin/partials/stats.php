@@ -10,7 +10,11 @@
  *
  * @package    Turbosmtp
  * @subpackage Turbosmtp/admin/partials
+ *
+ * @var $begin string
+ * @var $end string
  */
+
 
 ?>
 
@@ -232,6 +236,13 @@
 
             <div id="ts-history-table" style="">
 				<?php
+				$wp_list_table = new Turbosmtp_Messages_List_Table(
+					$this->api,
+					$begin,
+					$end,
+					apply_filters( 'turbosmtp_stats_per_page', 10 ),
+					"all"
+				);
 				$wp_list_table->prepare_items();
 				$wp_list_table->display();
 
