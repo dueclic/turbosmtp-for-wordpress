@@ -102,7 +102,7 @@ function turbosmtp_is_admin_page() {
 		"turbosmtp_page_turbosmtp_config",
 		"toplevel_page_turbosmtp_migration",
 		"turbosmtp_page_turbosmtp_stats",
-		"turbosmtp_page_turbosmtp_api_keys"
+		"admin_page_turbosmtp_api_keys"
 	);
 
 	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
