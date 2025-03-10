@@ -57,6 +57,9 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 				];
 			}, $data['attachments'] );
 		}
+
+		apply_filters('turbosmtp_before_send_http_payload', $payload);
+
 		$response = $this->request(
 			$this->get_api_smtp_endpoint_url(),
 			$payload,
