@@ -133,6 +133,9 @@ function turbosmtp_implode( $glue, $pieces ) {
 function turbosmtp_get_header_content_type(
 	$headers
 ) {
+
+	$content_type = "text/plain";
+
 	if ( ! is_array( $headers ) ) {
 		$tempheaders = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
 	} else {
@@ -146,12 +149,25 @@ function turbosmtp_get_header_content_type(
 			}
 			list( $name, $content ) = explode( ':', trim( $header ), 2 );
 
-			if ( strtolower( $name ) == 'content-type' ) {
-				return $content;
+
+			if ( str_contains( $content, ';' ) ) {
+				list( $type, $charset_content ) = explode( ';', $content );
+				$content_type                   = trim( $type );
+				if ( false !== stripos( $charset_content, 'charset=' ) ) {
+					$charset = trim( str_replace( array( 'charset=', '"' ), '', $charset_content ) );
+				} elseif ( false !== stripos( $charset_content, 'boundary=' ) ) {
+					$boundary = trim( str_replace( array( 'BOUNDARY=', 'boundary=', '"' ), '', $charset_content ) );
+					$charset  = '';
+				}
+
+				// Avoid setting an empty $content_type.
+			} elseif ( '' !== trim( $content ) ) {
+				$content_type = trim( $content );
 			}
+
 		}
 	}
 
-	return 'text/plain';
+	return $content_type;
 
 }

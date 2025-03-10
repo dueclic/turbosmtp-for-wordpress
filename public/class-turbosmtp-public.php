@@ -119,7 +119,7 @@ class Turbosmtp_Public {
 		];
 
 		if ( 'text/html' == $content_type ) {
-			$mail_atts['html']    = $atts['message'];
+			$mail_atts['html']    = $mail_atts['message'];
 			$mail_atts['message'] = wp_strip_all_tags( $mail_atts['message'] );
 		}
 

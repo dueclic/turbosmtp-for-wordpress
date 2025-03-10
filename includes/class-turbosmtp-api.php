@@ -33,6 +33,10 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 			'custom_headers' => $data['headers']
 		];
 
+		if (isset($data['html'])){
+			$payload['html_content'] = $data['html'];
+		}
+
 		// Add CC recipients if any
 		if ( ! empty( $data['cc'] ) ) {
 			$payload['cc'] = implode( ",", $data['cc'] );
