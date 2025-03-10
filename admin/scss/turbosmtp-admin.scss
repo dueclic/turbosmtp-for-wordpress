@@ -808,12 +808,15 @@ tbody tr:nth-of-type(2n) {
 }
 
 .turbosmtp-setup-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  text-align: center;
-  margin-top: 20px;
+  position: relative;
+  margin: 20px auto 0;
+  padding: .7em 2em 1em;
+  min-width: 255px;
+  max-width: 520px;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+  background: #fff;
+  box-sizing: border-box;
 }
 
 .turbosmtp-divider {
@@ -880,4 +883,328 @@ tbody tr:nth-of-type(2n) {
   z-index: 1000;
   max-width: 300px;
   display: none;
+}
+
+/* -------------------------------------------- */
+
+.tsev{
+
+}
+.update-nag{
+  display:none;
+}
+:root{
+  --tswp-error-color: #D73638;
+  --tswp-success-color: #01A32A;
+}
+
+/***/
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tswp-login-form{
+  display: block;
+  margin-top: 1em;
+  width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tswp-login-form.tswp-migration-form{
+  width: unset;
+}
+.tswp-login-form-signup{
+  margin-bottom: 2.5em;
+}
+.tswp-login-form label{
+  display: block;
+  margin-bottom: .5em;
+  font-size: 1.2em;
+}
+.tswp-login-form input[ type="text" ],
+.tswp-login-form input[ type="password"]{
+  display: block;
+  width: 100%;
+}
+.tswp-login-form-control-group{
+  margin-bottom: 1.5em;
+}
+.tswp-login-form label.tswp-login-form-get-api{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tswp-login-form label.tswp-login-form-get-api a{
+  font-size: .8em;
+}
+.tswp-text-center,
+.tswp-text-center p{
+  text-align: center;
+}
+.tswp-text-right,
+.tswp-text-right p{
+  text-align: right;
+}
+.tswp-text-left,
+.tswp-text-left p{
+  text-align: left;
+}
+.tswp-login-form-password-field{
+  position: relative;
+}
+.tswp-login-form-password-field input{
+  padding-right: 36px;
+}
+.tswp-login-form-password-field a {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  height: 32px;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: .5;
+}
+.tswp-login-form-password-field a:hover {
+  opacity: 1;
+}
+.tswp-login-form-password-field a svg {
+  width: 18px;
+}
+.tswp-login-logo{
+  width: 160px;
+  margin: 10em auto 0;
+}
+.tswp-login-logo-migration{
+  margin: 1rem auto;
+  width: 240px;
+}
+.tswp-or-separator{
+  display: flex;
+  align-items: center;
+  margin: 2rem;
+}
+.tswp-or-separator div{
+  height: 0;
+  border-bottom: 1px solid lightgray;
+  flex: 1 0 0;
+}
+.tswp-or-separator span{
+  padding: 0 1rem;
+}
+
+.tswp-main-container{
+  display: flex;
+  margin-top: 1em ;
+  margin-bottom: 1em ;
+}
+.tswp-main-container > div:first-child{
+  border-right: 1px solid #dddddd;
+  padding-right: 1em;
+}
+.tswp-main-container > div:last-child{
+  padding-left: 1em;
+}
+.tswp-main-account{
+  flex-grow: 0;
+  width: 260px;
+}
+.tswp-main-forms{
+  flex-grow: 1;
+}
+.tswp-forms-logo{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: start;
+}
+.tswp-forms-logo img{
+  width: 100px;
+}
+.tswp-account-status{
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  font-size: .9em;
+  margin-bottom: 2rem;
+}
+.tswp-account-connected{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--tswp-success-color);
+}
+.tswp-account-info {
+  margin-top: .5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .3rem;
+}
+.tswp-account-disconnect {
+  display: inline-flex;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.tswp-account-disconnect:hover {
+  background-color: #d5d5d5;
+}
+.tswp-account-disconnect svg {
+  fill: #616161;
+  height: 14px;
+  width: 14px;
+}
+.tswp-account-no-credits{
+  border-color: var(--tswp-error-color);
+  background-color: rgba(215, 54, 56, 0.05);
+}
+.tswp-account-no-credits span{
+  color: var(--tswp-error-color);
+  font-weight: bold;
+}
+
+.tswp-check-login-result {
+  margin-top: 1em;
+  display: none;
+}
+.tswp-hr-separator{
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.tswp-hr-separator-half{
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+}
+.tswp-credits-row{
+  margin: .5rem 0;
+  padding: .5rem 0 .2rem;
+  border-bottom: 1px solid #dcdcde;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+.tswp-form {
+  max-width: 100% !important;
+  margin-right: 1.5em;
+}
+.tswp-form-validator{
+  padding: 2.5rem 1rem;
+}
+.tswp-validator-input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+.tswp-validator-email{
+  min-width: 300px;
+  width: 50%;
+  font-size: 1.2em;
+}
+.tswp-validator-input .submit{
+  margin: 0;
+  padding: 0;
+}
+.tswp-validator-input .submit input{
+  font-size: 1.2em;
+}
+.tswp-validator-valid{
+  color: var(--tswp-success-color);
+}
+.tswp-validator-invalid{
+  color: var(--tswp-error-color);
+}
+.tswp-validation-response-container{
+  display: flex;
+  justify-content: center;
+}
+.tswp-validation-response-container .tswp-validation-response{
+  text-align: left;
+}
+.tswp-validation-response{
+  padding: 1em 1.5em;
+  margin: 0 0 1.5em;
+  background: #f0f0f1;
+  background: rgba(0, 0, 0, .07);
+  font-size: 13px;
+  font-family: Consolas, Monaco, monospace;
+  direction: ltr;
+  unicode-bidi: embed;
+  border: #DDD solid 1px;
+  border-radius: .25em;
+}
+.tswp-email-nowrap{
+  /*
+  white-space: nowrap;
+  display: inline-block;
+  padding-right: 1.5em;
+  */
+}
+
+.tooltip{
+  position: relative;
+  display: inline-block;
+}
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width:240px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: .25em;
+  color: #fff;
+  text-align: left;
+  padding: 6px;
+  position: absolute;
+  z-index: 1;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1.4em;
+}
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+@media screen and (max-width: 599px) {
+  .tswp-main-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .tswp-main-container > div:first-child {
+    border-right: none;
+    border-bottom: 1px solid #dddddd;
+    padding-right: 0;
+    padding-bottom: 1em;
+  }
+  .tswp-main-account {
+    flex-grow: 0;
+    width: 100%;
+  }
+  .tswp-account-status {
+    margin-bottom: .5em;
+  }
+  .tswp-main-container > div:last-child {
+    padding-left: 0;
+  }
+  .tswp-validator-input{
+    flex-direction: column;
+  }
+  .tswp-validator-email {
+    min-width: unset;
+    width: 100%;
+    font-size: 1em;
+  }
+  .tswp-form-validator {
+    padding: 1.5rem 1rem;
+  }
+  .tswp-form {
+    margin-right: 0;
+  }
 }
