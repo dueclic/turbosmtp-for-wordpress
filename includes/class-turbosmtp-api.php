@@ -63,12 +63,12 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 		$response = $this->request(
 			$this->get_api_smtp_endpoint_url(),
 			$payload,
-			true,
-			'POST' );
+			true
+		);
 
 		return [
 			'message_id'        => 'turboSMTP_' . uniqid(),
-			'provider_response' => $response
+			'response' => $response
 		];
 	}
 
