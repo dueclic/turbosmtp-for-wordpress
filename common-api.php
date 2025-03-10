@@ -149,20 +149,15 @@ function turbosmtp_get_header_content_type(
 			}
 			list( $name, $content ) = explode( ':', trim( $header ), 2 );
 
+			if (strtolower($name) === 'content-type') {
 
-			if ( str_contains( $content, ';' ) ) {
-				list( $type, $charset_content ) = explode( ';', $content );
-				$content_type                   = trim( $type );
-				if ( false !== stripos( $charset_content, 'charset=' ) ) {
-					$charset = trim( str_replace( array( 'charset=', '"' ), '', $charset_content ) );
-				} elseif ( false !== stripos( $charset_content, 'boundary=' ) ) {
-					$boundary = trim( str_replace( array( 'BOUNDARY=', 'boundary=', '"' ), '', $charset_content ) );
-					$charset  = '';
+				if ( str_contains( $content, ';' ) ) {
+					list( $type ) = explode( ';', $content );
+					$content_type = trim( $type );
+				} elseif ( '' !== trim( $content ) ) {
+					$content_type = trim( $content );
 				}
 
-				// Avoid setting an empty $content_type.
-			} elseif ( '' !== trim( $content ) ) {
-				$content_type = trim( $content );
 			}
 
 		}
