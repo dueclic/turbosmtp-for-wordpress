@@ -623,8 +623,8 @@ class Turbosmtp_Admin {
 			$turbosmtp_debug_js = defined( 'TURBOSMTP_DEBUG_JS' ) && (bool) TURBOSMTP_DEBUG_JS;
 
 			$plugin_js = [
-				'admin' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-admin.js' : 'admin/bundle/turbosmtp-admin.min.js',
-				'stats' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-stats.js' : 'admin/bundle/turbosmtp-stats.min.js'
+				'admin' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-admin.js' : 'admin/bundle/turbosmtp/turbosmtp-admin.min.js',
+				'stats' => $turbosmtp_debug_js ? 'admin/js/turbosmtp-stats.js' : 'admin/bundle/turbosmtp/turbosmtp-stats.min.js'
 			];
 
 
