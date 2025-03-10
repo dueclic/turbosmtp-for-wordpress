@@ -975,6 +975,31 @@ tbody tr:nth-of-type(2n) {
 .tswp-login-form-password-field a svg {
   width: 18px;
 }
+.tswp-input-group{
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.tswp-input-group-element:first-child{
+  border-right: none;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  margin: 0;
+}
+.tswp-input-group-element:last-child{
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin: 0;
+}
+.tswp-input-group-element.button{
+  font-size: 14px;
+}
+.tswp-login-form label.tswp-credentials-label{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .tswp-login-logo{
   width: 160px;
   margin: 10em auto 0;
