@@ -132,7 +132,7 @@ class Turbosmtp_Admin {
 
 		$current_user = wp_get_current_user();
 
-		$to = isset( $_POST['ts_mail_to'] ) ? sanitize_email( $_POST['ts_mail_to'] ) : $current_user->user_email;
+		$to = isset( $_POST['to'] ) ? sanitize_email( $_POST['to'] ) : $current_user->user_email;
 
 		$subject = esc_html__( "Email sent with WordPress and turboSMTP", "turbosmtp" );
 		$message = esc_html__( "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
