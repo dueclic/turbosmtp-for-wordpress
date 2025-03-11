@@ -68,18 +68,25 @@ $arrow_left_icon: url(../img/icon-arrow-left.png);
 .t {
   color: yellow;
 }
+.tswp-stats {
+  h2 {
 
-h2 {
-  font-weight: normal;
-}
-h3 {
-  font-weight: normal;
-}
-p {
-  font-weight: normal;
+  }
+
+  h3 {
+    font-weight: normal;
+  }
+
+  p {
+    font-weight: normal;
+  }
+
+  label {
+    font-weight: normal;
+  }
 }
 label {
-  font-weight: normal;
+  font-weight: 600;
 }
 .container-white {
   width: 100%;
@@ -761,7 +768,7 @@ label {
   }
 }
 .form-table th {
-  font-weight: normal;
+  /*font-weight: normal;*/
 }
 .submit input.std, .submit button.std  {
   @extend %btn;
@@ -789,7 +796,7 @@ input.std_sm {
   display: block;
 }
 tbody tr:nth-of-type(2n) {
-  background-color: $color_gallery_approx;
+  /*background-color: $color_gallery_approx;*/
 }
 
 /**
@@ -1035,8 +1042,9 @@ tbody tr:nth-of-type(2n) {
   padding-left: 1em;
 }
 .tswp-main-account{
+  flex-basis: 260px;
   flex-grow: 0;
-  width: 260px;
+  flex-shrink: 0;
 }
 .tswp-main-forms{
   flex-grow: 1;
@@ -1207,6 +1215,7 @@ tbody tr:nth-of-type(2n) {
     border-bottom: 1px solid #dddddd;
     padding-right: 0;
     padding-bottom: 1em;
+    flex-basis: auto;
   }
   .tswp-main-account {
     flex-grow: 0;
