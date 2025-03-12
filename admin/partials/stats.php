@@ -35,7 +35,7 @@
 
     <div class="wrap" id="paid-client" style="display:none;">
 
-        <div class="actions bulkactions ts-pull-right">
+        <div class="actions bulkactions tswp-stats-top">
 
             <form method="post" action="" class="change_date">
 
@@ -54,8 +54,12 @@
                 }
 
                 ?>
+                <span class="dashicons dashicons-calendar-alt"></span>
 
             </form>
+            <div>
+                <?php _e( "Need more statistics?", "turbosmtp" ); ?> <a href="https://dashboard.serversmtp.com/analytics/overview" target="_blank"><?php _e( "Check turboSMTP dashboard", "turbosmtp" ); ?></a>.
+            </div>
 
         </div>
 

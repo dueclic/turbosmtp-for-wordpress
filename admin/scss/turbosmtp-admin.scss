@@ -110,11 +110,17 @@ label {
 .change_date {
   margin-top: 20px;
   margin-bottom: 20px;
+  position: relative;
   input {
     padding: 10px;
   }
   label {
     padding: 10px;
+  }
+  span{
+    position: relative;
+    right: 30px;
+    top: 5px;
   }
 }
 .other-infos-columns {
@@ -441,8 +447,10 @@ label {
     }
   }
 }
-.ts-pull-right {
-  text-align: right;
+.tswp-stats-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 [class^="icon-"] {
   display: inline-block;
