@@ -161,7 +161,7 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			wp_die();
+			exit;
 		}
 
 		$ts_send_options  = array();
@@ -180,7 +180,7 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			wp_die();
+			exit;
 		}
 
 		if ( empty( $ts_send_options['fromname'] ) ) {
@@ -191,7 +191,7 @@ class Turbosmtp_Admin {
 					'send_method' => $send_method
 				], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
-			wp_die();
+			exit;
 		}
 
 		if ( $ts_send_options["is_smtp"] ) {
@@ -214,7 +214,7 @@ class Turbosmtp_Admin {
 						'send_method' => $send_method
 					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 				);
-				wp_die();
+				exit;
 			}
 
 			if ( isset( $_POST['ts_smtp_password'] ) ) {
@@ -256,7 +256,7 @@ class Turbosmtp_Admin {
 						'send_method' => $send_method
 					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 				);
-				wp_die();
+				exit;
 			}
 
 		}
@@ -266,6 +266,7 @@ class Turbosmtp_Admin {
 		wp_redirect(
 			add_query_arg( 'success', 'config_saved', admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 		);
+		exit;
 
 	}
 
