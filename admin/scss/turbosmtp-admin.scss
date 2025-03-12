@@ -657,12 +657,20 @@ label {
   }
 }
 .wp-list-table {
+
   > thead {
-    // background: $color_status_all;
+
+    a {
+    color: white !important;
+      &:hover{
+        background-color: rgba(0, 0, 0, 0.33);
+      }
+    }
+    background: $color_status_all;
     &.all {
-      // background: $color_status_all;
+      background: $color_status_all;
       > tr > th {
-        // color: $white;
+        color: $white;
       }
     }
     &.delivered {
@@ -721,6 +729,7 @@ label {
     display: none;
   }
 }
+
 .ts-spinner {
   margin: 20px auto;
   width: 50px;
