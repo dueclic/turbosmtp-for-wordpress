@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-12T15:06:08+00:00\n"
+"POT-Creation-Date: 2025-03-12T16:52:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: turbosmtp\n"
@@ -51,10 +51,8 @@ msgstr ""
 #: admin/class-turbosmtp-admin.php:129
 #: admin/class-turbosmtp-admin.php:280
 #: admin/partials/configuration.php:37
-#: admin/partials/login.php:27
-#: admin/partials/login.php:134
-#: admin/partials/migration.php:28
-#: admin/partials/migration.php:147
+#: admin/partials/login.php:72
+#: admin/partials/migration.php:71
 msgid "Invalid request"
 msgstr ""
 
@@ -74,192 +72,192 @@ msgstr ""
 msgid "Test email sent succesfully"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:370
-#: admin/class-turbosmtp-admin.php:381
+#: admin/class-turbosmtp-admin.php:365
+#: admin/class-turbosmtp-admin.php:376
 msgid "turboSMTP integration and configuration"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:382
+#: admin/class-turbosmtp-admin.php:377
 msgid "Configuration"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:392
-#: admin/class-turbosmtp-admin.php:393
+#: admin/class-turbosmtp-admin.php:387
+#: admin/class-turbosmtp-admin.php:388
 msgid "Report"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:401
+#: admin/class-turbosmtp-admin.php:396
 msgid "turboSMTP API Keys generated"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:402
+#: admin/class-turbosmtp-admin.php:397
 msgid "APIKeys"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:423
+#: admin/class-turbosmtp-admin.php:418
 msgid "This request is not allowed."
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:467
+#: admin/class-turbosmtp-admin.php:462
 msgid "Migration was completed succesfully"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:480
+#: admin/class-turbosmtp-admin.php:475
 msgid "Request was wrong"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:495
+#: admin/class-turbosmtp-admin.php:490
 msgid "turboSMTP requires a new configuration."
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:497
+#: admin/class-turbosmtp-admin.php:492
 msgid "Click here to generate API Keys"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:567
+#: admin/class-turbosmtp-admin.php:562
 msgid "Account was succesfully disconnected"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:639
+#: admin/class-turbosmtp-admin.php:634
 msgid "Generating..."
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:640
+#: admin/class-turbosmtp-admin.php:635
 msgid "Generating API Key"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:641
+#: admin/class-turbosmtp-admin.php:636
 msgid "Unknown error"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:642
+#: admin/class-turbosmtp-admin.php:637
 msgid "Copied"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:643
+#: admin/class-turbosmtp-admin.php:638
 msgid "Send in progress..."
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:644
+#: admin/class-turbosmtp-admin.php:639
 msgid "Connection request failed, please retry later."
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:645
+#: admin/class-turbosmtp-admin.php:640
 msgid "Are you sure you want disconnect?"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:646
+#: admin/class-turbosmtp-admin.php:641
 #: common-api.php:77
 msgid "Queue"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:647
+#: admin/class-turbosmtp-admin.php:642
 #: common-api.php:78
 msgid "Delivered"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:648
+#: admin/class-turbosmtp-admin.php:643
 #: common-api.php:79
 msgid "Bounced"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:649
+#: admin/class-turbosmtp-admin.php:644
 #: common-api.php:80
 msgid "Opened"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:650
+#: admin/class-turbosmtp-admin.php:645
 #: common-api.php:81
 msgid "Click"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:651
+#: admin/class-turbosmtp-admin.php:646
 #: common-api.php:82
 msgid "Unsubscribes"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:652
+#: admin/class-turbosmtp-admin.php:647
 #: common-api.php:83
 msgid "Dropped"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:653
+#: admin/class-turbosmtp-admin.php:648
 #: common-api.php:84
 msgid "Spam"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:654
+#: admin/class-turbosmtp-admin.php:649
 #: common-api.php:85
 msgid "Total"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:655
+#: admin/class-turbosmtp-admin.php:650
 msgid "No results to show"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:656
+#: admin/class-turbosmtp-admin.php:651
 #: includes/class-turbosmtp-messages-list-table.php:37
 msgid "Subject"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:657
+#: admin/class-turbosmtp-admin.php:652
 #: includes/class-turbosmtp-messages-list-table.php:39
 msgid "Error description"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:659
+#: admin/class-turbosmtp-admin.php:654
 msgid "Today"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:660
+#: admin/class-turbosmtp-admin.php:655
 msgid "Yesterday"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:661
+#: admin/class-turbosmtp-admin.php:656
 msgid "Last week"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:662
+#: admin/class-turbosmtp-admin.php:657
 msgid "Last month"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:663
+#: admin/class-turbosmtp-admin.php:658
 msgid "This month"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:664
+#: admin/class-turbosmtp-admin.php:659
 msgid "Last 30 days"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:665
+#: admin/class-turbosmtp-admin.php:660
 msgid "Last 7 days"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:666
+#: admin/class-turbosmtp-admin.php:661
 msgid "Custom range"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:667
+#: admin/class-turbosmtp-admin.php:662
 msgid "Previous month"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:668
+#: admin/class-turbosmtp-admin.php:663
 msgid "Current year"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:669
+#: admin/class-turbosmtp-admin.php:664
 msgid "Last year"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:670
+#: admin/class-turbosmtp-admin.php:665
 msgid "Confirm"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:671
+#: admin/class-turbosmtp-admin.php:666
 msgid "Clear"
 msgstr ""
 
-#: admin/class-turbosmtp-admin.php:672
+#: admin/class-turbosmtp-admin.php:667
 msgid "Cancel"
 msgstr ""
 
@@ -410,8 +408,8 @@ msgid "Copy"
 msgstr ""
 
 #: admin/partials/credentials.php:40
-#: admin/partials/login.php:103
-#: admin/partials/migration.php:116
+#: admin/partials/login.php:41
+#: admin/partials/migration.php:40
 msgid "Consumer Key"
 msgstr ""
 
@@ -420,138 +418,69 @@ msgid "The following Consumer Secret is only displayed here. Copy it now and kee
 msgstr ""
 
 #: admin/partials/credentials.php:56
-#: admin/partials/login.php:123
-#: admin/partials/migration.php:136
+#: admin/partials/login.php:61
+#: admin/partials/migration.php:60
 msgid "Consumer Secret"
 msgstr ""
 
 #: admin/partials/credentials.php:68
-#: admin/partials/credentials.php:102
 msgid "Go to configuration"
 msgstr ""
 
-#: admin/partials/credentials.php:81
-msgid "Your API Keys have been generated. Copy them for future use."
-msgstr ""
-
-#: admin/partials/credentials.php:85
-msgid "Consumer Key:"
-msgstr ""
-
-#: admin/partials/credentials.php:92
-msgid "Consumer Secret:"
-msgstr ""
-
-#: admin/partials/login.php:30
-#: admin/partials/migration.php:31
-msgid "Invalid consumer key and / or consumer secret."
-msgstr ""
-
 #: admin/partials/login.php:33
-#: admin/partials/login.php:140
-#: admin/partials/migration.php:34
-#: admin/partials/migration.php:153
-msgid "Please provide API keys."
-msgstr ""
-
-#: admin/partials/login.php:53
-msgid "Use API keys for login"
-msgstr ""
-
-#: admin/partials/login.php:63
-#: admin/partials/migration.php:64
-msgid "Enter Consumer Key:"
-msgstr ""
-
-#: admin/partials/login.php:65
-#: admin/partials/migration.php:66
-msgid "Enter your Consumer Key here..."
-msgstr ""
-
-#: admin/partials/login.php:66
-#: admin/partials/migration.php:67
-msgid "Enter Consumer Secret:"
-msgstr ""
-
-#: admin/partials/login.php:68
-#: admin/partials/migration.php:69
-msgid "Enter your Consumer Secret here..."
-msgstr ""
-
-#: admin/partials/login.php:71
-#: admin/partials/login.php:153
-msgid "Login"
-msgstr ""
-
-#: admin/partials/login.php:95
 msgid "Not a member?"
 msgstr ""
 
-#: admin/partials/login.php:96
+#: admin/partials/login.php:34
 msgid "Sign up for free"
 msgstr ""
 
-#: admin/partials/login.php:105
-#: admin/partials/migration.php:118
+#: admin/partials/login.php:43
+#: admin/partials/migration.php:42
 msgid "Get API Key"
 msgstr ""
 
-#: admin/partials/login.php:113
-#: admin/partials/migration.php:126
+#: admin/partials/login.php:51
+#: admin/partials/migration.php:50
 msgid "Show Consumer Secret"
 msgstr ""
 
-#: admin/partials/login.php:118
-#: admin/partials/migration.php:131
+#: admin/partials/login.php:56
+#: admin/partials/migration.php:55
 msgid "Hide Consumer Secret"
 msgstr ""
 
-#: admin/partials/login.php:137
-#: admin/partials/migration.php:150
+#: admin/partials/login.php:75
+#: admin/partials/migration.php:74
 msgid "Invalid Consumer Key or Secret. Please check your credentials."
 msgstr ""
 
-#: admin/partials/migration.php:54
-msgid "Hello %s, For continue to use you need to enter your API Key or generate a new one."
+#: admin/partials/login.php:78
+#: admin/partials/migration.php:77
+msgid "Please provide API keys."
 msgstr ""
 
-#: admin/partials/migration.php:72
-msgid "Update"
+#: admin/partials/login.php:91
+msgid "Login"
 msgstr ""
 
-#: admin/partials/migration.php:75
-msgid "or"
-msgstr ""
-
-#: admin/partials/migration.php:78
-msgid "Generate API Key"
-msgstr ""
-
-#: admin/partials/migration.php:82
-msgid "Skipping setup, you will lose your current turboSMTP configuration, and you can be unable to send"
-msgstr ""
-
-#: admin/partials/migration.php:85
-msgid "Skip Setup"
-msgstr ""
-
-#: admin/partials/migration.php:108
+#: admin/partials/migration.php:32
 msgid "Hello %s, Your API Keys are required to continue. Please enter your existing API keys or generate a new pair of keys."
 msgstr ""
 
-#: admin/partials/migration.php:167
+#: admin/partials/migration.php:91
 msgid "Connect to turboSMTP"
 msgstr ""
 
-#: admin/partials/migration.php:176
+#: admin/partials/migration.php:100
 msgid "Or"
 msgstr ""
 
-#: admin/partials/migration.php:179
+#: admin/partials/migration.php:103
 msgid "Clicking the following button will automatically generate a new set of API keys and log you into your turboSMTP account."
 msgstr ""
 
-#: admin/partials/migration.php:183
+#: admin/partials/migration.php:107
 msgid "Generate API Keys and connect"
 msgstr ""
 
