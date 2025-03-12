@@ -185,11 +185,13 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 
 == Screenshots ==
 
-1. Configure turboSMTP account
-
-2. Show analytics
-
-3. Login turboSMTP account
+1. Login turboSMTP account with API Keys
+2. Configure turboSMTP account 
+3. Configure SMTP
+4. Show analytics
+5. Email List Table
+6. turboSMTP account migration
+7. turboSMTP API keys details
 
 == Frequently Asked Questions ==
 
