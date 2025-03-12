@@ -85,7 +85,7 @@ if (isset($_REQUEST['success'])) {
             </div>
         </div>
         <div class="tswp-main-forms">
-            <h1><?php _e('Welcome to turboSMTP plugin for Wordpress', "turbosmtp"); ?></h1>
+            <h1><?php _e('Welcome to turboSMTP', "turbosmtp"); ?></h1>
             <p><?php _e('Enhance your WordPress email performance by integrating turboSMTP, a professional SMTP service. This ensures reliable delivery and enables advanced tracking and detailed reporting, giving you insights into your email outreach. Set up and configure your turboSMTP account details in this section.', 'turbosmtp'); ?></p>
             <div class="tswp-form card">
                 <h2><?php _e('Settings', "turbosmtp"); ?></h2>
@@ -130,7 +130,8 @@ if (isset($_REQUEST['success'])) {
                         <h3>
                             <?php _e("turboSMTP SMTP parameters", "turbosmtp"); ?>
                         </h3>
-                        <table class="form-table">
+                        <p><?php _e('For enhanced security, we recommend using the turboSMTP API. API Keys can be easily revoked, and your main turboSMTP password remains separate. While SMTP parameters are available, the API method offers greater control and protection.', "turbosmtp"); ?></p>
+                    <table class="form-table">
                             <tr valign="top">
                                 <th scope="row"><label for="ts_smtp_email">
                                         <?php _e("Username", "turbosmtp"); ?> <small>(email)</small>
@@ -269,14 +270,18 @@ if (isset($_REQUEST['success'])) {
                                </td>
                            </tr>
                        </table>
-                       <p class="submit">
+
+
+                       <p class="submit tswp-email-submit">
                            <?php
                            wp_nonce_field('turbosmtp_send_test_email', 'turbosmtp_send_test_email_nonce');
                            ?>
                            <button id="turbosmtp_send_test_email" class="button button-primary">
                                <?php _e("Send email", "turbosmtp"); ?>
                            </button>
+                            <span id="turbosmtp-email-result"></span>
                        </p>
+
                    </form>
                </div>
             </div>

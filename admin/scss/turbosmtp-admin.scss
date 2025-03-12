@@ -150,7 +150,7 @@ label {
           > h3 {
             width: 100%;
             color: $white;
-            text-align: right;
+            text-align: center;
             display: inline-block;
             margin-top: 10px;
             margin-bottom: 10px;
@@ -171,7 +171,7 @@ label {
           color: $white;
           font-size: 22px;
           font-weight: 200;
-          text-align: right;
+          text-align: center;
           padding: 3px 10px;
           margin: 0;
         }
@@ -650,11 +650,11 @@ label {
 }
 .wp-list-table {
   > thead {
-    background: $color_status_all;
+    // background: $color_status_all;
     &.all {
-      background: $color_status_all;
+      // background: $color_status_all;
       > tr > th {
-        color: $white;
+        // color: $white;
       }
     }
     &.delivered {
@@ -1006,7 +1006,6 @@ tbody tr:nth-of-type(2n) {
   align-items: center;
   justify-content: space-between;
 }
-
 .tswp-login-logo{
   width: 160px;
   margin: 10em auto 0;
@@ -1096,14 +1095,6 @@ tbody tr:nth-of-type(2n) {
   height: 14px;
   width: 14px;
 }
-.tswp-account-no-credits{
-  border-color: var(--tswp-error-color);
-  background-color: rgba(215, 54, 56, 0.05);
-}
-.tswp-account-no-credits span{
-  color: var(--tswp-error-color);
-  font-weight: bold;
-}
 
 .tswp-check-login-result {
   margin-top: 1em;
@@ -1117,70 +1108,14 @@ tbody tr:nth-of-type(2n) {
   margin-top: .75rem;
   margin-bottom: .75rem;
 }
-.tswp-credits-row{
-  margin: .5rem 0;
-  padding: .5rem 0 .2rem;
-  border-bottom: 1px solid #dcdcde;
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-}
 .tswp-form {
   max-width: 100% !important;
   margin-right: 1.5em;
 }
-.tswp-form-validator{
-  padding: 2.5rem 1rem;
-}
-.tswp-validator-input{
+.tswp-email-submit{
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 1em;
-}
-.tswp-validator-email{
-  min-width: 300px;
-  width: 50%;
-  font-size: 1.2em;
-}
-.tswp-validator-input .submit{
-  margin: 0;
-  padding: 0;
-}
-.tswp-validator-input .submit input{
-  font-size: 1.2em;
-}
-.tswp-validator-valid{
-  color: var(--tswp-success-color);
-}
-.tswp-validator-invalid{
-  color: var(--tswp-error-color);
-}
-.tswp-validation-response-container{
-  display: flex;
-  justify-content: center;
-}
-.tswp-validation-response-container .tswp-validation-response{
-  text-align: left;
-}
-.tswp-validation-response{
-  padding: 1em 1.5em;
-  margin: 0 0 1.5em;
-  background: #f0f0f1;
-  background: rgba(0, 0, 0, .07);
-  font-size: 13px;
-  font-family: Consolas, Monaco, monospace;
-  direction: ltr;
-  unicode-bidi: embed;
-  border: #DDD solid 1px;
-  border-radius: .25em;
-}
-.tswp-email-nowrap{
-  /*
-  white-space: nowrap;
-  display: inline-block;
-  padding-right: 1.5em;
-  */
 }
 
 .tooltip{
