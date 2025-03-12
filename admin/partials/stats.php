@@ -68,7 +68,7 @@
             <div class="other-infos-header">
                 <div class="other-infos-toggle"><a href="#"><span class="icon-arrow-down" data-close="icon-arrow-left"
                                                                   data-open="icon-arrow-left"></span></a></div>
-                <h3><span class="icon-stat"></span> Line Chart</h3>
+                <h3><span class="icon-stat"></span> <?php esc_html_e("Line Chart", "turbosmtp"); ?></h3>
             </div>
 
             <canvas id="turbo-stat-chart" width="400" height="400"></canvas>

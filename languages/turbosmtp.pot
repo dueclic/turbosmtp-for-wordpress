@@ -1,0 +1,653 @@
+# Copyright (C) 2025 dueclic
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: turboSMTP 4.9.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/turbosmtp-for-wordpress\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-03-12T15:06:08+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: turbosmtp\n"
+
+#. Plugin Name of the plugin
+#: turbosmtp.php
+msgid "turboSMTP"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: turbosmtp.php
+msgid "https://www.serversmtp.com/en/smtp-wordpress-configure"
+msgstr ""
+
+#. Description of the plugin
+#: turbosmtp.php
+msgid "Easily send emails from your WordPress blog using turboSMTP's services"
+msgstr ""
+
+#. Author of the plugin
+#: turbosmtp.php
+msgid "dueclic"
+msgstr ""
+
+#. Author URI of the plugin
+#: turbosmtp.php
+msgid "https://www.dueclic.com/"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:86
+#: admin/class-turbosmtp-admin.php:111
+msgid "There was an error connecting to the API. Please retry later."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:121
+msgid "Error sending email"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:129
+#: admin/class-turbosmtp-admin.php:280
+#: admin/partials/configuration.php:37
+#: admin/partials/login.php:27
+#: admin/partials/login.php:134
+#: admin/partials/migration.php:28
+#: admin/partials/migration.php:147
+msgid "Invalid request"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:137
+msgid "Email sent with WordPress and turboSMTP"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:138
+msgid "If you read this email means that turboSMTP plugin is working properly."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:143
+msgid "Unknown error sending the test email"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:145
+msgid "Test email sent succesfully"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:370
+#: admin/class-turbosmtp-admin.php:381
+msgid "turboSMTP integration and configuration"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:382
+msgid "Configuration"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:392
+#: admin/class-turbosmtp-admin.php:393
+msgid "Report"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:401
+msgid "turboSMTP API Keys generated"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:402
+msgid "APIKeys"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:423
+msgid "This request is not allowed."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:467
+msgid "Migration was completed succesfully"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:480
+msgid "Request was wrong"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:495
+msgid "turboSMTP requires a new configuration."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:497
+msgid "Click here to generate API Keys"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:567
+msgid "Account was succesfully disconnected"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:639
+msgid "Generating..."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:640
+msgid "Generating API Key"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:641
+msgid "Unknown error"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:642
+msgid "Copied"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:643
+msgid "Send in progress..."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:644
+msgid "Connection request failed, please retry later."
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:645
+msgid "Are you sure you want disconnect?"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:646
+#: common-api.php:77
+msgid "Queue"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:647
+#: common-api.php:78
+msgid "Delivered"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:648
+#: common-api.php:79
+msgid "Bounced"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:649
+#: common-api.php:80
+msgid "Opened"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:650
+#: common-api.php:81
+msgid "Click"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:651
+#: common-api.php:82
+msgid "Unsubscribes"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:652
+#: common-api.php:83
+msgid "Dropped"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:653
+#: common-api.php:84
+msgid "Spam"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:654
+#: common-api.php:85
+msgid "Total"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:655
+msgid "No results to show"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:656
+#: includes/class-turbosmtp-messages-list-table.php:37
+msgid "Subject"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:657
+#: includes/class-turbosmtp-messages-list-table.php:39
+msgid "Error description"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:659
+msgid "Today"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:660
+msgid "Yesterday"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:661
+msgid "Last week"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:662
+msgid "Last month"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:663
+msgid "This month"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:664
+msgid "Last 30 days"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:665
+msgid "Last 7 days"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:666
+msgid "Custom range"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:667
+msgid "Previous month"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:668
+msgid "Current year"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:669
+msgid "Last year"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:670
+msgid "Confirm"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:671
+msgid "Clear"
+msgstr ""
+
+#: admin/class-turbosmtp-admin.php:672
+msgid "Cancel"
+msgstr ""
+
+#: admin/partials/configuration.php:39
+msgid "Sender email address is invalid"
+msgstr ""
+
+#: admin/partials/configuration.php:41
+msgid "SMTP Email is invalid"
+msgstr ""
+
+#: admin/partials/configuration.php:43
+msgid "SMTP Server is not valid."
+msgstr ""
+
+#: admin/partials/configuration.php:45
+msgid "Sender name must be not empty"
+msgstr ""
+
+#: admin/partials/configuration.php:47
+msgid "SMTP credentials are not valid"
+msgstr ""
+
+#: admin/partials/configuration.php:58
+msgid "Options saved succesfully!"
+msgstr ""
+
+#: admin/partials/configuration.php:78
+msgid "Disconnect account"
+msgstr ""
+
+#: admin/partials/configuration.php:88
+msgid "Welcome to turboSMTP"
+msgstr ""
+
+#: admin/partials/configuration.php:89
+msgid "Enhance your WordPress email performance by integrating turboSMTP, a professional SMTP service. This ensures reliable delivery and enables advanced tracking and detailed reporting, giving you insights into your email outreach. Set up and configure your turboSMTP account details in this section."
+msgstr ""
+
+#: admin/partials/configuration.php:91
+msgid "Settings"
+msgstr ""
+
+#: admin/partials/configuration.php:92
+msgid "Define your sender details here to control how your WordPress emails are sent. Select your desired connection method, either the turboSMTP API or manual SMTP settings, to tailor the plugin to your needs."
+msgstr ""
+
+#: admin/partials/configuration.php:101
+msgid "Sender name"
+msgstr ""
+
+#: admin/partials/configuration.php:109
+msgid "Sender email address"
+msgstr ""
+
+#: admin/partials/configuration.php:117
+msgid "Sending Method"
+msgstr ""
+
+#: admin/partials/configuration.php:122
+msgid "SMTP"
+msgstr ""
+
+#: admin/partials/configuration.php:131
+msgid "turboSMTP SMTP parameters"
+msgstr ""
+
+#: admin/partials/configuration.php:133
+msgid "For enhanced security, we recommend using the turboSMTP API. API Keys can be easily revoked, and your main turboSMTP password remains separate. While SMTP parameters are available, the API method offers greater control and protection."
+msgstr ""
+
+#: admin/partials/configuration.php:137
+msgid "Username"
+msgstr ""
+
+#: admin/partials/configuration.php:147
+msgid "Password"
+msgstr ""
+
+#: admin/partials/configuration.php:161
+msgid "To further secure your credentials, it's advised to define your password within the wp-config.php file using the constant 'TURBOSMTP_SMTP_PASSWORD'."
+msgstr ""
+
+#: admin/partials/configuration.php:170
+msgid "Safely stored in wp-config.php"
+msgstr ""
+
+#: admin/partials/configuration.php:180
+msgid "SMTP Server"
+msgstr ""
+
+#: admin/partials/configuration.php:200
+msgid "SSL"
+msgstr ""
+
+#: admin/partials/configuration.php:207
+msgid "No encryption (non-SSL)"
+msgstr ""
+
+#: admin/partials/configuration.php:214
+msgid "Use SSL"
+msgstr ""
+
+#: admin/partials/configuration.php:221
+msgid "SMTP Port"
+msgstr ""
+
+#: admin/partials/configuration.php:228
+msgid "Use port 25, 587 or 2525 for non SSL encrypted connections, 465 or 25025 for SSL encrypted connections"
+msgstr ""
+
+#: admin/partials/configuration.php:238
+msgid "Save changes"
+msgstr ""
+
+#: admin/partials/configuration.php:250
+msgid "Send test email"
+msgstr ""
+
+#: admin/partials/configuration.php:251
+msgid "Ensure your setup is correct! Enter a recipient email below to send a test email and verify that your turboSMTP settings are working smoothly."
+msgstr ""
+
+#: admin/partials/configuration.php:258
+msgid "Recipient"
+msgstr ""
+
+#: admin/partials/configuration.php:266
+msgid "Write your email address and click on \"Send email\""
+msgstr ""
+
+#: admin/partials/configuration.php:280
+msgid "Send email"
+msgstr ""
+
+#: admin/partials/credentials.php:24
+msgid "Connection successful! Ensure you copy your unique Key Name, Consumer Key, and Consumer Secret now - the Secret won't be displayed again. Save them safely for future access."
+msgstr ""
+
+#: admin/partials/credentials.php:28
+msgid "Key name"
+msgstr ""
+
+#: admin/partials/credentials.php:34
+#: admin/partials/credentials.php:46
+#: admin/partials/credentials.php:62
+msgid "Copy"
+msgstr ""
+
+#: admin/partials/credentials.php:40
+#: admin/partials/login.php:103
+#: admin/partials/migration.php:116
+msgid "Consumer Key"
+msgstr ""
+
+#: admin/partials/credentials.php:51
+msgid "The following Consumer Secret is only displayed here. Copy it now and keep it safe. If you lose this key, you'll need to delete it and generate a new one."
+msgstr ""
+
+#: admin/partials/credentials.php:56
+#: admin/partials/login.php:123
+#: admin/partials/migration.php:136
+msgid "Consumer Secret"
+msgstr ""
+
+#: admin/partials/credentials.php:68
+#: admin/partials/credentials.php:102
+msgid "Go to configuration"
+msgstr ""
+
+#: admin/partials/credentials.php:81
+msgid "Your API Keys have been generated. Copy them for future use."
+msgstr ""
+
+#: admin/partials/credentials.php:85
+msgid "Consumer Key:"
+msgstr ""
+
+#: admin/partials/credentials.php:92
+msgid "Consumer Secret:"
+msgstr ""
+
+#: admin/partials/login.php:30
+#: admin/partials/migration.php:31
+msgid "Invalid consumer key and / or consumer secret."
+msgstr ""
+
+#: admin/partials/login.php:33
+#: admin/partials/login.php:140
+#: admin/partials/migration.php:34
+#: admin/partials/migration.php:153
+msgid "Please provide API keys."
+msgstr ""
+
+#: admin/partials/login.php:53
+msgid "Use API keys for login"
+msgstr ""
+
+#: admin/partials/login.php:63
+#: admin/partials/migration.php:64
+msgid "Enter Consumer Key:"
+msgstr ""
+
+#: admin/partials/login.php:65
+#: admin/partials/migration.php:66
+msgid "Enter your Consumer Key here..."
+msgstr ""
+
+#: admin/partials/login.php:66
+#: admin/partials/migration.php:67
+msgid "Enter Consumer Secret:"
+msgstr ""
+
+#: admin/partials/login.php:68
+#: admin/partials/migration.php:69
+msgid "Enter your Consumer Secret here..."
+msgstr ""
+
+#: admin/partials/login.php:71
+#: admin/partials/login.php:153
+msgid "Login"
+msgstr ""
+
+#: admin/partials/login.php:95
+msgid "Not a member?"
+msgstr ""
+
+#: admin/partials/login.php:96
+msgid "Sign up for free"
+msgstr ""
+
+#: admin/partials/login.php:105
+#: admin/partials/migration.php:118
+msgid "Get API Key"
+msgstr ""
+
+#: admin/partials/login.php:113
+#: admin/partials/migration.php:126
+msgid "Show Consumer Secret"
+msgstr ""
+
+#: admin/partials/login.php:118
+#: admin/partials/migration.php:131
+msgid "Hide Consumer Secret"
+msgstr ""
+
+#: admin/partials/login.php:137
+#: admin/partials/migration.php:150
+msgid "Invalid Consumer Key or Secret. Please check your credentials."
+msgstr ""
+
+#: admin/partials/migration.php:54
+msgid "Hello %s, For continue to use you need to enter your API Key or generate a new one."
+msgstr ""
+
+#: admin/partials/migration.php:72
+msgid "Update"
+msgstr ""
+
+#: admin/partials/migration.php:75
+msgid "or"
+msgstr ""
+
+#: admin/partials/migration.php:78
+msgid "Generate API Key"
+msgstr ""
+
+#: admin/partials/migration.php:82
+msgid "Skipping setup, you will lose your current turboSMTP configuration, and you can be unable to send"
+msgstr ""
+
+#: admin/partials/migration.php:85
+msgid "Skip Setup"
+msgstr ""
+
+#: admin/partials/migration.php:108
+msgid "Hello %s, Your API Keys are required to continue. Please enter your existing API keys or generate a new pair of keys."
+msgstr ""
+
+#: admin/partials/migration.php:167
+msgid "Connect to turboSMTP"
+msgstr ""
+
+#: admin/partials/migration.php:176
+msgid "Or"
+msgstr ""
+
+#: admin/partials/migration.php:179
+msgid "Clicking the following button will automatically generate a new set of API keys and log you into your turboSMTP account."
+msgstr ""
+
+#: admin/partials/migration.php:183
+msgid "Generate API Keys and connect"
+msgstr ""
+
+#: admin/partials/stats-free.php:30
+msgid "Upgrade your plan to unlock statistics"
+msgstr ""
+
+#: admin/partials/stats-free.php:33
+msgid "You are currently on a free trial plan. Please upgrade to view the full dashboard."
+msgstr ""
+
+#: admin/partials/stats-free.php:37
+msgid "Upgrade plan"
+msgstr ""
+
+#: admin/partials/stats.php:32
+msgid "Loading analytics data..."
+msgstr ""
+
+#: admin/partials/stats.php:61
+msgid "Need more statistics?"
+msgstr ""
+
+#: admin/partials/stats.php:61
+msgid "Check turboSMTP dashboard"
+msgstr ""
+
+#: admin/partials/stats.php:71
+msgid "Line Chart"
+msgstr ""
+
+#: admin/partials/stats.php:80
+msgid "No results found for your temporal choice."
+msgstr ""
+
+#: admin/partials/stats.php:90
+msgid "total sent emails"
+msgstr ""
+
+#: admin/partials/stats.php:108
+msgid "delivered emails"
+msgstr ""
+
+#: admin/partials/stats.php:125
+msgid "opened emails"
+msgstr ""
+
+#: admin/partials/stats.php:142
+msgid "clicked emails"
+msgstr ""
+
+#: admin/partials/stats.php:159
+msgid "bounces"
+msgstr ""
+
+#: admin/partials/stats.php:175
+msgid "unsubscribes"
+msgstr ""
+
+#: admin/partials/stats.php:183
+msgid "spam reports"
+msgstr ""
+
+#: admin/partials/stats.php:191
+msgid "queued"
+msgstr ""
+
+#: admin/partials/stats.php:199
+msgid "drop"
+msgstr ""
+
+#: admin/partials/stats.php:217
+msgid "Loading emails history..."
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:24
+#: includes/class-turbosmtp-messages-list-table.php:34
+msgid "Date / Time"
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:35
+msgid "Events"
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:36
+msgid "To"
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:38
+msgid "From"
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:197
+msgid "sent email"
+msgstr ""
+
+#: includes/class-turbosmtp-messages-list-table.php:198
+msgid "sent emails"
+msgstr ""
