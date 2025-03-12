@@ -321,7 +321,7 @@ class Turbosmtp_Admin {
 			}
 
 			$auth_options = get_option( "ts_auth_options" );
-			$send_options = get_option( "ts_send_options" );
+			$send_options = get_option( "ts_send_options", [] );
 
 			update_option( "ts_send_options", array_merge(
 				$send_options,
