@@ -122,7 +122,6 @@
 			data: {},
 			beforeSend: function() {
 				$("#turbosmtp_send_test_email").prop("disabled", true);
-				$('#turbosmtp-email-result').html(ts.i18n.test_email_send_loading);
 			},
 			success: function(response) {
 				if (response.success) {

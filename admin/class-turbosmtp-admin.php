@@ -307,7 +307,7 @@ class Turbosmtp_Admin {
 
 			try {
 				$this->api->set( $consumer_key, $consumer_secret );
-				$this->api->get_user_config();
+				$user = $this->api->get_user_config();
 			} catch ( Exception $e ) {
 
 				$error_messages = apply_filters( 'turbosmtp_api_error_messages', [
@@ -320,15 +320,14 @@ class Turbosmtp_Admin {
 				exit;
 			}
 
-			$auth_options = get_option( "ts_auth_options" );
 			$send_options = get_option( "ts_send_options", [] );
 
 			update_option( "ts_send_options", array_merge(
 				$send_options,
 				[
-					"email"    => $auth_options['op_ts_email'],
-					"password" => $auth_options['op_ts_password'],
-					"is_smtp"  => apply_filters('turbosmtp_default_is_smtp', false)
+					"is_smtp"  => apply_filters('turbosmtp_default_is_smtp', false),
+					"fromname" => get_bloginfo(),
+					"from" => get_bloginfo('admin_email')
 				]
 			) );
 
@@ -340,10 +339,6 @@ class Turbosmtp_Admin {
 
 			update_option( "ts_migration_done", true );
 
-		} else if ( isset( $_POST['skip_setup'] ) ) {
-			update_option( "ts_auth_options", [] );
-			update_option( "ts_send_options", [] );
-			update_option( "ts_migration_done", true );
 		}
 
 		wp_redirect(
