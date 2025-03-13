@@ -69,7 +69,7 @@ class Turbosmtp_Public {
 	 * @throws \PHPMailer\PHPMailer\Exception
 	 */
 
-	function phpmailer_init(
+	function maybe_send_via_phpmailer(
 		$phpmailer
 	) {
 		$send_options = get_option( "ts_send_options" );
@@ -83,8 +83,11 @@ class Turbosmtp_Public {
 				return;
 			}
 
+			$from = $phpmailer->From ?: $send_options['from'];
+			$fromname = $phpmailer->FromName ?: $send_options['fromname'];
+
 			$phpmailer->isSMTP();
-			$phpmailer->setFrom( $send_options["from"], $send_options["fromname"] );
+			$phpmailer->setFrom( $from, $fromname );
 			$phpmailer->Host       = $send_options["host"];
 			$phpmailer->SMTPAuth   = 'yes';
 			$phpmailer->SMTPSecure = $send_options["smtpsecure"];
@@ -104,14 +107,18 @@ class Turbosmtp_Public {
 			return $retval;
 		}
 
-		$content_type = turbosmtp_get_header_content_type(
+		$data = turbosmtp_get_headers_data(
 			$atts['headers']
 		);
 
+		$content_type = $data['content-type'];
+		$from         = $data['from'] ?: $send_options['from'];
+		$fromname     = $data['fromname'] ?: $send_options['fromname'];
+
 		$mail_atts = [
 			'to'          => $atts['to'],
-			'from'        => $send_options['from'],
-			'fromname'    => $send_options['fromname'],
+			'from'        => $from,
+			'fromname'    => $fromname,
 			'subject'     => $atts['subject'],
 			'message'     => $atts['message'],
 			"headers"     => $atts["headers"],
@@ -148,7 +155,7 @@ class Turbosmtp_Public {
 
 	public function turbosmtp_api_response( $response, $args ) {
 		$code = (int) $args['code'];
-		if ( $code === 401 && apply_filters('turbosmtp_disconnect_if_api_response_401', true) ) {
+		if ( $code === 401 && apply_filters( 'turbosmtp_disconnect_if_api_response_401', true ) ) {
 			$auth_options              = get_option( "ts_auth_options" );
 			$auth_options['valid_api'] = false;
 			update_option( "ts_auth_options", $auth_options );

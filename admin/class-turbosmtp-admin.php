@@ -78,7 +78,29 @@ class Turbosmtp_Admin {
 		try {
 			$turbosmtp_hosts = turbosmtp_valid_hosts();
 			$send_options    = get_option( "ts_send_options" );
+
 			$user_config     = $this->api->get_user_config();
+
+			if (!isset($send_options['email'])){
+				$send_options['email'] = $user_config['email'];
+			}
+
+			if (!isset($send_options['host'])){
+				$send_options['host'] = 'pro.turbo-smtp.com';
+			}
+
+			if (!isset($send_options['smtpsecure'])){
+				$send_options['smtpsecure'] = 'ssl';
+			}
+
+			if (!isset($send_options['port'])){
+				$send_options['port'] = 465;
+			}
+
+			if (!isset($send_options['port'])){
+				$send_options['port'] = 465;
+			}
+
 			$current_user    = wp_get_current_user();
 			require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/configuration.php';
 		} catch ( Exception $e ) {
@@ -281,6 +303,24 @@ class Turbosmtp_Admin {
 			);
 		}
 		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/credentials.php';
+	}
+
+	/**
+	 * Register the shortcut for the settings area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function settings_link( $links, $file ) {
+		if ( is_network_admin() ) {
+			$settings_url = network_admin_url( 'admin.php?page=turbosmtp_config' );
+		} else {
+			$settings_url = admin_url( 'admin.php?page=turbosmtp_config' );
+		}
+
+		$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . __( 'Settings', 'turbosmtp' ) . '</a>';
+		array_unshift( $links, $settings_link );
+
+		return $links;
 	}
 
 	public function save_api_keys() {

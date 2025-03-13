@@ -17,9 +17,6 @@
  * @var $user_config array
  */
 
-?>
-
-<?php
 
 $send_method = $send_options['is_smtp'] ? 'smtp' : 'api';
 
@@ -202,7 +199,7 @@ if (isset($_REQUEST['success'])) {
                                 <td>
                                     <p>
                                         <input id="turboSMTP_mail_smtpsecure_none" name="ts_smtp_smtpsecure" type="radio"
-                                               value=""<?php if ($send_options["smtpsecure"] == '') { ?> checked="checked"<?php } ?> />
+                                               value="" <?php if ($send_options["smtpsecure"] == '') { ?> checked="checked"<?php } ?> />
                                         <label for="ts_smtp_smtpsecure">
                                             <?php _e("No encryption (non-SSL)", "turbosmtp"); ?>
                                         </label>

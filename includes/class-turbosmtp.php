@@ -155,6 +155,9 @@ class Turbosmtp {
 			$this->get_version()
 		);
 
+		$prefix = is_network_admin() ? 'network_admin_' : '';
+		$this->loader->add_filter("{$prefix}plugin_action_links_" . plugin_basename(TURBOSMTP_BASE_PATH), $plugin_admin, 'settings_link', 10, 2);
+
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
@@ -200,7 +203,7 @@ class Turbosmtp {
 
 		if ( turbosmtp_validapi() ) {
 			$this->loader->add_action('pre_wp_mail', $plugin_public, 'maybe_send_via_http', 10, 2 );
-			$this->loader->add_action( 'phpmailer_init', $plugin_public,'phpmailer_init' );
+			$this->loader->add_action( 'phpmailer_init', $plugin_public,'maybe_send_via_phpmailer' );
 		}
 
 	}

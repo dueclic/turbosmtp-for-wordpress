@@ -130,11 +130,18 @@ function turbosmtp_implode( $glue, $pieces ) {
 	return $pieces;
 }
 
-function turbosmtp_get_header_content_type(
+function turbosmtp_get_headers_data(
 	$headers
 ) {
 
-	$content_type = "text/plain";
+	$data = [
+		"content-type" => "text/plain",
+		"from"         => "",
+		"fromname"     => "",
+		"cc" => [],
+		"bcc" => [],
+		"reply-to" => []
+	];
 
 	if ( ! is_array( $headers ) ) {
 		$tempheaders = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
@@ -149,20 +156,56 @@ function turbosmtp_get_header_content_type(
 			}
 			list( $name, $content ) = explode( ':', trim( $header ), 2 );
 
-			if (strtolower($name) === 'content-type') {
+			$name = strtolower( $name );
 
-				if ( str_contains( $content, ';' ) ) {
-					list( $type ) = explode( ';', $content );
-					$content_type = trim( $type );
-				} elseif ( '' !== trim( $content ) ) {
-					$content_type = trim( $content );
-				}
+			switch ( $name ) {
+				case 'content-type':
 
+					if ( str_contains( $content, ';' ) ) {
+						list( $type ) = explode( ';', $content );
+						$data['content-type'] = trim( $type );
+					} elseif ( '' !== trim( $content ) ) {
+						$data['content-type'] = trim( $content );
+					}
+					break;
+
+				case 'from':
+					$bracket_pos = strpos( $content, '<' );
+					if ( false !== $bracket_pos ) {
+						// Text before the bracketed email is the "From" name.
+						if ( $bracket_pos > 0 ) {
+							$from_name        = substr( $content, 0, $bracket_pos );
+							$from_name        = str_replace( '"', '', $from_name );
+							$from_name        = trim( $from_name );
+							$data['fromname'] = $from_name;
+						}
+
+						$from_email   = substr( $content, $bracket_pos + 1 );
+						$from_email   = str_replace( '>', '', $from_email );
+						$from_email   = trim( $from_email );
+						$data['from'] = $from_email;
+
+					} elseif ( '' !== trim( $content ) ) {
+						$from_email   = trim( $content );
+						$data['from'] = $from_email;
+					}
+
+					break;
+
+				case 'cc':
+					$data['cc'] = array_merge( (array) $data['cc'], explode( ',', $content ) );
+					break;
+				case 'bcc':
+					$data['bcc'] = array_merge( (array) $data['bcc'], explode( ',', $content ) );
+					break;
+				case 'reply-to':
+					$data['reply-to'] = array_merge( (array) $data['reply-to'], explode( ',', $content ) );
+					break;
 			}
 
 		}
 	}
 
-	return $content_type;
+	return $data;
 
 }
