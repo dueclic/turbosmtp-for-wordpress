@@ -40,7 +40,7 @@
                 <label for="consumer_key" class="tswp-login-form-get-api">
                     <?php _e( "Consumer Key", "turbosmtp" ); ?>:
                     <a href="https://dashboard.serversmtp.com/settings/integrations" target="_blank"
-                       class="tswp-get-api"><?php _e( "Get API Key", "turbosmtp" ); ?>:
+                       class="tswp-get-api"><?php _e( "Get API Key", "turbosmtp" ); ?>
                     </a>
                 </label>
                 <input class="tswp-input" type="text" value="" id="consumer_key"
