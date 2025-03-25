@@ -17,8 +17,8 @@
  * Plugin URI:        https://www.serversmtp.com/en/smtp-wordpress-configure
  * Description:       Easily send emails from your WordPress blog using turboSMTP's services
  * Version:           4.9.1
- * Author:            dueclic
- * Author URI:        https://www.dueclic.com/
+ * Author:            turbosmtp
+ * Author URI:        https://www.serversmtp.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       turbosmtp

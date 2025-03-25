@@ -130,6 +130,14 @@ function turbosmtp_implode( $glue, $pieces ) {
 	return $pieces;
 }
 
+/**
+ * Extract data from headers
+ *
+ * @param $headers
+ *
+ * @return array
+ */
+
 function turbosmtp_get_headers_data(
 	$headers
 ) {
@@ -156,9 +164,10 @@ function turbosmtp_get_headers_data(
 			}
 			list( $name, $content ) = explode( ':', trim( $header ), 2 );
 
-			$name = strtolower( $name );
+			$name    = trim( $name );
+			$content = trim( $content );
 
-			switch ( $name ) {
+			switch ( strtolower( $name ) ) {
 				case 'content-type':
 
 					if ( str_contains( $content, ';' ) ) {

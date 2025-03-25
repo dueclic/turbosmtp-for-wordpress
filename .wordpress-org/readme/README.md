@@ -1,5 +1,5 @@
 === turboSMTP ===
-Contributors: dueclic
+Contributors: turbosmtp, dueclic
 Tags: turboSMTP,smtp,email,mailer,ssl
 Requires at least: 6.0
 Tested up to: 6.7.1
