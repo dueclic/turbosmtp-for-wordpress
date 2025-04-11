@@ -148,7 +148,8 @@ function turbosmtp_get_headers_data(
 		"fromname"     => "",
 		"cc" => [],
 		"bcc" => [],
-		"reply-to" => []
+		"reply-to" => [],
+		'headers' => []
 	];
 
 	if ( ! is_array( $headers ) ) {
@@ -209,6 +210,9 @@ function turbosmtp_get_headers_data(
 					break;
 				case 'reply-to':
 					$data['reply-to'] = array_merge( (array) $data['reply-to'], explode( ',', $content ) );
+					break;
+				default:
+					$data['headers'][ trim( $name ) ] = trim( $content );
 					break;
 			}
 

@@ -121,7 +121,7 @@ class Turbosmtp_Public {
 			'fromname'    => $fromname,
 			'subject'     => $atts['subject'],
 			'message'     => $atts['message'],
-			"headers"     => $atts["headers"],
+			"headers"     => $data["headers"],
 			"attachments" => $atts["attachments"]
 		];
 
