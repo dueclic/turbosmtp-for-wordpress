@@ -159,8 +159,8 @@ class Turbosmtp_Admin {
 		$subject = esc_html__( "Email sent with WordPress and turboSMTP", "turbosmtp" );
 		$message = esc_html__( "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
 
-
-		$sent_email = wp_mail( $to, $subject, $message );
+		$headers = array('Content-Type: text/html; charset=UTF-8');
+		$sent_email = wp_mail( $to, $subject, $message, $headers );
 		if ( ! $sent_email ) {
 			wp_send_json_error( [ 'message' => __( 'Unknown error sending the test email', 'turbosmtp' ) ] );
 		} else {

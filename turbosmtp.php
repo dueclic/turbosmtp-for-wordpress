@@ -16,7 +16,7 @@
  * Plugin Name:       turboSMTP
  * Plugin URI:        https://www.serversmtp.com/en/smtp-wordpress-configure
  * Description:       Easily send emails from your WordPress blog using turboSMTP's services
- * Version:           4.9.2
+ * Version:           4.9.3
  * Author:            turbosmtp
  * Author URI:        https://www.serversmtp.com
  * License:           GPL-2.0+
@@ -37,7 +37,7 @@ require_once plugin_dir_path( __FILE__ ) . 'common-api.php';
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TURBOSMTP_VERSION', '4.9.2' );
+define( 'TURBOSMTP_VERSION', '4.9.3' );
 define( 'TURBOSMTP_BASE_PATH', __FILE__ );
 
 /**
