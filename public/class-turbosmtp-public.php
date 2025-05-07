@@ -122,8 +122,16 @@ class Turbosmtp_Public {
 			'subject'     => $atts['subject'],
 			'message'     => $atts['message'],
 			"headers"     => $data["headers"],
-			"attachments" => $atts["attachments"]
+			"attachments" => $atts["attachments"],
 		];
+
+		if (!empty($data['bcc'])){
+			$mail_atts['bcc'] = $data['bcc'];
+		}
+
+		if (!empty($data['cc'])){
+			$mail_atts['cc'] = $data['cc'];
+		}
 
 		if ( 'text/html' == $content_type ) {
 			$mail_atts['html']    = $mail_atts['message'];
