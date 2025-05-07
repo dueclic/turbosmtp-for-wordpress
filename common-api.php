@@ -208,9 +208,6 @@ function turbosmtp_get_headers_data(
 				case 'bcc':
 					$data['bcc'] = array_merge( (array) $data['bcc'], explode( ',', $content ) );
 					break;
-				case 'reply-to':
-					$data['reply-to'] = array_merge( (array) $data['reply-to'], explode( ',', $content ) );
-					break;
 				default:
 					$data['headers'][ trim( $name ) ] = trim( $content );
 					break;
