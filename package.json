@@ -1,6 +1,6 @@
 {
   "name": "turbosmtp-wordpress-plugin",
-  "version": "2.7.0",
+  "version": "4.9.8",
   "description": "Easily send emails from your WordPress website using turboSMTP's services",
   "main": "gulpfile.js",
   "scripts": {
