@@ -10,6 +10,5 @@ module.exports = {
         {filename: 'turbosmtp.php', updater: 'scripts/version-updaters/php-plugin.js'},
         {filename: '.wordpress-org/readme/README.md', updater: 'scripts/version-updaters/wp-readme.js'},
         {filename: 'package.json', type: 'json'},
-        {filename: 'package-lock.json', type: 'json'},
     ],
 };

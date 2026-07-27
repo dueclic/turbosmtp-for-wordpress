@@ -10,27 +10,40 @@ Official turboSMTP WordPress plugin (slug: `turbosmtp`). It reroutes all `wp_mai
 
 Asset build only — there are no tests and no PHP linting configured. PHP files are loaded directly by WordPress; nothing compiles them.
 
+Toolchain: Node 20 (`.nvmrc`) + pnpm 9 (pinned via `packageManager`, use through corepack: `corepack enable` once, then plain `pnpm` works). SCSS compiles with dart-sass (`sass` + gulp-sass 5).
+
 ```bash
-npm install        # uses node version in .nvmrc
-npm run build      # gulp default: clean → copy vendor bundles → SCSS → JS
-npm run build:css  # SCSS only (admin/scss → admin/css/*.min.css)
-npm run build:js   # JS only (admin/js → admin/bundle/turbosmtp/*.min.js via babel+uglify)
-npm run watch      # watch both SCSS and JS
+pnpm install        # uses node version in .nvmrc
+pnpm run build      # gulp default: clean → copy vendor bundles → SCSS → JS
+pnpm run build:css  # SCSS only (admin/scss → admin/css/*.min.css)
+pnpm run build:js   # JS only (admin/js → admin/bundle/turbosmtp/*.min.js via babel+uglify)
+pnpm run watch      # watch both SCSS and JS
+```
+
+## Local dev environment (wp-env)
+
+`@wordpress/env` (needs Docker) spins up WordPress with the plugin mounted and activated; config in `.wp-env.json` (PHP 8.2, `WP_DEBUG` on).
+
+```bash
+pnpm run env:start    # http://localhost:8888 — admin: admin/password
+pnpm run env:stop
+pnpm run env:destroy  # remove containers + volumes
+pnpm run env:cli ...  # WP-CLI inside the container, e.g. pnpm run env:cli option get ts_auth_options
 ```
 
 Compiled/copy targets are committed: never hand-edit `admin/css/*.min.css`, `admin/bundle/**`. Edit sources in `admin/scss/` and `admin/js/`, then rebuild. `admin/bundle/chart.js`, `admin/bundle/daterangepicker`, and `turbosmtp-summarizer.min.js` are copied/transpiled from node_modules by the `plugins` gulp task.
 
 ## Release / versioning
 
-Releases are driven by **conventional commits** (`feat:`, `fix:`, …) via `commit-and-tag-version` (pinned to 9.6.0 — the last version that runs on Node 12, required by the gulp toolchain; don't upgrade it without also upgrading Node/gulp):
+Releases are driven by **conventional commits** (`feat:`, `fix:`, …) via `commit-and-tag-version`:
 
 ```bash
-npm run release:dry   # preview: next version + changelog
-npm run release       # bump versions, update CHANGELOG.md, commit, create tag
+pnpm run release:dry   # preview: next version + changelog
+pnpm run release       # bump versions, update CHANGELOG.md, commit, create tag
 git push --follow-tags origin master   # push manually — this triggers the WP.org deploy
 ```
 
-`npm run release` computes the next semver from commits since the last tag and updates every version location in one commit: `turbosmtp.php` (header `Version:` + `TURBOSMTP_VERSION` constant), `Stable tag:` in `.wordpress-org/readme/README.md`, `package.json`/`package-lock.json`, and `CHANGELOG.md`. Config is in `.versionrc.js`; the custom updaters live in `scripts/version-updaters/`. Tags are plain versions with no `v` prefix (e.g. `4.9.8`). Never bump versions by hand.
+`pnpm run release` computes the next semver from commits since the last tag and updates every version location in one commit: `turbosmtp.php` (header `Version:` + `TURBOSMTP_VERSION` constant), `Stable tag:` in `.wordpress-org/readme/README.md`, `package.json`, and `CHANGELOG.md`. Config is in `.versionrc.js`; the custom updaters live in `scripts/version-updaters/`. Tags are plain versions with no `v` prefix (e.g. `4.9.8`). Never bump versions by hand.
 
 The user-facing changelog inside `.wordpress-org/readme/README.md` (`== Changelog ==` section) is NOT generated — curate it manually when the release is worth announcing to WP.org users.
 
@@ -72,7 +85,7 @@ Loaded before everything else. Notable: `turbosmtp_analytics_filter_options()` m
 ## Translations
 
 - All user-facing strings go through `__()`/`_e()` with the `turbosmtp` text domain.
-- The catalog `languages/turbosmtp.pot` is generated with WP-CLI: `npm run makepot` (wraps `wp i18n make-pot`; requires the `wp` binary — not installed by default). Regenerate it when translatable strings change.
+- The catalog `languages/turbosmtp.pot` is generated with WP-CLI: `pnpm run makepot` (wraps `wp i18n make-pot`; requires the `wp` binary — not installed by default). Regenerate it when translatable strings change.
 - There is deliberately no `load_plugin_textdomain()` call: translations are delivered as automatic language packs from translate.wordpress.org (GlotPress), keyed on the `Text Domain` plugin header. No `.po`/`.mo` files live in the repo — translated strings are managed on translate.wordpress.org, not here.
 
 ## Conventions

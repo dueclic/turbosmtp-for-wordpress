@@ -11,4 +11,7 @@ CLAUDE.md
 CHANGELOG.md
 .nvmrc
 .versionrc.js
+.wp-env.json
+.wp-env.override.json
+pnpm-lock.yaml
 /scripts
