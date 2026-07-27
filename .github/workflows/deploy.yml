@@ -38,11 +38,27 @@ jobs:
           rsync -rc --exclude-from=.distignore ./ /tmp/package/turbosmtp/ --delete --delete-excluded
           cd /tmp/package
           zip -rq turbosmtp.zip turbosmtp
+      # Release notes come from the CHANGELOG.md section for this version
+      # (written by commit-and-tag-version); if missing, fall back to
+      # GitHub's auto-generated notes (commits since the previous tag).
       - name: Create GitHub release with plugin zip
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" /tmp/package/turbosmtp.zip \
-            --verify-tag \
-            --title "$GITHUB_REF_NAME" \
-            --generate-notes
+          if [ -f CHANGELOG.md ]; then
+            awk -v ver="$GITHUB_REF_NAME" '
+              /^##+ \[/ { if (found) exit; if (index($0, "[" ver "]")) found=1; next }
+              found { print }
+            ' CHANGELOG.md > /tmp/release-notes.md
+          fi
+          if [ -s /tmp/release-notes.md ]; then
+            gh release create "$GITHUB_REF_NAME" /tmp/package/turbosmtp.zip \
+              --verify-tag \
+              --title "$GITHUB_REF_NAME" \
+              --notes-file /tmp/release-notes.md
+          else
+            gh release create "$GITHUB_REF_NAME" /tmp/package/turbosmtp.zip \
+              --verify-tag \
+              --title "$GITHUB_REF_NAME" \
+              --generate-notes
+          fi
