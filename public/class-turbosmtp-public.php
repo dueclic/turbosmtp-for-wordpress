@@ -111,9 +111,9 @@ class Turbosmtp_Public {
 			$atts['headers']
 		);
 
-		$content_type = $data['content-type'];
-		$from         = $data['from'] ?: $send_options['from'];
-		$fromname     = $data['fromname'] ?: $send_options['fromname'];
+		$content_type = apply_filters( 'wp_mail_content_type', $data['content-type'] );
+		$from         = apply_filters( 'wp_mail_from', $data['from'] ?: $send_options['from'] );
+		$fromname     = apply_filters( 'wp_mail_from_name', $data['fromname'] ?: $send_options['fromname'] );
 
 		$mail_atts = [
 			'to'          => $atts['to'],
