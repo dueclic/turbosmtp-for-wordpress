@@ -133,6 +133,10 @@ class Turbosmtp_Public {
 			$mail_atts['cc'] = $data['cc'];
 		}
 
+		if (!empty($data['reply-to'])){
+			$mail_atts['reply_to'] = $data['reply-to'];
+		}
+
 		if ( 'text/html' == $content_type ) {
 			$mail_atts['html']    = $mail_atts['message'];
 			$mail_atts['message'] = wp_strip_all_tags( $mail_atts['message'] );

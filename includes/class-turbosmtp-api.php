@@ -29,7 +29,7 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 			'subject'        => $data['subject'],
 			'content'        => $data['message'],
 			'to'             => turbosmtp_implode( ",", $data['to'] ),
-			'reply_to'       => $data['reply_to'] ?? $data['from'],
+			'reply_to'       => ! empty( $data['reply_to'] ) ? turbosmtp_implode( ",", $data['reply_to'] ) : $data['from'],
 			'custom_headers' => $data['headers']
 		];
 
