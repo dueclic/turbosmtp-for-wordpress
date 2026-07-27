@@ -29,6 +29,11 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 
 == Changelog ==
 
+= 4.9.8 =
+* Compatibility with WP 7.0
+* Preserve Reply-To header when sending via API
+* Apply core wp_mail filters (wp_mail_from, wp_mail_from_name, wp_mail_content_type, wp_mail_charset) when sending via API
+
 = 4.9.7 =
 * Compatibility with WP 6.9
 
