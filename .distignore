@@ -14,4 +14,8 @@ CHANGELOG.md
 .wp-env.json
 .wp-env.override.json
 pnpm-lock.yaml
+package.json
+gulpfile.js
 /scripts
+/admin/scss
+/admin/js

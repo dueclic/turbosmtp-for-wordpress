@@ -47,7 +47,7 @@ git push --follow-tags origin master   # push manually — this triggers the WP.
 
 The user-facing changelog inside `.wordpress-org/readme/README.md` (`== Changelog ==` section) is NOT generated — curate it manually when the release is worth announcing to WP.org users.
 
-Deployment to the WordPress.org SVN repo happens automatically via GitHub Actions (`.github/workflows/deploy.yml`) when a git tag is pushed. `.distignore` controls what is excluded from the deployed zip (dev files like `CLAUDE.md`, `CHANGELOG.md`, `.versionrc.js`, `scripts/` are excluded).
+Deployment to the WordPress.org SVN repo happens automatically via GitHub Actions (`.github/workflows/deploy.yml`) when a git tag is pushed. The same workflow builds the assets first (they are not committed), then creates a GitHub release for the tag with the packaged `turbosmtp.zip` attached — the exact zip deployed to WP.org. `.distignore` controls what is excluded from the deployed zip (dev files like `CLAUDE.md`, `CHANGELOG.md`, `.versionrc.js`, `scripts/` are excluded).
 
 ## Architecture
 

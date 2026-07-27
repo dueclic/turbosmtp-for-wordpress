@@ -2,3 +2,5 @@
 node_modules
 oldstuff
 .wp-env.override.json
+admin/css
+admin/bundle
