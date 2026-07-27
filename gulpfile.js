@@ -1,7 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
-const scss = require('gulp-sass');
+const scss = require('gulp-sass')(require('sass'));
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const plumber = require('gulp-plumber');
@@ -67,7 +67,7 @@ gulp.task('scripts', async () => {
 
 
 gulp.task('clean', function () {
-    return gulp.src(['./admin/bundle/*', "./admin/css"], {read: false})
+    return gulp.src(['./admin/bundle/*', "./admin/css"], {read: false, allowEmpty: true})
         .pipe(clean());
 });
 
