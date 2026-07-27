@@ -11,13 +11,17 @@
     "build:css": "gulp styles",
     "build:js": "gulp scripts",
     "watch": "gulp watch",
-    "clean": "gulp clean"
+    "clean": "gulp clean",
+    "release": "commit-and-tag-version",
+    "release:dry": "commit-and-tag-version --dry-run",
+    "makepot": "wp i18n make-pot . languages/turbosmtp.pot"
   },
   "author": "dueclic",
   "license": "GPLv3",
   "devDependencies": {
     "@babel/core": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
+    "commit-and-tag-version": "9.6.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
