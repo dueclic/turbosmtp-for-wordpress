@@ -91,3 +91,4 @@ Loaded before everything else. Notable: `turbosmtp_analytics_filter_options()` m
 ## Conventions
 
 - Code style is WordPress-flavored PHP (tabs, snake_case, Yoda-ish spacing as in existing files); match the surrounding file.
+- Everything written to the repo or GitHub is in **English**: PR titles and bodies, commit messages, code comments, and docs — regardless of the language used in conversation.
