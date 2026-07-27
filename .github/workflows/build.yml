@@ -1,0 +1,36 @@
+name: Build & package check
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build plugin zip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable corepack
+        run: corepack enable
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build assets
+        run: pnpm run build
+      # Package with the same rsync + .distignore logic used by the
+      # WP.org deploy action, so the artifact matches what gets deployed.
+      - name: Package plugin zip
+        run: |
+          mkdir -p /tmp/package/turbosmtp
+          rsync -rc --exclude-from=.distignore ./ /tmp/package/turbosmtp/ --delete --delete-excluded
+          cd /tmp/package
+          zip -rq turbosmtp.zip turbosmtp
+          echo "── zip contents ──"
+          unzip -l turbosmtp.zip
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: turbosmtp-zip
+          path: /tmp/package/turbosmtp.zip
