@@ -3,6 +3,8 @@ on:
   push:
     tags:
       - "*"
+permissions:
+  contents: write
 jobs:
   tag:
     name: New tag
@@ -28,3 +30,19 @@ jobs:
           SLUG: turbosmtp
           ASSETS_DIR: .wordpress-org/assets
           README_DIR: .wordpress-org/readme
+      # Package the plugin exactly as deployed (same rsync + .distignore
+      # logic as the deploy action) and attach it to the GitHub release.
+      - name: Package plugin zip
+        run: |
+          mkdir -p /tmp/package/turbosmtp
+          rsync -rc --exclude-from=.distignore ./ /tmp/package/turbosmtp/ --delete --delete-excluded
+          cd /tmp/package
+          zip -rq turbosmtp.zip turbosmtp
+      - name: Create GitHub release with plugin zip
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" /tmp/package/turbosmtp.zip \
+            --verify-tag \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
