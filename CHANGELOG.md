@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.9.9](https://github.com/dueclic/turbosmtp-for-wordpress/compare/4.9.8...4.9.9) (2026-10-28)
+
 ## [4.9.8](https://github.com/dueclic/turbosmtp-for-wordpress/compare/4.9.7...4.9.8) (2026-07-27)
 
 
