@@ -8,9 +8,14 @@
 
         display: function (data) {
 
-            $tbody.on("click", ".toggle-row", function (e) {
-                e.preventDefault();
-                $(this).closest("tr").toggleClass("is-expanded")
+            // WordPress core (common.js) already toggles .is-expanded on
+            // .toggle-row clicks: binding a second toggle here cancelled it
+            // out. Only mirror the state for assistive technologies.
+            $tbody.on("click", ".toggle-row", function () {
+                var $button = $(this);
+                window.setTimeout(function () {
+                    $button.attr("aria-expanded", $button.closest("tr").hasClass("is-expanded") ? "true" : "false");
+                }, 0);
             });
 
             data = $.extend({
@@ -72,6 +77,10 @@
             });
 
             $("tbody tr").prop("title", "");
+
+            $tbody.find(".toggle-row").each(function () {
+                $(this).attr("aria-expanded", $(this).closest("tr").hasClass("is-expanded") ? "true" : "false");
+            });
 
             $(".ts-loading").hide();
             $(".history-step").show();
@@ -161,6 +170,21 @@
             $tooltip.hide();
         });
 
+        // The API key icon has its own tooltip: hide the error one meanwhile.
+        $(document).on('mouseenter', '#ts-history-table .tswp-api-key-wrap', function() {
+            $tooltip.hide();
+        });
+
+        // WCAG 1.4.13: the API key tooltip can be dismissed with Escape.
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape') {
+                $('.tswp-api-key-wrap').addClass('is-dismissed');
+            }
+        });
+        $(document).on('mouseleave focusout', '#ts-history-table .tswp-api-key-wrap', function() {
+            $(this).removeClass('is-dismissed');
+        });
+
         $(document).on('mousemove', '#ts-history-table tbody tr', function(e) {
             $tooltip.css({
                 left: e.pageX + 10,
@@ -168,18 +192,17 @@
             });
         });
 
-        $(".other-infos-toggle a").on("click", function (evt) {
-            evt.preventDefault();
+        $(".other-infos-toggle button").on("click", function () {
+            var $button = $(this);
+            var expanded = $button.attr("aria-expanded") === "true";
 
-            if ($(this).find("span").hasClass("icon-arrow-down")) {
-                $("#turbo-stat-chart").hide();
-                $(this).find("span").removeClass("icon-arrow-down").addClass("icon-arrow-left");
-            }
-            else {
-                $("#turbo-stat-chart").show();
-                $(this).find("span").removeClass("icon-arrow-left").addClass("icon-arrow-down");
-            }
-
+            $("#turbo-stat-chart-wrap").toggle(!expanded);
+            $button
+                .attr("aria-expanded", expanded ? "false" : "true")
+                .attr("aria-label", expanded ? ts.i18n.show_chart : ts.i18n.hide_chart);
+            $button.find("span")
+                .toggleClass("icon-arrow-down", !expanded)
+                .toggleClass("icon-arrow-left", expanded);
         });
 
         var from_date = $("input[name='from_date']");
@@ -214,21 +237,16 @@
             if (window.chart != null)
                 window.chart.destroy();
 
-            var c = $('#turbo-stat-chart');
-            var ctx = c.get(0).getContext("2d");
-            var container = c.parent();
+            var ctx = $('#turbo-stat-chart').get(0).getContext("2d");
 
-            var $container = $(container);
-
-            c.attr('width', $container.width()); //max width
-
-            c.attr('height', $container.height() / 1.5); //max height
-
+            // The height comes from .tswp-chart-wrap (CSS), so the chart stays
+            // readable on narrow screens instead of keeping a fixed ratio.
             window.chart = new Chart(ctx, {
                 type: 'line',
                 data: chartData,
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     legend: {
                         position: 'bottom'
                     },
@@ -237,7 +255,8 @@
                             ticks: {
                                 maxRotation: 0,
                                 autoSkip: true,
-                                maxTicksLimit: 10
+                                // ~90px per YYYY-MM-DD label, so they never overlap on phones
+                                maxTicksLimit: Math.max(2, Math.min(10, Math.floor($('#turbo-stat-chart-wrap').width() / 90)))
                             }
                         }]
                     }
@@ -381,6 +400,10 @@
                     }
 
                     else {
+                        // The table is reset to all events: keep the filter state in sync.
+                        $("div[data-ts-filter]").removeClass("active").attr("aria-pressed", "false");
+                        $("div[data-ts-filter='all']").addClass("active").attr("aria-pressed", "true");
+
                         list.update({
                             'filter': 'all',
                             'begin': picker.startDate.format("YYYY-MM-DD"),
@@ -395,10 +418,17 @@
             });
         };
 
+        $("div[data-ts-filter]").on("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                $(this).trigger("click");
+            }
+        });
+
         $("div[data-ts-filter]").on("click", function () {
             var picker = $(from_date).data('daterangepicker');
-            $("div[data-ts-filter]").removeClass("active");
-            $(this).addClass("active");
+            $("div[data-ts-filter]").removeClass("active").attr("aria-pressed", "false");
+            $(this).addClass("active").attr("aria-pressed", "true");
             list.update({
                 'filter': $(this).data("ts-filter"),
                 'begin': picker.startDate.format("YYYY-MM-DD"),

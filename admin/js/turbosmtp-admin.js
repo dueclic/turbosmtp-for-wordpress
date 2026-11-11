@@ -29,44 +29,15 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-	$(document).on('click', '#generate_api_keys', function () {
-		var nonce = $(this).data('nonce');
+	$(document).on('click', '.tswp-password-toggle', function () {
+		var $button = $(this);
+		var $input = $('#' + $button.attr('aria-controls'));
+		var show = $input.attr('type') === 'password';
 
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				action: 'turbosmtp_generate_api_keys',
-				turbosmtp_nonce: nonce
-			},
-			beforeSend: function () {
-				$('#generate_api_keys').prop('disabled', true).text(ts.i18n.api_key_generate_loading);
-			},
-			success: function (response) {
-				if (response.success) {
-					location.href=response.data.redirect_url;
-				} else {
-					alert('Error: ' + (response.message || ts.i18n.api_key_generate_unknown_error));
-				}
-			},
-			error: function (xhr, status, error) {
-				alert('AJAX Error: ' + error);
-			},
-			complete: function () {
-				$('#generate_api_keys').prop('disabled', false).text(ts.i18n.api_key_generate_button);
-			}
-		});
-	});
-
-	$(document).on('click', '.copy-button', function () {
-		var targetId = $(this).data('target');
-		var copyText = $('#' + targetId);
-		copyText.select();
-		document.execCommand('copy');
-
-		var messageSpan = $('#message_' + targetId);
-		messageSpan.text(ts.i18n.api_key_copied_text).fadeIn().delay(2000).fadeOut();
+		$input.attr('type', show ? 'text' : 'password');
+		$button
+			.attr('aria-pressed', show ? 'true' : 'false')
+			.attr('aria-label', show ? $button.data('label-hide') : $button.data('label-show'));
 	});
 
 	var $sendingMethod = $("#send_method");

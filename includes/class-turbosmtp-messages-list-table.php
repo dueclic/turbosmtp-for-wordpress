@@ -174,11 +174,54 @@ class Turbosmtp_Messages_List_Table extends WP_List_Table {
 			return date( "d/m/Y H:i", strtotime( $item[ $column_name ] ) );
 		}
 
-		return $item[ $column_name ];
+		return esc_html( $item[ $column_name ] ?? '' );
 	}
 
+	/**
+	 * Event badge. The error description is otherwise only in a hover
+	 * tooltip, so it is also printed here: for screen readers on desktop,
+	 * and visibly in the expanded row on small screens.
+	 */
 	function column_events( $item ) {
-		return turbosmtp_get_icon( $item );
+		$output = turbosmtp_get_icon( $item );
+
+		if ( ! empty( $item['error'] ) ) {
+			$output .= sprintf(
+				'<span class="tswp-event-error"><span class="screen-reader-text">%1$s: </span>%2$s</span>',
+				esc_html__( 'Error description', 'turbosmtp' ),
+				esc_html( $item['error'] )
+			);
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Sender, plus the API key the message was sent with (as in the turboSMTP dashboard).
+	 */
+	function column_sender( $item ) {
+		$sender = esc_html( $item['sender'] ?? '' );
+
+		if ( empty( $item['consumer_key'] ) ) {
+			return $sender;
+		}
+
+		$key        = turbosmtp_resolve_consumer_key( $item['consumer_key'] );
+		$tooltip_id = wp_unique_id( 'tswp-api-key-' );
+
+		$name_row = $key['is_own'] ?
+			'<strong>' . esc_html__( 'API Key', 'turbosmtp' ) . ':</strong> ' . esc_html__( 'connected to this site', 'turbosmtp' ) . '<br>' :
+			'';
+
+		return sprintf(
+			'<div class="tswp-sender"><span>%1$s</span><span class="tswp-api-key-wrap"><button type="button" class="tswp-api-key" aria-describedby="%2$s"><span class="dashicons dashicons-admin-network" aria-hidden="true"></span><span class="screen-reader-text">%3$s</span></button><span class="tswp-api-key-tooltip" role="tooltip" id="%2$s">%4$s<strong>%5$s:</strong> %6$s</span></span></div>',
+			$sender,
+			esc_attr( $tooltip_id ),
+			esc_html__( 'API Key', 'turbosmtp' ),
+			$name_row,
+			esc_html__( 'Consumer Key', 'turbosmtp' ),
+			esc_html( $key['consumer_key'] )
+		);
 	}
 
 	/**

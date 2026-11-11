@@ -56,27 +56,24 @@ Deployment to the WordPress.org SVN repo happens automatically via GitHub Action
 Two mutually exclusive send paths, chosen by the `is_smtp` flag in the `ts_send_options` option:
 
 - **HTTP API** (`is_smtp` falsy): `pre_wp_mail` filter → `maybe_send_via_http()` short-circuits `wp_mail()` entirely, parses headers with `turbosmtp_get_headers_data()` (common-api.php) and posts to the turboSMTP `/mail/send` API. Fires the `turbosmtp_api_response` action afterwards.
-- **SMTP** (`is_smtp` truthy): `phpmailer_init` action → `maybe_send_via_phpmailer()` reconfigures PHPMailer with the stored host/port/credentials. The SMTP password can be overridden with the `TURBOSMTP_SMTP_PASSWORD` constant (wp-config.php) instead of storing it in the DB.
+- **SMTP** (`is_smtp` truthy): `phpmailer_init` action → `maybe_send_via_phpmailer()` reconfigures PHPMailer with the stored host/port. SMTP authentication uses the connected API key pair (`turbosmtp_get_smtp_credentials()`: Consumer Key as username, Consumer Secret as password, same rule as the turboSMTP dashboard). On save, `Turbosmtp_Admin::check_smtp_credentials()` logs in to the SMTP server with that pair: it is the only way to check the key's `SEND_SMTP` permission, since the REST API accepts any key with `APIS` and does not expose a key's permissions.
 
 Both paths are registered only when `turbosmtp_validapi()` is true.
 
 ### API client (includes/)
 
-`Turbosmtp_Api_Base` (abstract) wraps `wp_remote_request` against `https://pro.api.serversmtp.com/api/v2` and throws `Turbosmtp_Exception` on errors; `Turbosmtp_Api` adds concrete calls: `send`, `get_user_config`, `create_api_keys`, `authorize`, `deauthorize`, `get_analytics`. Auth is consumer key/secret stored in the `ts_auth_options` option and injected into both admin and public classes from `Turbosmtp::__construct`.
+`Turbosmtp_Api_Base` (abstract) wraps `wp_remote_request` against `https://pro.api.serversmtp.com/api/v2` and throws `Turbosmtp_Exception` on errors; `Turbosmtp_Api` adds concrete calls: `send`, `get_user_config`, `get_analytics`. Auth is consumer key/secret only (password-based `/authorize` is being removed from the public API; do not reintroduce it) stored in the `ts_auth_options` option and injected into both admin and public classes from `Turbosmtp::__construct`.
 
 ### Options
 
-- `ts_auth_options` — `consumer_key`, `consumer_secret`, `valid_api` flag; legacy pre-4.9 keys (`op_ts_email`, `op_ts_validapi`) live here too.
-- `ts_send_options` — sender defaults and SMTP settings (`is_smtp`, `from`, `fromname`, `host`, `port`, `smtpsecure`, `email`, `password`).
-- `ts_migration_done` — tracks the legacy→API-keys migration.
+- `ts_auth_options` — `consumer_key`, `consumer_secret`, `valid_api` flag.
+- `ts_send_options` — sender defaults and SMTP settings (`is_smtp`, `from`, `fromname`, `host`, `port`, `smtpsecure`).
 
-### Migration state machine
-
-`turbosmtp_migration_has_done()` (common-api.php) gates the whole admin: if a legacy username/password install hasn't migrated to API keys, the plugin shows a migration notice/page (`admin/partials/migration.php`, `wp_ajax_turbosmtp_generate_api_keys`) instead of the normal stats/config hooks. Legacy submenu pages (`ts-dash`, `TSStats`, `TSLogout`) still exist in the admin class for that path.
+`turbosmtp_cleanup_legacy_options()` (common-api.php, run from `Turbosmtp::__construct`) strips what older versions stored: `op_ts_*` keys (account email/password), `email`/`password` in `ts_send_options`, and the `ts_migration_done` / `ts_show_credentials` options. Old unmigrated installs end up on the API key login page.
 
 ### Admin (admin/class-turbosmtp-admin.php)
 
-Single large class holding menu registration, the settings/config forms (partials in `admin/partials/`), AJAX endpoints (stats chart, stats history, test email, disconnect, API key generation) and `admin_post` handlers. Stats pages render with Chart.js + daterangepicker + the `ts-aggs-chartjs` summarizer bundle; email log table uses `Turbosmtp_Messages_List_Table` (extends `WP_List_Table`).
+Single large class holding menu registration, the settings/config forms (partials in `admin/partials/`), AJAX endpoints (stats chart, stats history, test email, disconnect) and `admin_post` handlers. Stats pages render with Chart.js + daterangepicker + the `ts-aggs-chartjs` summarizer bundle; email log table uses `Turbosmtp_Messages_List_Table` (extends `WP_List_Table`), which escapes every cell and shows the consumer key each message was sent with next to the sender (as the dashboard does). Key names are not available to the plugin (`/user/consumerKeys` refuses API key auth), so only the site's own key is labelled.
 
 ### Shared helpers (common-api.php)
 
