@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.10.0](https://github.com/dueclic/turbosmtp-for-wordpress/compare/4.9.9...4.10.0) (2026-11-11)
+
+
+### Features
+
+* authenticate SMTP with the API key and drop password-based auth ([39eeadd](https://github.com/dueclic/turbosmtp-for-wordpress/commit/39eeadda53547633f39c47c3ad74f4acf8b4dae3))
+
 ## [4.9.9](https://github.com/dueclic/turbosmtp-for-wordpress/compare/4.9.8...4.9.9) (2026-10-28)
 
 ## [4.9.8](https://github.com/dueclic/turbosmtp-for-wordpress/compare/4.9.7...4.9.8) (2026-07-27)
