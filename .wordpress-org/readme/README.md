@@ -29,6 +29,18 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 
 == Changelog ==
 
+= 4.10.0 =
+* SMTP now authenticates with your API key (Consumer Key as username, Consumer Secret as password): your turboSMTP account password is no longer stored or used. The key needs the "SMTP Sending" permission, checked when you save the settings
+* Removed the legacy email/password migration: old installs that never switched to API keys are asked to connect with an API key
+* The sender configured in the plugin is now used for SMTP sending too, unless another plugin sets one
+* Report: shows the API key each email was sent with
+* Report: fixed rows not expanding on mobile, improved layout on small screens and with translated labels
+* Accessibility: labels, keyboard navigation, focus, contrast and screen reader fixes in settings, login and report
+* New HTML test email
+* Security: escaped email data in the report table and request parameters in the admin pages
+* Switching to the API sending method keeps your SMTP settings
+* Translation fixes
+
 = 4.9.9 =
 * Compatibility with WP 7.1
 
@@ -216,8 +228,6 @@ turboSMTP’s official plugin for WordPress is a professional tool that delivers
 3. Configure SMTP
 4. Show analytics
 5. Email List Table
-6. turboSMTP account migration
-7. turboSMTP API keys details
 
 == Frequently Asked Questions ==
 
