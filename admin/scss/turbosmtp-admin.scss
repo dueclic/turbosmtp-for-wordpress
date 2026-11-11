@@ -27,6 +27,8 @@ $color_status_queued: var(--queued-color);
 $color_status_spam: var(--spam-color);
 
 $color_status_queued_accent: #3c3c3c;
+// Text on light status panels (white fails WCAG AA there).
+$color_panel_text_dark: #101517;
 $color_pink_swan_approx: #bbbbbb;
 $color_outrageous_orange_approx: #ff5e3c;
 $seashell: #f1f1f1;
@@ -142,6 +144,11 @@ label {
       width: 100%;
       margin-right: 4px;
       cursor: pointer;
+      // column layout: the number is centered in the space left by heading and foot
+      display: flex;
+      flex-direction: column;
+      // lets the number size itself on the panel width (cqi units below)
+      container-type: inline-size;
       &:hover {
         //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
         transform: scale(1.1);
@@ -152,25 +159,40 @@ label {
       }
       > {
         .heading {
-          padding: 0 15px 0 5px;
+          padding: 0 8px;
+          // same height for one- and two-line titles, so the numbers line up
+          min-height: 3.6em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           > h3 {
             width: 100%;
             color: $white;
             text-align: center;
-            display: inline-block;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            hyphens: auto;
+            overflow-wrap: break-word;
           }
         }
+        .body {
+          flex: 1 1 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .body > h4 {
-          font-size: 50px;
+          // sized on the panel width: a fixed 50px overflowed it ("80.00%")
+          font-size: clamp(24px, 3vw, 50px);
+          font-size: clamp(24px, 26cqi, 50px);
           color: $white;
           text-align: center;
           font-weight: 200;
-          line-height: 50px;
-          margin: 10px;
+          line-height: 1;
+          margin: 10px 4px;
+          white-space: nowrap;
           span {
-            font-size: 40px;
+            font-size: .8em;
           }
         }
         .foot p {
@@ -197,27 +219,40 @@ label {
         overflow: hidden;
         position: relative;
         cursor: pointer;
+        // flex instead of floats + negative margin: longer (translated) labels
+        // used to run under the percentage
+        display: flex;
+        align-items: stretch;
         > {
           .heading {
-            float: left;
-            width: 100%;
-            margin-right: -51px;
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            align-items: center;
             > h3 {
-              display: inline-block;
-              margin-top: 10px;
-              margin-bottom: 10px;
-              padding-left: 10px;
+              margin-top: 8px;
+              margin-bottom: 8px;
+              padding: 0 6px 0 10px;
               color: $white;
+              font-size: clamp(13px, 1.25vw, 16.9px);
+              line-height: 1.25;
+              // break between syllables of the page language, never mid-syllable
+              hyphens: auto;
+              overflow-wrap: break-word;
             }
           }
           .body {
-            float: left;
-            width: 50px;
+            flex: 0 0 auto;
+            min-width: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             > p {
-              margin-top: 10px;
-              margin-bottom: 10px;
+              margin: 0;
+              padding: 0 6px;
               color: $white;
               text-align: center;
+              white-space: nowrap;
             }
           }
         }
@@ -254,7 +289,8 @@ label {
         .spam {
           background: $color_status_spam;
           > .body {
-            background: $color_status_heading;
+            // darker instead of lighter: white text needs AA contrast on red
+            background: rgba(0, 0, 0, 0.15) !important;
           }
         }
         .drop {
@@ -270,6 +306,22 @@ label {
         > .heading {
           background: $color_status_heading;
         }
+    }
+    // Light backgrounds: dark text keeps AA contrast without changing the brand colors.
+    .delivered, .clicks, .bounce {
+      > .panel > .heading > h3,
+      > .panel > .body > h4,
+      > .panel > .foot p {
+        color: $color_panel_text_dark;
+      }
+    }
+    .other-stats > .unsubscribes,
+    .other-stats > .queued,
+    .other-stats > .drop {
+      > .heading > h3,
+      > .body > p {
+        color: $color_panel_text_dark;
+      }
     }
     .total-email > .panel {
       background: $color_status_all;
@@ -320,17 +372,6 @@ label {
       .heading > h3 {
         font-size: 14px;
       }
-      .body > h4 {
-        font-size: 30px;
-        line-height: 30px;
-        margin: 5px;
-        span {
-          font-size: 25px;
-        }
-      }
-    }
-    > .other-stats > div > .heading > h3 {
-      font-size: 12px;
     }
   }
 }
@@ -463,7 +504,8 @@ label {
   background-repeat: no-repeat;
 }
 
-.events {
+// WP_List_Table also adds the column name ("events") as a class on the <td>.
+span.events {
   pointer-events: none;
   display: inline-block;
   padding: 0 1rem 0 2rem;
@@ -487,19 +529,22 @@ label {
     top: 2px;
   }
   &.events-delivered {
-    color: $color_status_delivered;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #00739b;
     &:after {
       background-color: $color_status_delivered;
     }
   }
   &.events-queued {
-    color: $color_status_queued;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #6b6b70;
     &:after {
       background-color: $color_status_queued;
     }
   }
   &.events-bounce {
-    color: $color_status_bounce;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #7d682b;
     &:after {
       background-color: $color_status_bounce;
     }
@@ -511,19 +556,22 @@ label {
     }
   }
   &.events-clicks {
-    color: $color_status_click;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #4e772a;
     &:after {
       background-color: $color_status_click;
     }
   }
   &.events-unsubscribes {
-    color: $color_status_unsubscribe;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #b34567;
     &:after {
       background-color: $color_status_unsubscribe;
     }
   }
   &.events-drop {
-    color: $color_status_drop;
+    // darker shade of the status color: WCAG AA contrast on table rows
+    color: #6a6a71;
     &:after {
       background-color: $color_status_drop;
     }
@@ -620,14 +668,41 @@ label {
   color: $color_mercury_approx;
   padding: 10px 20px 10px 10px;
   position: relative;
-  h3 {
-    color: $color_star_dust_approx;
+  h2 {
+    color: #646970;
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 1em 0;
   }
 }
 .other-infos-toggle {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 12px;
+  right: 12px;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    &:focus-visible {
+      outline: 2px solid #2271b1;
+      outline-offset: 1px;
+    }
+  }
+}
+.tswp-chart-wrap {
+  position: relative;
+  height: 320px;
+  padding: 0 10px 10px;
+  @media screen and (max-width: 782px) {
+    height: 280px;
+  }
 }
 .icon-stat {
   background: $stats_icon;
@@ -890,13 +965,6 @@ tbody tr:nth-of-type(2n) {
   background: #e2e2e2;
 }
 
-.copy-message {
-  color: green;
-  font-weight: bold;
-  margin-left: 10px;
-  display: none;
-}
-
 .error-tooltip {
   position: absolute;
   background-color: #f9f9f9;
@@ -935,9 +1003,6 @@ tbody tr:nth-of-type(2n) {
   margin-left: auto;
   margin-right: auto;
 }
-.tswp-login-form.tswp-migration-form{
-  width: unset;
-}
 .tswp-login-form-signup{
   margin-bottom: 2.5em;
 }
@@ -954,13 +1019,19 @@ tbody tr:nth-of-type(2n) {
 .tswp-login-form-control-group{
   margin-bottom: 1.5em;
 }
-.tswp-login-form label.tswp-login-form-get-api{
+.tswp-login-form .tswp-login-form-get-api{
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.tswp-login-form label.tswp-login-form-get-api a{
-  font-size: .8em;
+  margin-bottom: .5em;
+  // the "Get API Key" link sits next to the label, not inside it
+  label {
+    display: inline;
+    margin-bottom: 0;
+  }
+  a {
+    font-size: .8em;
+  }
 }
 .tswp-text-center,
 .tswp-text-center p{
@@ -980,69 +1051,46 @@ tbody tr:nth-of-type(2n) {
 .tswp-login-form-password-field input{
   padding-right: 36px;
 }
-.tswp-login-form-password-field a {
+.tswp-password-toggle {
   cursor: pointer;
   position: absolute;
   right: 0;
   bottom: 0;
   display: flex;
-  height: 32px;
-  width: 36px;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  opacity: .5;
-}
-.tswp-login-form-password-field a:hover {
-  opacity: 1;
-}
-.tswp-login-form-password-field a svg {
-  width: 18px;
-}
-.tswp-input-group{
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-.tswp-input-group-element:first-child{
-  border-right: none;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  margin: 0;
-}
-.tswp-input-group-element:last-child{
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  margin: 0;
-}
-.tswp-input-group-element.button{
-  font-size: 14px;
-}
-.tswp-login-form label.tswp-credentials-label{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  color: #50575e;
+  &:hover {
+    color: #1d2327;
+  }
+  &:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: -2px;
+  }
+  svg {
+    width: 18px;
+    fill: currentColor;
+  }
+  .tswp-icon-hide {
+    display: none;
+  }
+  &[aria-pressed="true"] {
+    .tswp-icon-show {
+      display: none;
+    }
+    .tswp-icon-hide {
+      display: block;
+    }
+  }
 }
 .tswp-login-logo{
   width: 160px;
   margin: 10em auto 0;
-}
-.tswp-login-logo-migration{
-  margin: 1rem auto;
-  width: 240px;
-}
-.tswp-or-separator{
-  display: flex;
-  align-items: center;
-  margin: 2rem;
-}
-.tswp-or-separator div{
-  height: 0;
-  border-bottom: 1px solid lightgray;
-  flex: 1 0 0;
-}
-.tswp-or-separator span{
-  padding: 0 1rem;
 }
 
 .tswp-main-container{
@@ -1129,6 +1177,148 @@ tbody tr:nth-of-type(2n) {
   max-width: 100% !important;
   margin-right: 1.5em;
 }
+.tswp-sender {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5em;
+  > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+.tswp-api-key-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.tswp-api-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // 24x24 minimum target size (WCAG 2.5.8)
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #50575e;
+  cursor: help;
+  opacity: .35;
+  transition: opacity .15s;
+  .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+  &:hover, &:focus-visible {
+    opacity: 1;
+  }
+  &:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 1px;
+  }
+}
+tr:hover .tswp-api-key {
+  opacity: .7;
+}
+tr:hover .tswp-api-key:hover {
+  opacity: 1;
+}
+@media (hover: none) {
+  .tswp-api-key {
+    opacity: .7;
+  }
+}
+.tswp-api-key-tooltip {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 10;
+  width: max-content;
+  max-width: min(320px, 80vw);
+  padding: 6px 8px;
+  border-radius: .25em;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.5em;
+  text-align: left;
+  word-break: break-all;
+}
+// The wrapper (not just the icon) keeps the tooltip open while hovered (WCAG 1.4.13).
+.tswp-api-key-wrap:hover .tswp-api-key-tooltip,
+.tswp-api-key-wrap:focus-within .tswp-api-key-tooltip {
+  display: block;
+}
+.tswp-api-key-wrap.is-dismissed .tswp-api-key-tooltip {
+  display: none;
+}
+
+// Error description: hover tooltip on desktop, so only for screen readers
+// there; shown in the expanded row on small screens (no hover).
+.tswp-event-error {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media screen and (max-width: 782px) {
+  .tswp-event-error {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    margin-top: .5em;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+    color: #50575e;
+  }
+}
+
+// WP's responsive list table gives full width to td:nth-child(n+3), assuming
+// a checkbox column first. This table has none: its 2nd cell needs it too.
+@media screen and (max-width: 782px) {
+  #turbosmtp-messages-list-table tr td:nth-child(2) {
+    flex: 0 1 100%;
+  }
+}
+
+// Event filters are role="button": visible keyboard focus.
+.other-infos-columns [data-ts-filter]:focus-visible {
+  outline: 2px solid #2271b1;
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1002;
+}
+
+@media screen and (max-width: 767px) {
+  .tswp-stats-top {
+    flex-wrap: wrap;
+    gap: .5em 1em;
+    > div {
+      flex: 1 1 100%;
+    }
+  }
+  .change_date {
+    margin-bottom: 0;
+  }
+  .other-infos-columns > div.other-stats {
+    width: 100%;
+  }
+  // Scaled panels overflow the viewport on phones.
+  .other-infos-columns > div > .panel:hover,
+  .other-infos-columns > .other-stats > div:hover {
+    transform: none;
+  }
+}
+
 .tswp-email-submit{
   display: flex;
   align-items: center;

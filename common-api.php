@@ -1,20 +1,66 @@
 <?php
 
 /**
- * @return bool
+ * Removes options left behind by older plugin versions.
+ *
+ * Before API keys, the plugin stored the account email and password in
+ * plain text (ts_auth_options op_ts_*, and ts_send_options email/password
+ * for SMTP). Neither is used anymore: authentication only uses the
+ * consumer key and secret.
  */
-function turbosmtp_migration_has_done() {
+function turbosmtp_cleanup_legacy_options() {
 
-	$auth_options      = get_option( "ts_auth_options" );
-	$plugin_setup_done = get_option( 'ts_migration_done' );
+	$auth_options = get_option( 'ts_auth_options' );
 
-	return ! ( $auth_options &&
-	           isset( $auth_options['op_ts_validapi'] ) &&
-	           (bool) $auth_options['op_ts_validapi'] &&
-	           isset( $auth_options['op_ts_email'] ) &&
-	           $auth_options['op_ts_email'] &&
-	           ! $plugin_setup_done );
+	if ( is_array( $auth_options ) ) {
+		$legacy_keys = array_filter( array_keys( $auth_options ), function ( $key ) {
+			return 0 === strpos( $key, 'op_ts_' );
+		} );
 
+		if ( ! empty( $legacy_keys ) ) {
+			foreach ( $legacy_keys as $key ) {
+				unset( $auth_options[ $key ] );
+			}
+
+			if ( empty( $auth_options ) ) {
+				delete_option( 'ts_auth_options' );
+			} else {
+				update_option( 'ts_auth_options', $auth_options );
+			}
+		}
+	}
+
+	$send_options = get_option( 'ts_send_options' );
+
+	if ( is_array( $send_options ) && ( isset( $send_options['email'] ) || isset( $send_options['password'] ) ) ) {
+		unset( $send_options['email'], $send_options['password'] );
+		update_option( 'ts_send_options', $send_options );
+	}
+
+	if ( false !== get_option( 'ts_migration_done' ) ) {
+		delete_option( 'ts_migration_done' );
+	}
+
+	if ( false !== get_option( 'ts_show_credentials' ) ) {
+		delete_option( 'ts_show_credentials' );
+	}
+
+}
+
+/**
+ * SMTP credentials are the connected API key pair: the Consumer Key is the
+ * username and the Consumer Secret is the password. The key needs the
+ * SEND_SMTP permission.
+ *
+ * @return array{username: string, password: string}
+ */
+function turbosmtp_get_smtp_credentials() {
+	$auth_options = get_option( 'ts_auth_options' );
+
+	return array(
+		'username' => $auth_options['consumer_key'] ?? '',
+		'password' => $auth_options['consumer_secret'] ?? '',
+	);
 }
 
 function turbosmtp_get_label() {
@@ -26,10 +72,87 @@ function turbosmtp_get_label() {
 	);
 }
 
+/**
+ * The From address wp_mail() uses when nothing else sets one
+ * (same logic as wp-includes/pluggable.php).
+ *
+ * @return string
+ */
+function turbosmtp_wp_default_from_email() {
+	$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+	$from     = 'wordpress@';
+
+	if ( null !== $sitename ) {
+		if ( 0 === strpos( $sitename, 'www.' ) ) {
+			$sitename = substr( $sitename, 4 );
+		}
+
+		$from .= $sitename;
+	}
+
+	return $from;
+}
+
+/**
+ * Plain text version of an HTML email body: tags removed, entities decoded
+ * (it is not HTML anymore) and runs of blank lines collapsed.
+ *
+ * @param string $html
+ *
+ * @return string
+ */
+function turbosmtp_html_to_text( $html ) {
+	$text = preg_replace( '@<head[^>]*?>.*?</head>@si', '', $html );
+	$text = wp_strip_all_tags( $text );
+	$text = html_entity_decode( $text, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	$text = preg_replace( "/[ \t]+\n/", "\n", $text );
+
+	return trim( preg_replace( "/\n{3,}/", "\n\n", $text ) );
+}
+
 function turbosmtp_validapi() {
 	$auth_options = get_option( "ts_auth_options" );
 
 	return isset( $auth_options['valid_api'] ) && (bool) $auth_options['valid_api'];
+}
+
+/**
+ * Normalizes a consumer key the way the analytics backend stores it: lowercase,
+ * the first "@" written as "_at_" and ":" as "_".
+ *
+ * @param string $consumer_key
+ *
+ * @return string
+ */
+function turbosmtp_consumer_key_stream_key( $consumer_key ) {
+	$key = strtolower( trim( (string) $consumer_key ) );
+	$pos = strpos( $key, '@' );
+
+	if ( false !== $pos ) {
+		$key = substr_replace( $key, '_at_', $pos, 1 );
+	}
+
+	return str_replace( ':', '_', $key );
+}
+
+/**
+ * Resolves the consumer_key of an analytics row. Key names are not available
+ * here (the consumer keys list refuses API key authentication), so only the
+ * key connected to this site can be recognized.
+ *
+ * @param string $received consumer_key as returned by /analytics.
+ *
+ * @return array{consumer_key: string, is_own: bool}
+ */
+function turbosmtp_resolve_consumer_key( $received ) {
+	$auth_options = get_option( 'ts_auth_options' );
+	$own_key      = $auth_options['consumer_key'] ?? '';
+	$is_own       = '' !== $own_key && turbosmtp_consumer_key_stream_key( $own_key ) === strtolower( $received );
+
+	return array(
+		'consumer_key' => $is_own ? $own_key : str_replace( '_at_', '@', $received ),
+		'is_own'       => $is_own,
+	);
 }
 
 function turbosmtp_analytics_filter_options() {
@@ -100,9 +223,7 @@ function turbosmtp_is_admin_page() {
 	$turbo_admin_pages = array(
 		"toplevel_page_turbosmtp_config",
 		"turbosmtp_page_turbosmtp_config",
-		"toplevel_page_turbosmtp_migration",
-		"turbosmtp_page_turbosmtp_stats",
-		"admin_page_turbosmtp_api_keys"
+		"turbosmtp_page_turbosmtp_stats"
 	);
 
 	if ( $screen != null && in_array( $screen->id, $turbo_admin_pages ) ) {
@@ -115,8 +236,8 @@ function turbosmtp_is_admin_page() {
 
 function turbosmtp_valid_hosts() {
 	$hosts = array(
-		"pro.eu.turbo-smtp.com" => __( "European", "turbostmp" ),
-		"pro.turbo-smtp.com"    => __( "Not european", "turbostmp" ),
+		"pro.eu.turbo-smtp.com" => __( "European", "turbosmtp" ),
+		"pro.turbo-smtp.com"    => __( "Not european", "turbosmtp" ),
 	);
 
 	return $hosts;

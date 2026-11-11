@@ -89,13 +89,65 @@ class Turbosmtp_Public {
 			$phpmailer->isSMTP();
 			$phpmailer->setFrom( $from, $fromname );
 			$phpmailer->Host       = $send_options["host"];
-			$phpmailer->SMTPAuth   = 'yes';
+			$phpmailer->SMTPAuth   = true;
 			$phpmailer->SMTPSecure = $send_options["smtpsecure"];
 			$phpmailer->Port       = $send_options["port"];
-			$phpmailer->Username   = $send_options["email"];
-			$phpmailer->Password   = defined( 'TURBOSMTP_SMTP_PASSWORD' ) ? TURBOSMTP_SMTP_PASSWORD : $send_options["password"];
+			$credentials = turbosmtp_get_smtp_credentials();
+
+			$phpmailer->Username   = $credentials['username'];
+			$phpmailer->Password   = $credentials['password'];
+
+			// Same as the HTTP API path: HTML emails also get a plain text part,
+			// unless someone else already set one.
+			if ( 'text/html' === $phpmailer->ContentType && '' === $phpmailer->AltBody ) {
+				$phpmailer->AltBody = turbosmtp_html_to_text( $phpmailer->Body );
+			}
 
 		}
+	}
+
+	/**
+	 * wp_mail() always sets a From before phpmailer_init (wordpress@<site>),
+	 * so the configured sender has to replace WordPress' defaults here. Only
+	 * the defaults are replaced: a From header or a later wp_mail_from filter
+	 * from another plugin still wins. The HTTP path handles this itself.
+	 *
+	 * @param string $from_email
+	 *
+	 * @return string
+	 */
+	public function default_from_email( $from_email ) {
+		$send_options = get_option( "ts_send_options" );
+
+		if (
+			! empty( $send_options['is_smtp'] ) &&
+			! empty( $send_options['from'] ) &&
+			is_email( $send_options['from'] ) &&
+			$from_email === turbosmtp_wp_default_from_email()
+		) {
+			return $send_options['from'];
+		}
+
+		return $from_email;
+	}
+
+	/**
+	 * @param string $from_name
+	 *
+	 * @return string
+	 */
+	public function default_from_name( $from_name ) {
+		$send_options = get_option( "ts_send_options" );
+
+		if (
+			! empty( $send_options['is_smtp'] ) &&
+			! empty( $send_options['fromname'] ) &&
+			'WordPress' === $from_name
+		) {
+			return $send_options['fromname'];
+		}
+
+		return $from_name;
 	}
 
 	function maybe_send_via_http(
@@ -139,7 +191,7 @@ class Turbosmtp_Public {
 
 		if ( 'text/html' == $content_type ) {
 			$mail_atts['html']    = $mail_atts['message'];
-			$mail_atts['message'] = wp_strip_all_tags( $mail_atts['message'] );
+			$mail_atts['message'] = turbosmtp_html_to_text( $mail_atts['message'] );
 		}
 
 		try {

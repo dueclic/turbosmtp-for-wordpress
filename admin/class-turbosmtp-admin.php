@@ -62,13 +62,6 @@ class Turbosmtp_Admin {
 
 	}
 
-	public function migration_page() {
-
-		$auth_options = get_option( "ts_auth_options" );
-
-		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/migration.php';
-	}
-
 	public function login_page() {
 		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/login.php';
 	}
@@ -80,10 +73,6 @@ class Turbosmtp_Admin {
 			$send_options    = get_option( "ts_send_options" );
 
 			$user_config     = $this->api->get_user_config();
-
-			if (!isset($send_options['email'])){
-				$send_options['email'] = $user_config['email'];
-			}
 
 			if (!isset($send_options['host'])){
 				$send_options['host'] = 'pro.turbo-smtp.com';
@@ -157,7 +146,7 @@ class Turbosmtp_Admin {
 		$to = isset( $_POST['to'] ) ? sanitize_email( $_POST['to'] ) : $current_user->user_email;
 
 		$subject = esc_html__( "Email sent with WordPress and turboSMTP", "turbosmtp" );
-		$message = esc_html__( "If you read this email means that turboSMTP plugin is working properly.", "turbosmtp" );
+		$message = $this->get_test_email_html();
 
 		$headers = array('Content-Type: text/html; charset=UTF-8');
 		$sent_email = wp_mail( $to, $subject, $message, $headers );
@@ -171,6 +160,46 @@ class Turbosmtp_Admin {
 
 	}
 
+
+	/**
+	 * @return string HTML body of the test email.
+	 */
+	private function get_test_email_html() {
+		$send_options = get_option( "ts_send_options", [] );
+
+		if ( ! empty( $send_options['is_smtp'] ) ) {
+			$method_label = sprintf(
+				/* translators: 1: SMTP host, 2: SMTP port, 3: encryption (SSL or STARTTLS) */
+				__( 'SMTP (%1$s, port %2$s, %3$s)', 'turbosmtp' ),
+				$send_options['host'] ?? '',
+				$send_options['port'] ?? '',
+				'ssl' === ( $send_options['smtpsecure'] ?? '' ) ? 'SSL' : __( 'STARTTLS when available', 'turbosmtp' )
+			);
+		} else {
+			$method_label = __( 'HTTP API', 'turbosmtp' );
+		}
+
+		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+		$site_url  = home_url( '/' );
+		$sender_name  = $send_options['fromname'] ?? '';
+		$sender_email = $send_options['from'] ?? '';
+		$sent_at      = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
+
+		/**
+		 * URL of the logo in the test email. It must be reachable by the
+		 * recipient's mail client: on local or private sites the alt text
+		 * is shown instead. Email clients do not render SVG, hence the PNG.
+		 */
+		$logo_url = apply_filters(
+			'turbosmtp_test_email_logo_url',
+			plugins_url( 'admin/img/ts-logo-email.png', TURBOSMTP_BASE_PATH )
+		);
+
+		ob_start();
+		include plugin_dir_path( TURBOSMTP_BASE_PATH ) . 'admin/partials/test-email.php';
+
+		return ob_get_clean();
+	}
 
 	public function save_send_options() {
 
@@ -187,7 +216,7 @@ class Turbosmtp_Admin {
 		}
 
 		$ts_send_options  = array();
-		$old_send_options = get_option( "ts_send_options" );
+		$old_send_options = get_option( "ts_send_options", array() );
 
 		$ts_send_options["from"]     = sanitize_email( $_POST['ts_auth_email'] );
 		$ts_send_options["fromname"] = sanitize_text_field( $_POST['ts_auth_email_from'] );
@@ -227,50 +256,6 @@ class Turbosmtp_Admin {
 			$ts_send_options["host"]       = sanitize_text_field( $_POST['ts_smtp_host'] );
 			$ts_send_options["smtpsecure"] = sanitize_text_field( $_POST['ts_smtp_smtpsecure'] );
 
-			$ts_send_options["email"] = sanitize_text_field( $_POST['ts_smtp_email'] );
-
-			if ( ! is_email( $ts_send_options['email'] ) ) {
-				wp_redirect(
-					add_query_arg( [
-						'error'       => 'invalid_smtp_email',
-						'send_method' => $send_method
-					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-				);
-				exit;
-			}
-
-			if ( isset( $_POST['ts_smtp_password'] ) ) {
-				$ts_send_options["password"] = sanitize_text_field( $_POST['ts_smtp_password'] );
-			} else if ( isset( $old_send_options['password'] ) ) {
-				$ts_send_options["password"] = $old_send_options['password'];
-			}
-
-
-			try {
-				add_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
-				$authorize_body = $this->api->authorize(
-					$ts_send_options['email'],
-					defined( 'TURBOSMTP_SMTP_PASSWORD' ) ?
-						TURBOSMTP_SMTP_PASSWORD :
-						$ts_send_options["password"]
-				);
-				$this->api->deauthorize( $authorize_body['auth'] );
-				remove_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
-			} catch ( \Exception $e ) {
-				wp_redirect(
-					add_query_arg( [
-						'error'       => 'invalid_smtp_credentials',
-						'send_method' => $send_method
-					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
-				);
-				exit;
-			}
-
-			$ts_send_options["port"]     = $port;
-			$ts_send_options["smtpauth"] = 'yes';
-			$ts_send_options["is_smtp"]  = true;
-
-
 			if ( ! in_array( $ts_send_options["host"], array_keys( turbosmtp_valid_hosts() ) ) ) {
 				wp_redirect(
 					add_query_arg( [
@@ -281,6 +266,35 @@ class Turbosmtp_Admin {
 				exit;
 			}
 
+			$smtp_error = $this->check_smtp_credentials(
+				$ts_send_options["host"],
+				$port,
+				$ts_send_options["smtpsecure"]
+			);
+
+			if ( null !== $smtp_error ) {
+				wp_redirect(
+					add_query_arg( [
+						'error'       => $smtp_error,
+						'send_method' => $send_method
+					], admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
+				);
+				exit;
+			}
+
+			$ts_send_options["port"]     = $port;
+			$ts_send_options["smtpauth"] = 'yes';
+			$ts_send_options["is_smtp"]  = true;
+
+		}
+
+		if ( ! $ts_send_options["is_smtp"] ) {
+			// Keep the SMTP settings, so switching back from the API does not reset them.
+			foreach ( array( 'host', 'port', 'smtpsecure', 'smtpauth' ) as $key ) {
+				if ( isset( $old_send_options[ $key ] ) ) {
+					$ts_send_options[ $key ] = $old_send_options[ $key ];
+				}
+			}
 		}
 
 		update_option( "ts_send_options", $ts_send_options );
@@ -293,16 +307,56 @@ class Turbosmtp_Admin {
 	}
 
 
-	public function show_credentials_page() {
-		update_option( "ts_show_credentials", false );
-		$consumer_key    = sanitize_text_field( $_GET['consumer_key'] );
-		$consumer_secret = sanitize_text_field( $_GET['consumer_secret'] );
-		if ( empty( $consumer_key ) || empty( $consumer_secret ) ) {
-			wp_die(
-				__( 'Invalid request', 'turbosmtp' )
-			);
+	/**
+	 * Logs in to the turboSMTP SMTP server with the connected API key, the
+	 * same way PHPMailer does when sending. This is the only way to check
+	 * that the key has the SEND_SMTP permission: the REST API accepts a key
+	 * with the APIS permission alone and does not expose a key's permissions.
+	 *
+	 * @param string $host
+	 * @param int|string $port
+	 * @param string $secure 'ssl' or '' (STARTTLS is used when offered, like PHPMailer's SMTPAutoTLS).
+	 *
+	 * @return string|null Error code for the configuration page, or null on success.
+	 */
+	private function check_smtp_credentials( $host, $port, $secure ) {
+
+		if ( ! class_exists( '\PHPMailer\PHPMailer\SMTP' ) ) {
+			require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 		}
-		require_once plugin_dir_path( TURBOSMTP_BASE_PATH ) . '/admin/partials/credentials.php';
+
+		$credentials = turbosmtp_get_smtp_credentials();
+		$timeout     = (int) apply_filters( 'turbosmtp_smtp_check_timeout', 15 );
+		$helo        = wp_parse_url( home_url(), PHP_URL_HOST ) ?: 'localhost';
+
+		$smtp          = new \PHPMailer\PHPMailer\SMTP();
+		$smtp->Timeout = $timeout;
+
+		try {
+			if (
+				! $smtp->connect( ( 'ssl' === $secure ? 'ssl://' : '' ) . $host, (int) $port, $timeout ) ||
+				! $smtp->hello( $helo )
+			) {
+				return 'smtp_connection_failed';
+			}
+
+			if ( 'ssl' !== $secure && $smtp->getServerExt( 'STARTTLS' ) ) {
+				if ( ! $smtp->startTLS() || ! $smtp->hello( $helo ) ) {
+					return 'smtp_connection_failed';
+				}
+			}
+
+			if ( ! $smtp->authenticate( $credentials['username'], $credentials['password'] ) ) {
+				return 'invalid_smtp_credentials';
+			}
+
+			$smtp->quit();
+
+			return null;
+		} finally {
+			$smtp->close();
+		}
+
 	}
 
 	/**
@@ -327,7 +381,7 @@ class Turbosmtp_Admin {
 
 		if ( ! wp_verify_nonce( $_POST['turbosmtp_nonce'], 'turbosmtp_save_api_keys' ) ) {
 			wp_redirect(
-				add_query_arg( 'error', 'invalid_request', admin_url( 'admin.php?page=' . $this->plugin_name . '_migration' ) )
+				add_query_arg( 'error', 'invalid_request', admin_url( 'admin.php?page=' . $this->plugin_name . '_config' ) )
 			);
 			wp_die();
 		}
@@ -377,8 +431,6 @@ class Turbosmtp_Admin {
 				"valid_api"       => true
 			] );
 
-			update_option( "ts_migration_done", true );
-
 		}
 
 		wp_redirect(
@@ -394,10 +446,7 @@ class Turbosmtp_Admin {
 		$configuration_page_callback = [ $this, 'configuration_page' ];
 		$configuration_page_slug     = "turbosmtp_config";
 
-		if ( ! turbosmtp_migration_has_done() ) {
-			$configuration_page_callback = [ $this, 'migration_page' ];
-			$configuration_page_slug     = "turbosmtp_migration";
-		} else if ( ! turbosmtp_validapi() ) {
+		if ( ! turbosmtp_validapi() ) {
 			$configuration_page_callback = [ $this, 'login_page' ];
 		}
 
@@ -419,10 +468,7 @@ class Turbosmtp_Admin {
 			$configuration_page_callback
 		);
 
-		if (
-			turbosmtp_migration_has_done() &&
-			turbosmtp_validapi()
-		) {
+		if ( turbosmtp_validapi() ) {
 			add_submenu_page( "turbosmtp_config",
 				__( "Report", "turbosmtp" ),
 				__( "Report", "turbosmtp" ),
@@ -430,16 +476,6 @@ class Turbosmtp_Admin {
 				"turbosmtp_stats",
 				[ $this, 'stats_page' ]
 			);
-
-			if ( get_option( "ts_show_credentials", false ) ) {
-				add_submenu_page( null,
-					__( "turboSMTP API Keys generated", "turbosmtp" ),
-					__( "APIKeys", "turbosmtp" ),
-					"manage_options",
-					"turbosmtp_api_keys",
-					[ $this, 'show_credentials_page' ]
-				);
-			}
 		}
 
 		/*if (turbosmtp_validapi()) {
@@ -448,93 +484,6 @@ class Turbosmtp_Admin {
 			add_submenu_page("ts-dash", __("Logout", "turbosmtp"), __("Logout", "turbosmtp"), "manage_options", "ts-logout", "TSLogout");
 
 		}*/
-
-
-	}
-
-	public function generate_api_keys() {
-		if ( ! wp_verify_nonce( $_POST['turbosmtp_nonce'], 'turbosmtp_generate_api_keys' ) ) {
-			wp_send_json_error( [
-				'message' => __( 'This request is not allowed.', 'turbosmtp' )
-			] );
-		}
-
-		$auth_options = get_option( "ts_auth_options" );
-		$send_options = get_option( "ts_send_options" );
-
-		try {
-
-			add_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
-
-			$authorize_body = $this->api->authorize(
-				$auth_options['op_ts_email'],
-				$auth_options['op_ts_password']
-			);
-
-			$authkey = $authorize_body['auth'];
-
-			$api_keys = $this->api->create_api_keys(
-				$authkey
-			);
-
-			update_option( "ts_send_options", array_merge(
-				$send_options,
-				[
-					"email"    => $auth_options['op_ts_email'],
-					"password" => $auth_options['op_ts_password'],
-					"is_smtp"  => apply_filters('turbosmtp_default_is_smtp', false)
-				]
-			) );
-
-			update_option( "ts_auth_options", [
-				"consumer_key"    => $api_keys["consumerKey"],
-				"consumer_secret" => $api_keys["consumerSecret"],
-				"valid_api"       => true
-			] );
-
-			update_option( "ts_migration_done", true );
-
-			update_option( "ts_show_credentials", true );
-
-			$this->api->deauthorize( $authkey );
-
-			wp_send_json_success( [
-				"message"         => __( 'Migration was completed succesfully', 'turbosmtp'  ),
-				"consumer_key"    => $api_keys['consumerKey'],
-				"consumer_secret" => $api_keys['consumerSecret'],
-				"redirect_url"        => add_query_arg( [
-					"consumer_key"    => $api_keys["consumerKey"],
-					"consumer_secret" => $api_keys["consumerSecret"]
-				], admin_url( 'admin.php?page=' . $this->plugin_name . '_api_keys' ) )
-			] );
-
-			remove_filter('turbosmtp_disconnect_if_api_response_401', '__return_false');
-
-		} catch ( Exception $e ) {
-			wp_send_json_error( [
-				"message" => __( 'Request was wrong', 'turbosmtp' ),
-				"details" => $e->getMessage()
-			] );
-		}
-
-	}
-
-	public function switch_to_api_keys_notice() {
-
-		if ( isset( $_GET['page'] ) && $_GET['page'] === $this->plugin_name . '_migration' ) {
-			return;
-		}
-
-		$message = sprintf(
-			'<strong>%s</strong> <a href="%s">%s</a>.',
-			esc_html__( 'turboSMTP requires a new configuration.', 'turbosmtp' ),
-			esc_url( admin_url( 'admin.php?page=' . $this->plugin_name . '_migration' ) ),
-			esc_html__( 'Click here to generate API Keys', 'turbosmtp' )
-		);
-
-		echo '<div class="notice notice-warning is-dismissible">
-                <p>' . $message . '</p>
-              </div>';
 
 
 	}
@@ -593,10 +542,6 @@ class Turbosmtp_Admin {
 		delete_option( "ts_send_options" );
 
 		delete_option( "ts_auth_options" );
-
-		delete_option( "ts_migration_done" );
-
-		delete_option( "ts_show_credentials" );
 
 		wp_send_json_success( [
 			'message'      => __( 'Account was succesfully disconnected', 'turbosmtp' ),
@@ -671,13 +616,11 @@ class Turbosmtp_Admin {
 
 			wp_localize_script( $this->plugin_name . '-admin', 'ts', array(
 				'i18n' => array(
-					'api_key_generate_loading'       => __( 'Generating...', 'turbosmtp' ),
-					'api_key_generate_button'        => __( 'Generating API Key', 'turbosmtp' ),
-					'api_key_generate_unknown_error' => __( 'Unknown error', 'turbosmtp' ),
-					'api_key_copied_text'            => __( 'Copied', 'turbosmtp' ),
 					'test_email_send_loading'        => __( 'Send in progress...', 'turbosmtp' ),
 					'connection_request_error'       => __( 'Connection request failed, please retry later.', 'turbosmtp' ),
 					'disconnect_confirm'             => __( 'Are you sure you want disconnect?', 'turbosmtp' ),
+					'show_chart'                     => __( 'Show chart', 'turbosmtp' ),
+					'hide_chart'                     => __( 'Hide chart', 'turbosmtp' ),
 					"queued"                         => __( "Queue", "turbosmtp" ),
 					"delivered"                      => __( "Delivered", "turbosmtp" ),
 					"bounce"                         => __( "Bounced", "turbosmtp" ),

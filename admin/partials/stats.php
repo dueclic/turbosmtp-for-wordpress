@@ -18,9 +18,10 @@
 
 ?>
 <div class="tswp-stats">
-    <div class="error-tooltip"></div>
+    <h1 class="screen-reader-text"><?php esc_html_e( "turboSMTP Report", "turbosmtp" ); ?></h1>
+    <div class="error-tooltip" aria-hidden="true"></div>
 
-    <div class="ts-loading other-infos-loading">
+    <div class="ts-loading other-infos-loading" role="status">
 
         <div class="ts-spinner">
             <div class="rect1"></div>
@@ -39,7 +40,8 @@
 
             <form method="post" action="" class="change_date">
 
-                <input name="from_date" value="" type="text">
+                <label for="ts_date_range" class="screen-reader-text"><?php esc_html_e( "Date range", "turbosmtp" ); ?></label>
+                <input id="ts_date_range" name="from_date" value="" type="text" autocomplete="off">
 
                 <?php
 
@@ -49,16 +51,16 @@
                     $value = sanitize_text_field( $value );
 
                     if ( 'from' != $key && 'to' != $key ) {
-                        echo( "<input type='hidden' name='$key' value='$value' />" );
+                        echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" />';
                     }
                 }
 
                 ?>
-                <span class="dashicons dashicons-calendar-alt"></span>
+                <span class="dashicons dashicons-calendar-alt" aria-hidden="true"></span>
 
             </form>
             <div>
-                <?php _e( "Need more statistics?", "turbosmtp" ); ?> <a href="https://dashboard.serversmtp.com/analytics/overview" target="_blank"><?php _e( "Check turboSMTP dashboard", "turbosmtp" ); ?></a>.
+                <?php _e( "Need more statistics?", "turbosmtp" ); ?> <a href="https://dashboard.serversmtp.com/analytics/overview" target="_blank" rel="noopener"><?php _e( "Check turboSMTP dashboard", "turbosmtp" ); ?><span class="screen-reader-text"> <?php esc_html_e( "(opens in a new tab)", "turbosmtp" ); ?></span></a>.
             </div>
 
         </div>
@@ -66,23 +68,28 @@
         <div class="other-infos">
 
             <div class="other-infos-header">
-                <div class="other-infos-toggle"><a href="#"><span class="icon-arrow-down" data-close="icon-arrow-left"
-                                                                  data-open="icon-arrow-left"></span></a></div>
-                <h3><span class="icon-stat"></span> <?php esc_html_e("Line Chart", "turbosmtp"); ?></h3>
+                <div class="other-infos-toggle">
+                    <button type="button" aria-expanded="true" aria-controls="turbo-stat-chart-wrap"
+                            aria-label="<?php esc_attr_e( "Hide chart", "turbosmtp" ); ?>"><span class="icon-arrow-down" aria-hidden="true"></span></button>
+                </div>
+                <h2><span class="icon-stat" aria-hidden="true"></span> <?php esc_html_e("Line Chart", "turbosmtp"); ?></h2>
             </div>
 
-            <canvas id="turbo-stat-chart" width="400" height="400"></canvas>
+            <div id="turbo-stat-chart-wrap" class="tswp-chart-wrap">
+                <canvas id="turbo-stat-chart" role="img"
+                        aria-label="<?php esc_attr_e( "Line chart of email events per day in the selected period. The totals are listed below the chart.", "turbosmtp" ); ?>"></canvas>
+            </div>
 
         </div>
 
-        <div class="notice notice-error other-infos-noresults">
+        <div class="notice notice-error other-infos-noresults" role="status">
             <p>
                 <?php _e( "No results found for your temporal choice.", "turbosmtp" ); ?>
             </p>
         </div>
 
-        <div class="other-infos-columns">
-            <div class="total-email active" data-ts-filter="all">
+        <div class="other-infos-columns" role="group" aria-label="<?php esc_attr_e( "Filter the email history by event", "turbosmtp" ); ?>">
+            <div class="total-email active" data-ts-filter="all" role="button" tabindex="0" aria-pressed="true">
 
                 <div class="panel">
 
@@ -101,7 +108,7 @@
                 </div>
 
             </div>
-            <div class="delivered" data-ts-filter="delivered">
+            <div class="delivered" data-ts-filter="delivered" role="button" tabindex="0" aria-pressed="false">
                 <div class="panel">
 
                     <div class="heading">
@@ -118,7 +125,7 @@
 
                 </div>
             </div>
-            <div class="opens" data-ts-filter="opens">
+            <div class="opens" data-ts-filter="opens" role="button" tabindex="0" aria-pressed="false">
                 <div class="panel">
 
                     <div class="heading">
@@ -135,7 +142,7 @@
 
                 </div>
             </div>
-            <div class="clicks" data-ts-filter="clicks">
+            <div class="clicks" data-ts-filter="clicks" role="button" tabindex="0" aria-pressed="false">
                 <div class="panel">
 
                     <div class="heading">
@@ -152,7 +159,7 @@
 
                 </div>
             </div>
-            <div class="bounce" data-ts-filter="bounce">
+            <div class="bounce" data-ts-filter="bounce" role="button" tabindex="0" aria-pressed="false">
                 <div class="panel">
 
                     <div class="heading">
@@ -170,7 +177,7 @@
                 </div>
             </div>
             <div class="other-stats">
-                <div class="unsubscribes" data-ts-filter="unsubscribes">
+                <div class="unsubscribes" data-ts-filter="unsubscribes" role="button" tabindex="0" aria-pressed="false">
                     <div class="heading">
                         <h3><?php _e( "unsubscribes", "turbosmtp" ); ?></h3>
                     </div>
@@ -178,7 +185,7 @@
                         <p></p>
                     </div>
                 </div>
-                <div class="spam" data-ts-filter="spam">
+                <div class="spam" data-ts-filter="spam" role="button" tabindex="0" aria-pressed="false">
                     <div class="heading">
                         <h3><?php _e( "spam reports", "turbosmtp" ); ?></h3>
                     </div>
@@ -186,7 +193,7 @@
                         <p></p>
                     </div>
                 </div>
-                <div class="queued" data-ts-filter="queued">
+                <div class="queued" data-ts-filter="queued" role="button" tabindex="0" aria-pressed="false">
                     <div class="heading">
                         <h3><?php _e( "queued", "turbosmtp" ); ?></h3>
                     </div>
@@ -194,7 +201,7 @@
                         <p></p>
                     </div>
                 </div>
-                <div class="drop" data-ts-filter="drop">
+                <div class="drop" data-ts-filter="drop" role="button" tabindex="0" aria-pressed="false">
                     <div class="heading">
                         <h3><?php _e( "drop", "turbosmtp" ); ?></h3>
                     </div>
@@ -205,7 +212,7 @@
             </div>
         </div>
 
-        <div class="ts-loading history-email-loading">
+        <div class="ts-loading history-email-loading" role="status">
 
             <div class="ts-spinner">
                 <div class="rect1"></div>

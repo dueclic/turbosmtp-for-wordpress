@@ -79,6 +79,8 @@ class Turbosmtp {
 		}
 		$this->plugin_name = 'turbosmtp';
 
+		turbosmtp_cleanup_legacy_options();
+
 		$this->auth_options = get_option( 'ts_auth_options' );
 
 		$this->load_dependencies();
@@ -163,17 +165,12 @@ class Turbosmtp {
 
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'turbosmtp_menu' );
 
-		if ( ! turbosmtp_migration_has_done() ) {
-			$this->loader->add_action( 'admin_notices', $plugin_admin, 'switch_to_api_keys_notice' );
-			$this->loader->add_action( 'wp_ajax_turbosmtp_generate_api_keys', $plugin_admin, 'generate_api_keys' );
-		} else {
-			if ( turbosmtp_validapi() ) {
-				$this->loader->add_action( 'wp_ajax_turbosmtp_get_stats_chart', $plugin_admin, 'get_stats_chart' );
-				$this->loader->add_action('wp_ajax_turbosmtp_get_stats_history', $plugin_admin, 'get_stats_history');
-				$this->loader->add_action('admin_post_turbosmtp_save_send_options', $plugin_admin, 'save_send_options');
-				$this->loader->add_action( 'wp_ajax_turbosmtp_send_test_email', $plugin_admin,'send_test_email');
-				$this->loader->add_action( 'wp_ajax_turbosmtp_disconnect_account', $plugin_admin,'disconnect_account');
-			}
+		if ( turbosmtp_validapi() ) {
+			$this->loader->add_action( 'wp_ajax_turbosmtp_get_stats_chart', $plugin_admin, 'get_stats_chart' );
+			$this->loader->add_action('wp_ajax_turbosmtp_get_stats_history', $plugin_admin, 'get_stats_history');
+			$this->loader->add_action('admin_post_turbosmtp_save_send_options', $plugin_admin, 'save_send_options');
+			$this->loader->add_action( 'wp_ajax_turbosmtp_send_test_email', $plugin_admin,'send_test_email');
+			$this->loader->add_action( 'wp_ajax_turbosmtp_disconnect_account', $plugin_admin,'disconnect_account');
 		}
 
 		$this->loader->add_action( 'admin_post_save_api_keys', $plugin_admin, 'save_api_keys' );
@@ -204,6 +201,9 @@ class Turbosmtp {
 		if ( turbosmtp_validapi() ) {
 			$this->loader->add_action('pre_wp_mail', $plugin_public, 'maybe_send_via_http', 10, 2 );
 			$this->loader->add_action( 'phpmailer_init', $plugin_public,'maybe_send_via_phpmailer' );
+			// Priority 1: replaces only WordPress' defaults, other plugins' filters run after.
+			$this->loader->add_filter( 'wp_mail_from', $plugin_public, 'default_from_email', 1 );
+			$this->loader->add_filter( 'wp_mail_from_name', $plugin_public, 'default_from_name', 1 );
 		}
 
 	}

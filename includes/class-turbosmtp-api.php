@@ -82,53 +82,6 @@ class Turbosmtp_Api extends Turbosmtp_Api_Base {
 	}
 
 	/**
-	 * @return mixed
-	 * @throws Exception
-	 */
-
-	public function create_api_keys(
-		$authkey
-	) {
-		$endpoint = '/user/consumerKeys';
-
-		return $this->request( $endpoint, [
-			'label' => turbosmtp_get_label()
-		], false, "POST", [
-			'Content-Type'  => 'application/json',
-			'Authorization' => $authkey
-		] );
-	}
-
-	/**
-	 * @return mixed
-	 * @throws Exception
-	 */
-
-	public function authorize(
-		$email,
-		$password
-	) {
-		return $this->request( "/authorize", [
-			'email'    => $email,
-			'password' => $password
-		], false, "POST", [
-			'Content-Type' => 'application/json'
-		] );
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public function deauthorize(
-		$authkey
-	) {
-		return $this->request( "/deauthorize", [], false, "POST", [
-			'Content-Type'  => 'application/json',
-			'Authorization' => $authkey
-		] );
-	}
-
-	/**
 	 * @throws Exception
 	 */
 	public function get_analytics( $filters ) {
